@@ -1,15 +1,8 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { products, testimonials, blogPosts } from '../data/products'
 import ProductCard from '../components/ProductCard'
 import Reveal from '../components/Reveal'
 import './Home.css'
-
-const featuredTabs = [
-  { id: 'best', label: 'Mais vendidos' },
-  { id: 'new', label: 'Novidades' },
-  { id: 'expert', label: 'Recomendados' },
-]
 
 const heroShowcase = [
   { icon: '🖐️', label: 'Esfera Tátil', tile: 'tile-0' },
@@ -19,9 +12,6 @@ const heroShowcase = [
 ]
 
 export default function Home() {
-  const [featuredTab, setFeaturedTab] = useState('best')
-  const featured = products.filter((p) => p.badges.includes(featuredTab)).slice(0, 4)
-
   return (
     <>
       <section className="hero">
@@ -99,39 +89,20 @@ export default function Home() {
         <div className="container">
           <div className="section-header-row">
             <div>
-              <span className="eyebrow">Selecionados para você</span>
-              <h2>Destaques do catálogo</h2>
+              <span className="eyebrow">Catálogo completo</span>
+              <h2>Todos os nossos produtos</h2>
             </div>
             <Link to="/loja" className="btn btn-ghost">
-              Ver catálogo completo →
+              Ver com filtros →
             </Link>
           </div>
 
-          <div className="featured-tabs" role="tablist" aria-label="Filtrar destaques">
-            {featuredTabs.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                role="tab"
-                aria-selected={featuredTab === t.id}
-                className={`featured-tab ${featuredTab === t.id ? 'active' : ''}`}
-                onClick={() => setFeaturedTab(t.id)}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-
           <div className="product-grid">
-            {featured.length === 0 ? (
-              <p className="field-hint">Nenhum produto nessa categoria de destaque no momento.</p>
-            ) : (
-              featured.map((p, i) => (
-                <Reveal key={p.id} delay={i * 60}>
-                  <ProductCard product={p} />
-                </Reveal>
-              ))
-            )}
+            {products.map((p, i) => (
+              <Reveal key={p.id} delay={(i % 4) * 60}>
+                <ProductCard product={p} />
+              </Reveal>
+            ))}
           </div>
         </div>
       </Reveal>
