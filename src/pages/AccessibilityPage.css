@@ -1,0 +1,27 @@
+.accessibility-page {
+  padding: 48px 24px 80px;
+  max-width: 820px;
+}
+
+.a11y-section {
+  padding: 28px;
+  margin-top: 20px;
+}
+
+.a11y-section h2 {
+  color: var(--brand);
+  font-size: 1.2rem;
+}
+
+.a11y-section ul {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.a11y-toggle-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}

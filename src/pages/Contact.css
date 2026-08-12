@@ -1,0 +1,39 @@
+.contact-page {
+  padding: 48px 24px 80px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 32px;
+  margin-top: 32px;
+  align-items: start;
+}
+
+.contact-form {
+  padding: 32px;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-info-card {
+  padding: 24px;
+}
+
+.contact-info-card h2 {
+  font-size: 1.1rem;
+}
+
+.contact-info-card p {
+  margin-bottom: 6px;
+}
+
+@media (max-width: 800px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,117 @@
+.category-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(20, 20, 20, 0.3);
+}
+
+.category-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: var(--color-petrol-dark);
+  color: #fff;
+  padding: 20px 0 32px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: category-menu-slide 0.18s ease;
+}
+
+@keyframes category-menu-slide {
+  from { transform: translateX(-16px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.category-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 8px;
+}
+
+.category-menu-row {
+  display: flex;
+  align-items: center;
+}
+
+.category-menu-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 14px 12px;
+  border-radius: var(--radius-sm);
+  min-height: 44px;
+}
+
+.category-menu-link span[aria-hidden] {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+}
+
+.category-menu-row:hover .category-menu-link,
+.category-menu-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.category-menu-list > li.expanded > .category-menu-row .category-menu-link {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.category-menu-chevron {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.category-menu-chevron[aria-expanded='true'] {
+  transform: rotate(180deg);
+}
+
+.category-menu-subitems {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0 12px 0 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.category-menu-subitems a {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  min-height: 36px;
+}
+
+.category-menu-subitems a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.category-menu-heading {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 24px 20px 8px;
+}
+
+.category-menu-help .category-menu-link {
+  font-weight: 400;
+}

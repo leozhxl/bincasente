@@ -1,0 +1,142 @@
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+[data-contrast='high'] .site-header {
+  background: #000;
+}
+
+.site-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 18px 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-image {
+  height: 88px;
+  width: auto;
+  display: block;
+}
+
+.main-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 38px;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav a {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text);
+  padding: 6px 2px;
+  transition: color 0.15s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  color: var(--brand);
+}
+
+.category-menu-trigger {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 6px 2px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.category-menu-trigger:hover {
+  color: var(--brand);
+}
+
+.cta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  background: var(--brand);
+  color: #fff;
+  padding: 16px 32px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.cta-pill:hover {
+  background: var(--color-sage-dark);
+}
+
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  z-index: 50;
+}
+
+.search-suggestions li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--text);
+  border-radius: 8px;
+}
+
+.search-suggestions li a:hover {
+  background: var(--color-sage-light);
+}
+
+@media (max-width: 900px) {
+  .site-header-bar {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .main-nav {
+    order: 3;
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+  .main-nav ul {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}

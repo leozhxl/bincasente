@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
+
+:root {
+  /* 2 cores principais (azul-céu + lavanda) + 1 destaque vibrante para CTA de compra.
+     Rosa, menta e amarelo-manteiga ficam reservados a toques pontuais (badges). */
+  --color-sky: #a9dbf2;
+  --color-sky-dark: #4fa8d8;
+  --color-sky-light: #eaf6fc;
+
+  --color-lavender: #cdbdf0;
+  --color-lavender-dark: #9a7fd6;
+  --color-lavender-light: #f3effc;
+
+  --color-pink: #f6c9d6;
+  --color-pink-dark: #e78fa6;
+  --color-pink-light: #fdeef2;
+
+  --color-mint: #aee9d1;
+  --color-mint-dark: #4fb98c;
+  --color-mint-light: #eafaf3;
+
+  --color-butter: #ffe49a;
+  --color-butter-dark: #f0b93e;
+  --color-butter-light: #fff8e4;
+
+  /* CTA de compra: laranja vibrante, único ponto de alto contraste da paleta */
+  --color-cta: #ff7a3d;
+  --color-cta-dark: #e8621f;
+
+  /* Aliases usados no resto do site */
+  --color-sage: var(--color-sky-dark);
+  --color-sage-dark: #337fac;
+  --color-sage-light: var(--color-sky-light);
+  --color-terracotta: var(--color-cta);
+  --color-terracotta-dark: var(--color-cta-dark);
+  --color-petrol: var(--color-lavender-dark);
+  --color-petrol-dark: #7c62b8;
+  --color-sand: #ffffff;
+  --color-sand-deep: #fafafa;
+  --color-ink: #2b2a33;
+  --color-ink-soft: #6b6975;
+  --color-white: #ffffff;
+  --color-focus: var(--color-lavender-dark);
+  --color-success: var(--color-mint-dark);
+  --color-error: #d9534f;
+
+  --bg: var(--color-sand);
+  --bg-elevated: var(--color-sand-deep);
+  --bg-muted: #f2f2f5;
+  --text: var(--color-ink);
+  --text-soft: var(--color-ink-soft);
+  --border: #e6e5eb;
+  --accent: var(--color-cta);
+  --accent-contrast: #ffffff;
+  --brand: var(--color-sage);
+
+  --font-body: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', 'Atkinson Hyperlegible', serif;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 2px 8px rgba(38, 36, 32, 0.06);
+  --shadow-md: 0 8px 24px rgba(38, 36, 32, 0.10);
+  --shadow-lg: 0 16px 48px rgba(38, 36, 32, 0.14);
+
+  --font-scale: 1;
+  --container: 1240px;
+}
+
+[data-contrast='high'] {
+  --bg: #000000;
+  --bg-elevated: #000000;
+  --bg-muted: #0a0a0a;
+  --text: #ffffff;
+  --text-soft: #f2f2f2;
+  --border: #ffffff;
+  --accent: #ffd700;
+  --accent-contrast: #000000;
+  --brand: #ffd700;
+  --color-sage-light: #001a08;
+  --color-sage-dark: #7fffab;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: calc(100% * var(--font-scale));
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+[data-motion='reduced'] *, [data-motion='reduced'] *::before, [data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  color: var(--text);
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+[data-contrast='high'] :focus-visible {
+  outline: 4px solid #000;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--brand);
+  color: #fff;
+  padding: 12px 20px;
+  z-index: 1000;
+  border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 26px;
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-petrol-dark);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.btn-accent:hover {
+  background: var(--color-terracotta-dark);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.btn-outline:hover {
+  background: var(--color-sage-light);
+}
+
+.btn-danger {
+  background: var(--color-error);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #832f2a;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  min-height: 44px;
+  padding: 8px 16px;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--color-sage-light);
+  color: var(--color-sage-dark);
+}
+
+.badge-new {
+  background: var(--color-butter-light);
+  color: #8a6a10;
+}
+
+.badge-best {
+  background: var(--color-pink-light);
+  color: #b85c76;
+}
+
+.badge-expert {
+  background: var(--color-sage-light);
+  color: var(--color-sage-dark);
+}
+
+.card {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease;
+}
+
+.section {
+  padding: 72px 0;
+}
+
+.section-tight {
+  padding: 40px 0;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-sage-dark);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.stars {
+  color: var(--color-terracotta);
+  letter-spacing: 2px;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+input[type='password'],
+input[type='number'],
+select,
+textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  color: var(--text);
+}
+
+textarea {
+  min-height: 120px;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand);
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field-error {
+  color: var(--color-error);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.field-hint {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  margin-top: 6px;
+}

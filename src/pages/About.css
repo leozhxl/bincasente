@@ -1,0 +1,59 @@
+.about-hero {
+  background: var(--color-sage-light);
+  padding: 72px 0;
+  text-align: center;
+}
+
+.about-hero h1 {
+  color: var(--brand);
+  max-width: 24ch;
+  margin: 0 auto 20px;
+}
+
+.about-hero p {
+  max-width: 62ch;
+  margin: 0 auto;
+  color: var(--text-soft);
+  font-size: 1.1rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 48px;
+}
+
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stat {
+  padding: 24px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--brand);
+}
+
+.partners-section {
+  background: var(--bg-muted);
+}
+
+.partner-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+@media (max-width: 800px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,41 @@
+.viewer3d {
+  background: var(--color-sage-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.viewer3d-stage {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  perspective: 800px;
+}
+
+.viewer3d-stage:active {
+  cursor: grabbing;
+}
+
+.viewer3d-object {
+  font-size: 9rem;
+  display: inline-block;
+  transition: transform 0.05s linear;
+  user-select: none;
+}
+
+.viewer3d-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  flex-wrap: wrap;
+}
+
+.viewer3d-hint {
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}

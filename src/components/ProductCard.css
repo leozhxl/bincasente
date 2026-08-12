@@ -1,0 +1,98 @@
+.product-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.product-card-media {
+  position: relative;
+  background: var(--color-sage-light);
+  aspect-ratio: 4 / 3;
+}
+
+.product-card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 4rem;
+  text-decoration: none;
+}
+
+.product-card-badges {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wish-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 1.2rem;
+  color: var(--color-terracotta-dark);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.wish-btn.active {
+  background: var(--color-terracotta);
+  color: #fff;
+}
+
+.product-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.product-card-name {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 1.02rem;
+}
+
+.product-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.rating-count {
+  color: var(--text-soft);
+}
+
+.product-card-price {
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin: 0;
+  color: var(--brand);
+}
+
+.installments {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+}
+
+.product-card-body .btn {
+  margin-top: auto;
+}
