@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { products, blogPosts } from '../data/products'
+import { products } from '../data/products'
 import ProductCard from '../components/ProductCard'
 import Reveal from '../components/Reveal'
 import './Home.css'
@@ -115,30 +115,6 @@ export default function Home() {
             <Link to="/loja" className="btn btn-outline">
               Ver catálogo com filtros →
             </Link>
-          </div>
-        </div>
-      </Reveal>
-
-      <Reveal as="section" className="section blog-preview-section">
-        <div className="container">
-          <div className="section-header-row">
-            <div>
-              <span className="eyebrow">Conteúdo educativo</span>
-              <h2>Para pais, professores e terapeutas</h2>
-            </div>
-            <Link to="/blog" className="btn btn-ghost">
-              Ver blog completo →
-            </Link>
-          </div>
-          <div className="blog-preview-grid">
-            {blogPosts.map((post) => (
-              <Link key={post.slug} to={`/blog/${post.slug}`} className="blog-preview-card card">
-                <span className="badge badge-expert">{post.category}</span>
-                <h3>{post.title}</h3>
-                <p>{post.excerpt}</p>
-                <span className="blog-meta">{post.readTime} de leitura →</span>
-              </Link>
-            ))}
           </div>
         </div>
       </Reveal>
