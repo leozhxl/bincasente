@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import './ProductCard.css'
@@ -8,13 +9,20 @@ const badgeMap = {
   expert: { label: 'Recomendado por terapeutas', className: 'badge-expert' },
 }
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, checkered = false }) {
   const { addItem, wishlist, toggleWishlist } = useCart()
   const isWished = wishlist.includes(product.id)
+  const [justAdded, setJustAdded] = useState(false)
+
+  function handleAdd() {
+    addItem(product)
+    setJustAdded(true)
+    setTimeout(() => setJustAdded(false), 1600)
+  }
 
   return (
     <article className="product-card card">
-      <div className="product-card-media">
+      <div className={`product-card-media ${checkered ? 'checkered' : ''}`}>
         <button
           type="button"
           className={`wish-btn ${isWished ? 'active' : ''}`}
@@ -34,6 +42,11 @@ export default function ProductCard({ product }) {
             </span>
           ))}
         </div>
+        {justAdded && (
+          <span className="product-added-badge" role="status">
+            <span aria-hidden="true">🛒</span> Produto Adicionado
+          </span>
+        )}
       </div>
       <div className="product-card-body">
         <Link to={`/produto/${product.slug}`} className="product-card-name">
@@ -50,7 +63,7 @@ export default function ProductCard({ product }) {
           R$ {product.price.toFixed(2).replace('.', ',')}
           <span className="installments"> · {product.installments}</span>
         </p>
-        <button type="button" className="btn btn-accent btn-block" onClick={() => addItem(product)}>
+        <button type="button" className="btn btn-accent btn-block" onClick={handleAdd}>
           Adicionar ao carrinho
         </button>
       </div>

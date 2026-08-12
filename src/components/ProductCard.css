@@ -16,6 +16,30 @@
   aspect-ratio: 4 / 3;
 }
 
+.product-card-media.checkered {
+  background-image:
+    linear-gradient(45deg, #c0392b 25%, transparent 25%, transparent 75%, #c0392b 75%, #c0392b),
+    linear-gradient(45deg, #c0392b 25%, #fff 25%, #fff 75%, #c0392b 75%, #c0392b);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+  background-color: #fff;
+}
+
+.product-added-badge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(46, 143, 176, 0.92);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: center;
+  z-index: 3;
+}
+
 .product-card-image {
   display: flex;
   align-items: center;
@@ -84,11 +108,12 @@
   font-weight: 700;
   font-size: 1.15rem;
   margin: 0;
-  color: var(--brand);
+  color: var(--color-sky-dark);
 }
 
 .installments {
   font-weight: 400;
+  font-style: italic;
   font-size: 0.8rem;
   color: var(--text-soft);
 }

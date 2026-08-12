@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import CategoryMenu from './CategoryMenu'
 import './Header.css'
 
@@ -15,20 +16,60 @@ const navLinks = [
 
 export default function Header() {
   const { count } = useCart()
+  const { user } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
+  const [search, setSearch] = useState('')
+  const navigate = useNavigate()
 
   function closeNav() {
     setNavOpen(false)
   }
 
+  function handleSearch(e) {
+    e.preventDefault()
+    navigate(`/loja${search.trim() ? `?busca=${encodeURIComponent(search.trim())}` : ''}`)
+  }
+
   return (
     <header className="site-header">
-      <div className="container site-header-bar">
+      <div className="container site-header-top">
         <Link to="/" className="logo" aria-label="Brinca e Sente, página inicial">
           <img src="/logo.png" alt="Brinca e Sente" className="logo-image" />
         </Link>
 
+        <form className="header-search" onSubmit={handleSearch} role="search">
+          <label htmlFor="header-search-input" className="visually-hidden">Buscar no site</label>
+          <input
+            id="header-search-input"
+            type="search"
+            placeholder="BUSCAR NO SITE"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button type="submit" aria-label="Buscar">→</button>
+        </form>
+
+        <div className="header-top-actions">
+          <Link to="/conta" className="header-account">
+            <span className="header-account-icon" aria-hidden="true">👤</span>
+            <span className="header-account-text">
+              {user ? (
+                <>Olá, <strong>{user.displayName}</strong></>
+              ) : (
+                <>Olá, seja bem-vindo<br />Faça seu <strong>Login ou Cadastre-se</strong></>
+              )}
+            </span>
+          </Link>
+
+          <Link to="/carrinho" className="header-cart" aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
+            <span aria-hidden="true">🛒</span>
+            {count > 0 && <span className="header-cart-badge">{count}</span>}
+          </Link>
+        </div>
+      </div>
+
+      <div className="container site-header-bar">
         <button
           type="button"
           className="nav-toggle"
@@ -64,16 +105,12 @@ export default function Header() {
               </button>
             </li>
             <li className="nav-mobile-cart">
-              <Link to="/carrinho" className="cta-pill" onClick={closeNav} aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
+              <Link to="/carrinho" className="btn btn-accent btn-block" onClick={closeNav} aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
                 <span aria-hidden="true">🛒</span> Ver Carrinho{count > 0 ? ` (${count})` : ''}
               </Link>
             </li>
           </ul>
         </nav>
-
-        <Link to="/carrinho" className="cta-pill nav-desktop-cart" aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
-          <span aria-hidden="true">🛒</span> Ver Carrinho{count > 0 ? ` (${count})` : ''}
-        </Link>
       </div>
 
       <CategoryMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
