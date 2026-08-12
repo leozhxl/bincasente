@@ -3,7 +3,6 @@ import { CartProvider } from './context/CartContext'
 import { AccessibilityProvider } from './context/AccessibilityContext'
 import { AuthProvider } from './context/AuthContext'
 import { OrdersProvider } from './context/OrdersContext'
-import AccessibilityBar from './components/AccessibilityBar'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
@@ -31,7 +30,6 @@ export default function App() {
         <OrdersProvider>
           <CartProvider>
             <a href="#main-content" className="skip-link">Pular para o conteúdo principal</a>
-            <AccessibilityBar />
             <Header />
             <main id="main-content">
               <Routes>

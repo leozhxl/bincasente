@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
+import { useAccessibility } from '../context/AccessibilityContext'
 import CategoryMenu from './CategoryMenu'
 import './Header.css'
 
@@ -14,9 +15,13 @@ const navLinks = [
   { to: '/faq', label: 'FAQ' },
 ]
 
+const themeIcon = { light: '☀️', dark: '🌙', system: '🖥️' }
+const themeLabel = { light: 'Tema claro', dark: 'Tema escuro', system: 'Tema automático' }
+
 export default function Header() {
   const { count, subtotal } = useCart()
   const { user } = useAuth()
+  const { theme, toggleTheme } = useAccessibility()
   const [menuOpen, setMenuOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -114,6 +119,15 @@ export default function Header() {
             </li>
           </ul>
         </nav>
+
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={`${themeLabel[theme]}. Clique para alternar o tema.`}
+        >
+          <span aria-hidden="true">{themeIcon[theme]}</span>
+        </button>
       </div>
 
       <CategoryMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
