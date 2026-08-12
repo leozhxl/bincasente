@@ -389,6 +389,14 @@
   margin-top: 24px;
 }
 
+.featured-section {
+  background: var(--color-sky-light);
+}
+
+.featured-section .card {
+  background: var(--bg);
+}
+
 .testimonial-section {
   background: var(--color-petrol);
   color: #fff;
@@ -466,6 +474,10 @@
   margin-top: 40px;
 }
 
+.blog-preview-section {
+  background: var(--color-lavender-light);
+}
+
 .blog-preview-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -477,6 +489,7 @@
   padding: 24px;
   text-decoration: none;
   color: var(--text);
+  background: var(--bg);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -506,7 +519,7 @@
 }
 
 .newsletter-section {
-  background: var(--bg-muted);
+  background: var(--color-butter-light);
 }
 
 .newsletter-inner {

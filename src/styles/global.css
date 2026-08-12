@@ -155,7 +155,11 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(1200px 500px at 15% -10%, var(--color-sky-light) 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, var(--color-lavender-light) 0%, transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 1.0625rem;
