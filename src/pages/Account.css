@@ -277,6 +277,7 @@
 .status-entregue { background: var(--color-sage-light); color: var(--color-sage-dark); }
 .status-enviado { background: #e5eef2; color: var(--color-petrol-dark); }
 .status-processando { background: #f6e6dd; color: var(--color-terracotta-dark); }
+.status-pendente { background: var(--color-butter-light); color: #8a6a10; }
 
 .btn-sm {
   min-height: 36px;

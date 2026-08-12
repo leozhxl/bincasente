@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import QRCode from 'qrcode'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useOrders } from '../context/OrdersContext'
 import CheckoutProgress from '../components/CheckoutProgress'
+import { buildPixPayload, orderToTxid } from '../utils/pix'
 import './Checkout.css'
 
 const emptyForm = {
@@ -55,11 +57,21 @@ export default function Checkout() {
 
   async function handlePagamentoSubmit(e) {
     e.preventDefault()
+
+    if (form.pagamento === 'pix') {
+      setStep('pix')
+      return
+    }
+
+    await finalizeOrder('Processando')
+  }
+
+  async function finalizeOrder(status) {
     if (user) {
       await addOrder({
         id: orderNumber,
         date: new Date().toLocaleDateString('pt-BR'),
-        status: 'Processando',
+        status,
         total,
         items: items.map((i) => ({ name: i.name, qty: i.qty, price: i.price })),
       })
@@ -78,7 +90,7 @@ export default function Checkout() {
     )
   }
 
-  const stepNumber = step === 'dados' ? 2 : step === 'pagamento' ? 3 : 4
+  const stepNumber = step === 'dados' ? 2 : step === 'pagamento' || step === 'pix' ? 3 : 4
 
   return (
     <div className="container checkout-page">
@@ -231,19 +243,119 @@ export default function Checkout() {
         </div>
       )}
 
+      {step === 'pix' && (
+        <div className="checkout-grid">
+          <PixPayment
+            orderNumber={orderNumber}
+            total={total}
+            onBack={() => setStep('pagamento')}
+            onConfirm={() => finalizeOrder('Pendente')}
+          />
+          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
+        </div>
+      )}
+
       {step === 'confirmacao' && (
         <div className="confirmation card">
           <span className="confirmation-icon" aria-hidden="true">✔</span>
-          <h1>Pedido confirmado!</h1>
+          <h1>Pedido {form.pagamento === 'pix' ? 'registrado' : 'confirmado'}!</h1>
           <p>Número do pedido: <strong>{orderNumber}</strong></p>
-          <p>Enviamos um e-mail de confirmação para <strong>{form.email}</strong> com todos os detalhes.</p>
-          <p>Prazo estimado de entrega: <strong>4 a 7 dias úteis</strong>.</p>
+          {form.pagamento === 'pix' ? (
+            <p>
+              Assim que identificarmos o pagamento do Pix, seu pedido passa para <strong>Processando</strong>.
+              Você pode acompanhar o status em <strong>Minha Conta</strong>.
+            </p>
+          ) : (
+            <p>Enviamos um e-mail de confirmação para <strong>{form.email}</strong> com todos os detalhes.</p>
+          )}
+          <p>Prazo estimado de entrega: <strong>4 a 7 dias úteis</strong> após a confirmação do pagamento.</p>
           <div className="confirmation-actions">
             <button type="button" className="btn btn-primary" onClick={() => navigate('/conta')}>Acompanhar pedido</button>
             <button type="button" className="btn btn-outline" onClick={() => navigate('/loja')}>Continuar comprando</button>
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function PixPayment({ orderNumber, total, onBack, onConfirm }) {
+  const [qrDataUrl, setQrDataUrl] = useState(null)
+  const [copied, setCopied] = useState(false)
+  const [confirming, setConfirming] = useState(false)
+
+  const txid = orderToTxid(orderNumber)
+  const payload = buildPixPayload({ amount: total, txid })
+
+  useEffect(() => {
+    let cancelled = false
+    QRCode.toDataURL(payload, { width: 260, margin: 1 }).then((url) => {
+      if (!cancelled) setQrDataUrl(url)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [payload])
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(payload)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    } catch {
+      // clipboard indisponível, usuário pode selecionar o texto manualmente
+    }
+  }
+
+  async function handleConfirm() {
+    setConfirming(true)
+    await onConfirm()
+  }
+
+  return (
+    <div className="checkout-form pix-payment card">
+      <h1>Pague com Pix</h1>
+      <p className="field-hint">
+        Escaneie o QR Code no app do seu banco ou copie o código abaixo. O valor já vem preenchido.
+      </p>
+
+      <div className="pix-amount">R$ {total.toFixed(2).replace('.', ',')}</div>
+
+      <div className="pix-qr-wrap">
+        {qrDataUrl ? (
+          <img src={qrDataUrl} alt={`QR Code Pix para pagamento de R$ ${total.toFixed(2).replace('.', ',')}`} width={260} height={260} />
+        ) : (
+          <div className="pix-qr-loading" aria-hidden="true" />
+        )}
+      </div>
+
+      <div className="field">
+        <label htmlFor="pix-copia-cola">Pix copia e cola</label>
+        <div className="pix-copy-row">
+          <input id="pix-copia-cola" type="text" readOnly value={payload} onFocus={(e) => e.target.select()} />
+          <button type="button" className="btn btn-outline" onClick={handleCopy}>
+            {copied ? 'Copiado ✔' : 'Copiar'}
+          </button>
+        </div>
+      </div>
+
+      <ol className="pix-steps">
+        <li>Abra o app do seu banco e escolha pagar via Pix.</li>
+        <li>Escaneie o QR Code ou cole o código copiado.</li>
+        <li>Confirme o pagamento de <strong>R$ {total.toFixed(2).replace('.', ',')}</strong>.</li>
+        <li>Depois de pagar, clique em "Já paguei" abaixo.</li>
+      </ol>
+
+      <p className="field-hint">
+        Seu pedido fica com status <strong>Pendente</strong> até nossa equipe confirmar o recebimento do Pix.
+      </p>
+
+      <div className="checkout-actions">
+        <button type="button" className="btn btn-ghost" onClick={onBack} disabled={confirming}>← Voltar</button>
+        <button type="button" className="btn btn-accent" onClick={handleConfirm} disabled={confirming}>
+          {confirming ? 'Registrando...' : 'Já paguei'}
+        </button>
+      </div>
     </div>
   )
 }
