@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { products, testimonials, blogPosts } from '../data/products'
+import { products, blogPosts } from '../data/products'
 import ProductCard from '../components/ProductCard'
 import Reveal from '../components/Reveal'
 import './Home.css'
@@ -115,34 +115,6 @@ export default function Home() {
             <Link to="/loja" className="btn btn-outline">
               Ver catálogo com filtros →
             </Link>
-          </div>
-        </div>
-      </Reveal>
-
-      <Reveal as="section" className="section testimonial-section">
-        <div className="container">
-          <span className="eyebrow">Depoimentos</span>
-          <h2>Confiado por famílias e terapeutas</h2>
-          <div className="testimonial-grid">
-            {testimonials.map((t) => (
-              <blockquote key={t.name} className="testimonial card">
-                <span className="testimonial-stars stars" aria-hidden="true">★★★★★</span>
-                <p>&ldquo;{t.quote}&rdquo;</p>
-                <footer>
-                  <span className="testimonial-avatar" aria-hidden="true">{t.name.charAt(0)}</span>
-                  <span className="testimonial-meta">
-                    <strong>{t.name}</strong>
-                    <span>{t.role}</span>
-                  </span>
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-          <div className="trust-badges">
-            <span className="badge badge-expert">Compra 100% segura</span>
-            <span className="badge badge-expert">Produtos testados</span>
-            <span className="badge badge-expert">Atóxico e hipoalergênico</span>
-            <span className="badge badge-expert">Parceria com terapeutas ocupacionais</span>
           </div>
         </div>
       </Reveal>
