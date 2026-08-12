@@ -35,10 +35,10 @@
   --color-terracotta-dark: var(--color-cta-dark);
   --color-petrol: #1c3b5a;
   --color-petrol-dark: #12283d;
-  --color-sand: #fdf6ec;
+  --color-sand: #7ec8e8;
   --color-sand-deep: #ffffff;
   --color-ink: #1c3b5a;
-  --color-ink-soft: #5b6b7d;
+  --color-ink-soft: #4c6178;
   --color-white: #ffffff;
   --color-focus: var(--color-lavender-dark);
   --color-success: var(--color-mint-dark);
@@ -46,10 +46,10 @@
 
   --bg: var(--color-sand);
   --bg-elevated: var(--color-sand-deep);
-  --bg-muted: #f5eee0;
+  --bg-muted: #eaf6fc;
   --text: var(--color-ink);
   --text-soft: var(--color-ink-soft);
-  --border: #ecdfc8;
+  --border: #bfe3f2;
   --accent: var(--color-cta);
   --accent-contrast: #ffffff;
   --brand: var(--color-petrol);
