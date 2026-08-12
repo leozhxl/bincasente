@@ -15,7 +15,7 @@ const navLinks = [
 ]
 
 export default function Header() {
-  const { count } = useCart()
+  const { count, subtotal } = useCart()
   const { user } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
@@ -57,14 +57,17 @@ export default function Header() {
               {user ? (
                 <>Olá, <strong>{user.displayName}</strong></>
               ) : (
-                <>Olá, seja bem-vindo<br />Faça seu <strong>Login ou Cadastre-se</strong></>
+                <>Olá, seja bem-vindo, Faça seu <strong>Login ou Cadastre-se</strong></>
               )}
             </span>
           </Link>
 
           <Link to="/carrinho" className="header-cart" aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
-            <span aria-hidden="true">🛒</span>
-            {count > 0 && <span className="header-cart-badge">{count}</span>}
+            <span className="header-cart-icon" aria-hidden="true">🛒</span>
+            <span className="header-cart-info">
+              <span>{count} {count === 1 ? 'item' : 'itens'}</span>
+              <strong>R$ {subtotal.toFixed(2).replace('.', ',')}</strong>
+            </span>
           </Link>
         </div>
       </div>

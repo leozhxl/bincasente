@@ -171,23 +171,6 @@ export default function Home() {
         </div>
       </Reveal>
 
-      <Reveal as="section" className="section newsletter-section">
-        <div className="container newsletter-inner">
-          <div>
-            <h2>Ganhe 10% na primeira compra</h2>
-            <p>Receba conteúdos sobre desenvolvimento sensorial e novidades do catálogo.</p>
-          </div>
-          <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="newsletter-email" className="visually-hidden">
-              Seu e-mail
-            </label>
-            <input id="newsletter-email" type="email" placeholder="seuemail@exemplo.com" required />
-            <button type="submit" className="btn btn-accent">
-              Quero meu cupom
-            </button>
-          </form>
-        </div>
-      </Reveal>
     </>
   )
 }

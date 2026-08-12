@@ -1,9 +1,46 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Footer.css'
 
 export default function Footer() {
+  const [email, setEmail] = useState('')
+  const [sent, setSent] = useState(false)
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    setSent(true)
+  }
+
   return (
     <footer className="site-footer">
+      <div className="footer-newsletter-band">
+        <div className="container footer-newsletter-inner">
+          <form className="footer-newsletter-form" onSubmit={handleSubmit}>
+            <label htmlFor="footer-newsletter-email" className="visually-hidden">
+              Seu e-mail
+            </label>
+            <span className="footer-newsletter-label">
+              Cadastre-se e receba a<br />Newsletter com Novidades
+            </span>
+            <input
+              id="footer-newsletter-email"
+              type="email"
+              placeholder="seuemail@exemplo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit" aria-label="Cadastrar e-mail">→</button>
+          </form>
+          {sent && <p className="footer-newsletter-sent" role="status">✔ Cadastrado! Fique de olho no seu e-mail.</p>}
+
+          <div className="footer-social">
+            <span>Siga nos em nossas<br /><strong>Redes Sociais</strong></span>
+            <a href="#" aria-label="Instagram da Brinca e Sente">📷</a>
+          </div>
+        </div>
+      </div>
+
       <div className="container footer-grid">
         <div className="footer-brand">
           <div className="logo">
@@ -11,42 +48,39 @@ export default function Footer() {
             <span className="logo-text">Brinca e Sente</span>
           </div>
           <p>Produtos sensoriais de alta qualidade para pessoas com deficiência, com curadoria de terapeutas ocupacionais.</p>
-          <div className="footer-social" aria-label="Redes sociais">
-            <a href="#" aria-label="Instagram da Brinca e Sente">📷</a>
-            <a href="#" aria-label="Facebook da Brinca e Sente">📘</a>
-            <a href="#" aria-label="WhatsApp da Brinca e Sente">💬</a>
-          </div>
         </div>
 
-        <nav aria-label="Institucional">
-          <h2>Institucional</h2>
+        <nav aria-label="Conteúdo">
+          <h2>Conteúdo</h2>
           <ul>
-            <li><Link to="/sobre">Sobre Nós</Link></li>
-            <li><Link to="/blog">Blog</Link></li>
-            <li><Link to="/acessibilidade">Acessibilidade do Site</Link></li>
-            <li><Link to="/politica-trocas">Trocas e Devoluções</Link></li>
-          </ul>
-        </nav>
-
-        <nav aria-label="Ajuda">
-          <h2>Ajuda</h2>
-          <ul>
-            <li><Link to="/faq">Perguntas Frequentes</Link></li>
             <li><Link to="/contato">Fale Conosco</Link></li>
-            <li><Link to="/conta">Minha Conta</Link></li>
-            <li><Link to="/carrinho">Meu Carrinho</Link></li>
+            <li><Link to="/faq">Meios de pagamento e de frete</Link></li>
+            <li><Link to="/acessibilidade">Política de privacidade</Link></li>
+            <li><Link to="/politica-trocas">Política de Trocas e Devoluções</Link></li>
+            <li><Link to="/sobre">Quem somos</Link></li>
           </ul>
         </nav>
 
         <div>
-          <h2>Pagamento e segurança</h2>
+          <h2>Pague com</h2>
           <ul className="footer-badges">
+            <li>Visa</li>
+            <li>Mastercard</li>
+            <li>Elo</li>
             <li>Pix</li>
-            <li>Cartão</li>
             <li>Boleto</li>
-            <li>Compra segura</li>
-            <li>Site LGPD</li>
           </ul>
+        </div>
+
+        <div className="footer-seal-block">
+          <h2>Selos</h2>
+          <div className="footer-seal">
+            <span aria-hidden="true">🛡️</span>
+            <span>
+              COMPRA SEGURA
+              <br />SITE PROTEGIDO
+            </span>
+          </div>
         </div>
       </div>
 
