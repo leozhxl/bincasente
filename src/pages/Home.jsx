@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { categories, products, testimonials, blogPosts } from '../data/products'
 import ProductCard from '../components/ProductCard'
+import Reveal from '../components/Reveal'
 import './Home.css'
 
 const featuredTabs = [
@@ -10,7 +11,12 @@ const featuredTabs = [
   { id: 'expert', label: 'Recomendados' },
 ]
 
-const heroMockupIcons = ['✨', '🌀', '🧩', '🪀']
+const heroShowcase = [
+  { icon: '🖐️', label: 'Esfera Tátil', tile: 'tile-0' },
+  { icon: '✨', label: 'Painel Luminoso', tile: 'tile-1' },
+  { icon: '🌀', label: 'Kit Fidgets', tile: 'tile-2' },
+  { icon: '🧩', label: 'Kit Terapêutico', tile: 'tile-3' },
+]
 
 export default function Home() {
   const [featuredTab, setFeaturedTab] = useState('best')
@@ -51,11 +57,13 @@ export default function Home() {
             </dl>
           </div>
           <div className="hero-visual">
+            <div className="hero-glow" aria-hidden="true" />
             <div className="hero-mockup" aria-hidden="true">
               <div className="hero-mockup-grid">
-                {heroMockupIcons.map((icon, i) => (
-                  <div key={icon} className={`hero-mockup-tile tile-${i}`}>
-                    <span>{icon}</span>
+                {heroShowcase.map((item) => (
+                  <div key={item.label} className={`hero-mockup-tile ${item.tile}`}>
+                    <span className="hero-mockup-icon">{item.icon}</span>
+                    <span className="hero-mockup-label">{item.label}</span>
                   </div>
                 ))}
               </div>
@@ -87,7 +95,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section why-section">
+      <Reveal as="section" className="section why-section">
         <div className="container">
           <span className="eyebrow">Por que Brinca e Sente?</span>
           <h2>Design de alto padrão a serviço da inclusão real</h2>
@@ -114,9 +122,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="section category-section">
+      <Reveal as="section" className="section category-section">
         <div className="container">
           <span className="eyebrow">Categorias</span>
           <h2>Encontre o estímulo certo</h2>
@@ -131,9 +139,9 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="section featured-section">
+      <Reveal as="section" className="section featured-section">
         <div className="container">
           <div className="section-header-row">
             <div>
@@ -164,13 +172,17 @@ export default function Home() {
             {featured.length === 0 ? (
               <p className="field-hint">Nenhum produto nessa categoria de destaque no momento.</p>
             ) : (
-              featured.map((p) => <ProductCard key={p.id} product={p} />)
+              featured.map((p, i) => (
+                <Reveal key={p.id} delay={i * 60}>
+                  <ProductCard product={p} />
+                </Reveal>
+              ))
             )}
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="section testimonial-section">
+      <Reveal as="section" className="section testimonial-section">
         <div className="container">
           <span className="eyebrow">Depoimentos</span>
           <h2>Confiado por famílias e terapeutas</h2>
@@ -196,9 +208,9 @@ export default function Home() {
             <span className="badge badge-expert">Parceria com terapeutas ocupacionais</span>
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="section blog-preview-section">
+      <Reveal as="section" className="section blog-preview-section">
         <div className="container">
           <div className="section-header-row">
             <div>
@@ -220,9 +232,9 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="section newsletter-section">
+      <Reveal as="section" className="section newsletter-section">
         <div className="container newsletter-inner">
           <div>
             <h2>Ganhe 10% na primeira compra</h2>
@@ -238,7 +250,7 @@ export default function Home() {
             </button>
           </form>
         </div>
-      </section>
+      </Reveal>
     </>
   )
 }

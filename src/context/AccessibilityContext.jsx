@@ -6,11 +6,18 @@ export function AccessibilityProvider({ children }) {
   const [highContrast, setHighContrast] = useState(() => localStorage.getItem('bes_contrast') === 'high')
   const [fontScale, setFontScale] = useState(() => Number(localStorage.getItem('bes_font_scale')) || 1)
   const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('bes_motion') === 'reduced')
+  const [theme, setTheme] = useState(() => localStorage.getItem('bes_theme') || 'system')
 
   useEffect(() => {
     document.documentElement.setAttribute('data-contrast', highContrast ? 'high' : 'normal')
     localStorage.setItem('bes_contrast', highContrast ? 'high' : 'normal')
   }, [highContrast])
+
+  useEffect(() => {
+    if (theme === 'system') document.documentElement.removeAttribute('data-theme')
+    else document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('bes_theme', theme)
+  }, [theme])
 
   useEffect(() => {
     document.documentElement.style.setProperty('--font-scale', String(fontScale))
@@ -31,6 +38,8 @@ export function AccessibilityProvider({ children }) {
     resetFont: () => setFontScale(1),
     reducedMotion,
     toggleMotion: () => setReducedMotion((v) => !v),
+    theme,
+    toggleTheme: () => setTheme((v) => (v === 'dark' ? 'light' : v === 'light' ? 'system' : 'dark')),
   }
 
   return <AccessibilityContext.Provider value={value}>{children}</AccessibilityContext.Provider>

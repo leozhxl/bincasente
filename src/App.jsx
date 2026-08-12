@@ -8,6 +8,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 
+import Home from './pages/Home'
 import Catalog from './pages/Catalog'
 import Product from './pages/Product'
 import Cart from './pages/Cart'
@@ -34,7 +35,7 @@ export default function App() {
             <Header />
             <main id="main-content">
               <Routes>
-                <Route path="/" element={<Catalog />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/loja" element={<Catalog />} />
                 <Route path="/loja/:categorySlug" element={<Catalog />} />
                 <Route path="/produto/:slug" element={<Product />} />
