@@ -1,40 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
 
 :root {
-  /* 2 cores principais (azul-céu + lavanda) + 1 destaque vibrante para CTA de compra.
-     Rosa, menta e amarelo-manteiga ficam reservados a toques pontuais (badges). */
-  --color-sky: #a9dbf2;
-  --color-sky-dark: #4fa8d8;
-  --color-sky-light: #eaf6fc;
+  /* Paleta extraída da logo (Brinca & Sente): verde-água, roxo, rosa, verde e
+     laranja das letras/ícones, mais o azul-marinho da barra inferior. */
+  --color-sky: #17a398;
+  --color-sky-dark: #0e7c73;
+  --color-sky-light: #e1f5f2;
 
-  --color-lavender: #cdbdf0;
-  --color-lavender-dark: #9a7fd6;
-  --color-lavender-light: #f3effc;
+  --color-lavender: #7c5cbf;
+  --color-lavender-dark: #5a3d99;
+  --color-lavender-light: #f1ecfa;
 
-  --color-pink: #f6c9d6;
-  --color-pink-dark: #e78fa6;
-  --color-pink-light: #fdeef2;
+  --color-pink: #ec5c97;
+  --color-pink-dark: #c93b76;
+  --color-pink-light: #fdeaf1;
 
-  --color-mint: #aee9d1;
-  --color-mint-dark: #4fb98c;
-  --color-mint-light: #eafaf3;
+  --color-mint: #6fb93c;
+  --color-mint-dark: #4f8f22;
+  --color-mint-light: #eff8e6;
 
-  --color-butter: #ffe49a;
-  --color-butter-dark: #f0b93e;
-  --color-butter-light: #fff8e4;
+  --color-butter: #f5941f;
+  --color-butter-dark: #d97507;
+  --color-butter-light: #fff0dd;
 
-  /* CTA de compra: laranja vibrante, único ponto de alto contraste da paleta */
-  --color-cta: #ff7a3d;
-  --color-cta-dark: #e8621f;
+  /* CTA de compra: laranja-coral vibrante, único ponto de alto contraste da paleta */
+  --color-cta: #ff6b35;
+  --color-cta-dark: #e64a1d;
 
   /* Aliases usados no resto do site */
   --color-sage: var(--color-sky-dark);
-  --color-sage-dark: #337fac;
+  --color-sage-dark: #0b645d;
   --color-sage-light: var(--color-sky-light);
   --color-terracotta: var(--color-cta);
   --color-terracotta-dark: var(--color-cta-dark);
-  --color-petrol: var(--color-lavender-dark);
-  --color-petrol-dark: #7c62b8;
+  --color-petrol: #1c3b5a;
+  --color-petrol-dark: #12283d;
   --color-sand: #ffffff;
   --color-sand-deep: #fafafa;
   --color-ink: #2b2a33;
@@ -78,12 +78,12 @@
     --text: #f2f1f6;
     --text-soft: #b6b3c2;
     --border: #38364240;
-    --color-sky-light: #22303a;
-    --color-lavender-light: #2b273b;
-    --color-pink-light: #332831;
-    --color-mint-light: #1e332b;
-    --color-butter-light: #332c1c;
-    --color-sage-light: #22303a;
+    --color-sky-light: #12302e;
+    --color-lavender-light: #2b2140;
+    --color-pink-light: #3a2430;
+    --color-mint-light: #1e3320;
+    --color-butter-light: #3a2a14;
+    --color-sage-light: #12302e;
     --color-sand: #17161c;
     --color-sand-deep: #201f27;
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.28);
