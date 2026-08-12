@@ -16,6 +16,11 @@ const navLinks = [
 export default function Header() {
   const { count } = useCart()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
+
+  function closeNav() {
+    setNavOpen(false)
+  }
 
   return (
     <header className="site-header">
@@ -24,11 +29,22 @@ export default function Header() {
           <img src="/logo.png" alt="Brinca e Sente" className="logo-image" />
         </Link>
 
-        <nav className="main-nav" aria-label="Navegação principal">
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-expanded={navOpen}
+          aria-controls="main-nav"
+          aria-label={navOpen ? 'Fechar menu' : 'Abrir menu'}
+          onClick={() => setNavOpen((v) => !v)}
+        >
+          <span aria-hidden="true">{navOpen ? '✕' : '☰'}</span>
+        </button>
+
+        <nav id="main-nav" className={`main-nav ${navOpen ? 'open' : ''}`} aria-label="Navegação principal">
           <ul>
             {navLinks.map((link) => (
               <li key={link.to}>
-                <NavLink to={link.to} end={link.to === '/'} className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                <NavLink to={link.to} end={link.to === '/'} onClick={closeNav} className={({ isActive }) => (isActive ? 'active' : undefined)}>
                   {link.label}
                 </NavLink>
               </li>
@@ -39,15 +55,23 @@ export default function Header() {
                 className="category-menu-trigger"
                 aria-expanded={menuOpen}
                 aria-haspopup="true"
-                onClick={() => setMenuOpen(true)}
+                onClick={() => {
+                  setMenuOpen(true)
+                  closeNav()
+                }}
               >
                 Categorias
               </button>
             </li>
+            <li className="nav-mobile-cart">
+              <Link to="/carrinho" className="cta-pill" onClick={closeNav} aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
+                <span aria-hidden="true">🛒</span> Ver Carrinho{count > 0 ? ` (${count})` : ''}
+              </Link>
+            </li>
           </ul>
         </nav>
 
-        <Link to="/carrinho" className="cta-pill" aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
+        <Link to="/carrinho" className="cta-pill nav-desktop-cart" aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
           <span aria-hidden="true">🛒</span> Ver Carrinho{count > 0 ? ` (${count})` : ''}
         </Link>
       </div>

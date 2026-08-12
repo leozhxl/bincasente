@@ -19,3 +19,13 @@
 .whatsapp-btn:hover {
   background: var(--color-petrol-dark);
 }
+
+@media (max-width: 640px) {
+  .whatsapp-btn {
+    width: 48px;
+    height: 48px;
+    bottom: 16px;
+    right: 16px;
+    font-size: 1.4rem;
+  }
+}

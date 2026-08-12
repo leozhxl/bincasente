@@ -131,6 +131,16 @@
   gap: 8px;
 }
 
+.coupon-row input {
+  width: auto;
+  min-width: 0;
+  flex: 1;
+}
+
+.coupon-row .btn {
+  flex-shrink: 0;
+}
+
 .summary-lines {
   margin: 20px 0;
   padding-top: 16px;
