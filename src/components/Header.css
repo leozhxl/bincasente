@@ -25,7 +25,7 @@
 }
 
 .logo-image {
-  height: 76px;
+  height: 104px;
   width: auto;
   border-radius: 50%;
   display: block;
@@ -291,7 +291,7 @@
   }
 
   .logo-image {
-    height: 48px;
+    height: 60px;
   }
 
   .header-search {
