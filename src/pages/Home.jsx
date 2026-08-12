@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { categories, products, testimonials, blogPosts } from '../data/products'
+import { products, testimonials, blogPosts } from '../data/products'
 import ProductCard from '../components/ProductCard'
 import Reveal from '../components/Reveal'
 import './Home.css'
@@ -94,52 +94,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <Reveal as="section" className="section why-section">
-        <div className="container">
-          <span className="eyebrow">Por que Brinca e Sente?</span>
-          <h2>Design de alto padrão a serviço da inclusão real</h2>
-          <div className="why-grid">
-            <div className="why-card card">
-              <span className="why-icon" aria-hidden="true">🎓</span>
-              <h3>Curadoria especializada</h3>
-              <p>Cada produto é avaliado por terapeutas ocupacionais antes de entrar no catálogo.</p>
-            </div>
-            <div className="why-card card">
-              <span className="why-icon" aria-hidden="true">🛡️</span>
-              <h3>Segurança comprovada</h3>
-              <p>Materiais atóxicos, hipoalergênicos e testados, com certificações de qualidade.</p>
-            </div>
-            <div className="why-card card">
-              <span className="why-icon" aria-hidden="true">♿</span>
-              <h3>Acessibilidade de verdade</h3>
-              <p>Do site à embalagem, pensamos em autonomia para pessoas com diferentes necessidades.</p>
-            </div>
-            <div className="why-card card">
-              <span className="why-icon" aria-hidden="true">💚</span>
-              <h3>Propósito social</h3>
-              <p>Parte da nossa receita apoia projetos de inclusão em escolas públicas.</p>
-            </div>
-          </div>
-        </div>
-      </Reveal>
-
-      <Reveal as="section" className="section category-section">
-        <div className="container">
-          <span className="eyebrow">Categorias</span>
-          <h2>Encontre o estímulo certo</h2>
-          <div className="category-carousel">
-            {categories.map((cat) => (
-              <Link key={cat.slug} to={`/loja/${cat.slug}`} className="category-chip card">
-                <span className="category-icon" aria-hidden="true">{cat.icon}</span>
-                <span className="category-name">{cat.name}</span>
-                <span className="category-desc">{cat.description}</span>
-                <span className="category-arrow" aria-hidden="true">→</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </Reveal>
 
       <Reveal as="section" className="section featured-section">
         <div className="container">
