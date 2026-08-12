@@ -130,7 +130,6 @@ export default function Catalog() {
     <div className="container catalog-page">
       {showBestSellers ? (
         <>
-          <div className="carousel-placeholder" />
           <section className="best-sellers-section">
           <h2 className="best-sellers-heading">◄◄◄◄◄◄◄◄◄◄ MAIS VENDIDOS ►►►►►►►►►►</h2>
           <div className="catalog-layout">
