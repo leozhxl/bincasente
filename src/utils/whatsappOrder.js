@@ -1,6 +1,6 @@
 const COMPANY_WHATSAPP = '5548991542845'
 
-export function sendOrderToWhatsApp({ orderNumber, customer, items, total }) {
+export function sendOrderToWhatsApp({ orderNumber, customer, items, total, paymentMethod }) {
   const address = `${customer.endereco}, ${customer.numero || 's/n'} - ${customer.cidade}/${customer.estado}, CEP ${customer.cep}`
 
   const itemsText = items
@@ -13,7 +13,17 @@ export function sendOrderToWhatsApp({ orderNumber, customer, items, total }) {
     })
     .join('\n\n')
 
-  const message = `✅ Pagamento aprovado — Pedido ${orderNumber}
+  const header =
+    paymentMethod === 'cartao'
+      ? `🔗 Solicitação de link de pagamento (cartão) — Pedido ${orderNumber}`
+      : `✅ Pagamento aprovado — Pedido ${orderNumber}`
+
+  const footer =
+    paymentMethod === 'cartao'
+      ? '\n\nO cliente escolheu pagar no cartão. Por favor, envie um link de pagamento para ele.'
+      : ''
+
+  const message = `${header}
 
 Cliente: ${customer.nome}
 Telefone: ${customer.telefone || 'não informado'}
@@ -23,7 +33,7 @@ ${itemsText}
 
 Total: R$ ${total.toFixed(2).replace('.', ',')}
 
-Endereço de entrega: ${address}`
+Endereço de entrega: ${address}${footer}`
 
   const url = `https://wa.me/${COMPANY_WHATSAPP}?text=${encodeURIComponent(message)}`
   window.open(url, '_blank', 'noopener,noreferrer')

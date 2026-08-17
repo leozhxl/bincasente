@@ -88,6 +88,11 @@ export default function Checkout() {
       return
     }
 
+    if (form.pagamento === 'cartao') {
+      await finalizeOrder('Aguardando link de pagamento')
+      return
+    }
+
     await finalizeOrder('Processando')
   }
 
@@ -95,7 +100,7 @@ export default function Checkout() {
     const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
     const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits }))
 
-    sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total })
+    sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
 
     if (user) {
       await addOrder({
@@ -259,30 +264,10 @@ export default function Checkout() {
             </fieldset>
 
             {form.pagamento === 'cartao' && (
-              <>
-                <div className="field">
-                  <label htmlFor="numero-cartao">Número do cartão</label>
-                  <input id="numero-cartao" type="text" placeholder="0000 0000 0000 0000" inputMode="numeric" />
-                </div>
-                <div className="field-row">
-                  <div className="field">
-                    <label htmlFor="validade">Validade</label>
-                    <input id="validade" type="text" placeholder="MM/AA" />
-                  </div>
-                  <div className="field">
-                    <label htmlFor="cvv">CVV</label>
-                    <input id="cvv" type="text" inputMode="numeric" />
-                  </div>
-                </div>
-                <div className="field">
-                  <label htmlFor="parcelas">Parcelamento</label>
-                  <select id="parcelas">
-                    <option>1x de R$ {total.toFixed(2).replace('.', ',')} sem juros</option>
-                    <option>3x de R$ {(total / 3).toFixed(2).replace('.', ',')} sem juros</option>
-                    <option>6x de R$ {(total / 6).toFixed(2).replace('.', ',')} sem juros</option>
-                  </select>
-                </div>
-              </>
+              <p className="field-hint">
+                Ao confirmar, enviaremos seu pedido para o nosso WhatsApp e nossa equipe te manda um
+                <strong> link seguro de pagamento por cartão</strong> (em até 10x) para você concluir a compra por lá.
+              </p>
             )}
 
             {form.pagamento === 'pix' && (
@@ -294,7 +279,9 @@ export default function Checkout() {
 
             <div className="checkout-actions">
               <button type="button" className="btn btn-ghost" onClick={() => setStep('dados')}>← Voltar</button>
-              <button type="submit" className="btn btn-accent">Confirmar pedido</button>
+              <button type="submit" className="btn btn-accent">
+                {form.pagamento === 'cartao' ? 'Solicitar link de pagamento' : 'Confirmar pedido'}
+              </button>
             </div>
           </form>
 
@@ -317,17 +304,24 @@ export default function Checkout() {
       {step === 'confirmacao' && (
         <div className="confirmation card">
           <span className="confirmation-icon" aria-hidden="true">✔</span>
-          <h1>Pedido {form.pagamento === 'pix' ? 'registrado' : 'confirmado'}!</h1>
+          <h1>Pedido {form.pagamento === 'boleto' ? 'confirmado' : 'registrado'}!</h1>
           <span className="whatsapp-confirm-badge">
             <span aria-hidden="true">✅</span> Enviamos os detalhes do pedido para o nosso WhatsApp
           </span>
           <p>Número do pedido: <strong>{orderNumber}</strong></p>
-          {form.pagamento === 'pix' ? (
+          {form.pagamento === 'pix' && (
             <p>
               Assim que identificarmos o pagamento do Pix, seu pedido passa para <strong>Processando</strong>.
               Você pode acompanhar o status em <strong>Minha Conta</strong>.
             </p>
-          ) : (
+          )}
+          {form.pagamento === 'cartao' && (
+            <p>
+              Nossa equipe vai te enviar, pelo WhatsApp, um <strong>link seguro de pagamento por cartão</strong>{' '}
+              para você concluir a compra.
+            </p>
+          )}
+          {form.pagamento === 'boleto' && (
             <p>Enviamos um e-mail de confirmação para <strong>{form.email}</strong> com todos os detalhes.</p>
           )}
           <p>Prazo estimado de entrega: <strong>4 a 7 dias úteis</strong> após a confirmação do pagamento.</p>
