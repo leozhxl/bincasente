@@ -6,6 +6,7 @@ import { OrdersProvider } from './context/OrdersContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
+import BackButton from './components/BackButton'
 
 import Home from './pages/Home'
 import Catalog from './pages/Catalog'
@@ -31,6 +32,7 @@ export default function App() {
           <CartProvider>
             <a href="#main-content" className="skip-link">Pular para o conteúdo principal</a>
             <Header />
+            <BackButton />
             <main id="main-content">
               <Routes>
                 <Route path="/" element={<Home />} />

@@ -1,0 +1,12 @@
+.back-btn-bar {
+  padding-top: 20px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
