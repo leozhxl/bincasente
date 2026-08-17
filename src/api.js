@@ -35,3 +35,8 @@ export async function api(path, { method = 'GET', body } = {}) {
 
   return data
 }
+
+export async function calculateShipping(cep, quantity = 1) {
+  const data = await api('/shipping', { method: 'POST', body: { cepDestino: cep, quantity } })
+  return data.options[0]
+}

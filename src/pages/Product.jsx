@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { products } from '../data/products'
 import { useCart } from '../context/CartContext'
+import { calculateShipping } from '../api'
 import ProductViewer3D from '../components/ProductViewer3D'
 import ProductCard from '../components/ProductCard'
 import './Product.css'
@@ -34,11 +35,16 @@ export default function Product() {
     setTimeout(() => setAdded(false), 2500)
   }
 
-  function handleCep(e) {
+  async function handleCep(e) {
     e.preventDefault()
-    if (cep.replace(/\D/g, '').length === 8) {
-      setShippingInfo({ price: 24.9, days: '4 a 7 dias úteis' })
-    } else {
+    if (cep.replace(/\D/g, '').length !== 8) {
+      setShippingInfo({ error: true })
+      return
+    }
+    try {
+      const cheapest = await calculateShipping(cep, qty)
+      setShippingInfo({ price: cheapest.price, days: `${cheapest.days} dias úteis`, carrier: `${cheapest.carrier} · ${cheapest.service}` })
+    } catch {
       setShippingInfo({ error: true })
     }
   }
@@ -125,9 +131,9 @@ export default function Product() {
               <input id="cep" type="text" placeholder="00000-000" value={cep} onChange={(e) => setCep(e.target.value)} inputMode="numeric" />
               <button type="submit" className="btn btn-ghost">Calcular</button>
             </div>
-            {shippingInfo?.error && <p className="field-error">CEP inválido. Verifique e tente novamente.</p>}
+            {shippingInfo?.error && <p className="field-error">Não foi possível calcular o frete para esse CEP.</p>}
             {shippingInfo && !shippingInfo.error && (
-              <p className="field-hint">Frete: R$ {shippingInfo.price.toFixed(2).replace('.', ',')} · Prazo: {shippingInfo.days}</p>
+              <p className="field-hint">Frete ({shippingInfo.carrier}): R$ {shippingInfo.price.toFixed(2).replace('.', ',')} · Prazo: {shippingInfo.days}</p>
             )}
           </form>
 

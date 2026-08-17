@@ -4,6 +4,7 @@ import registerHandler from '../api/register.js'
 import loginHandler from '../api/login.js'
 import meHandler from '../api/me.js'
 import ordersHandler from '../api/orders.js'
+import shippingHandler from '../api/shipping.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -15,6 +16,7 @@ app.post('/api/register', registerHandler)
 app.post('/api/login', loginHandler)
 app.all('/api/me', meHandler)
 app.all('/api/orders', ordersHandler)
+app.post('/api/shipping', shippingHandler)
 
 app.listen(PORT, () => {
   console.log(`Brinca e Sente API rodando em http://localhost:${PORT}`)

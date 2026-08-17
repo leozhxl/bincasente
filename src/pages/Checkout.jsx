@@ -8,6 +8,7 @@ import CheckoutProgress from '../components/CheckoutProgress'
 import { buildPixPayload, orderToTxid } from '../utils/pix'
 import { openReceipt } from '../utils/receipt'
 import { sendOrderToWhatsApp } from '../utils/whatsappOrder'
+import { calculateShipping } from '../api'
 import './Checkout.css'
 
 const emptyForm = {
@@ -30,7 +31,7 @@ const paymentLabels = {
 }
 
 export default function Checkout() {
-  const { items, subtotal, clearCart } = useCart()
+  const { items, subtotal, count, clearCart } = useCart()
   const { user } = useAuth()
   const { addOrder } = useOrders()
   const navigate = useNavigate()
@@ -41,8 +42,10 @@ export default function Checkout() {
   const [confirmed, setConfirmed] = useState(false)
   const [orderNumber] = useState(() => `BS-${Math.floor(100000 + Math.random() * 900000)}`)
   const [orderSnapshot, setOrderSnapshot] = useState(null)
+  const [shippingInfo, setShippingInfo] = useState(null)
+  const [calculatingShipping, setCalculatingShipping] = useState(false)
 
-  const shipping = 24.9
+  const shipping = shippingInfo?.price ?? 0
   const total = subtotal + shipping
 
   function update(field, value) {
@@ -60,9 +63,21 @@ export default function Checkout() {
     return Object.keys(errs).length === 0
   }
 
-  function handleDadosSubmit(e) {
+  async function handleDadosSubmit(e) {
     e.preventDefault()
-    if (validateDados()) setStep('pagamento')
+    if (!validateDados()) return
+
+    setCalculatingShipping(true)
+    try {
+      const cheapest = await calculateShipping(form.cep, count)
+      setShippingInfo(cheapest)
+    } catch {
+      setErrors((prev) => ({ ...prev, cep: 'Não foi possível calcular o frete para esse CEP.' }))
+      setCalculatingShipping(false)
+      return
+    }
+    setCalculatingShipping(false)
+    setStep('pagamento')
   }
 
   async function handlePagamentoSubmit(e) {
@@ -210,10 +225,12 @@ export default function Checkout() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-accent btn-block">Continuar para pagamento</button>
+            <button type="submit" className="btn btn-accent btn-block" disabled={calculatingShipping}>
+              {calculatingShipping ? 'Calculando frete...' : 'Continuar para pagamento'}
+            </button>
           </form>
 
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
+          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} shippingInfo={shippingInfo} />
         </div>
       )}
 
@@ -281,7 +298,7 @@ export default function Checkout() {
             </div>
           </form>
 
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
+          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} shippingInfo={shippingInfo} />
         </div>
       )}
 
@@ -293,7 +310,7 @@ export default function Checkout() {
             onBack={() => setStep('pagamento')}
             onConfirm={() => finalizeOrder('Pendente')}
           />
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
+          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} shippingInfo={shippingInfo} />
         </div>
       )}
 
@@ -410,7 +427,7 @@ function PixPayment({ orderNumber, total, onBack, onConfirm }) {
   )
 }
 
-function OrderSummary({ items, subtotal, shipping, total }) {
+function OrderSummary({ items, subtotal, shipping, total, shippingInfo }) {
   return (
     <aside className="checkout-summary card">
       <h2>Resumo do pedido</h2>
@@ -427,7 +444,10 @@ function OrderSummary({ items, subtotal, shipping, total }) {
       </ul>
       <dl className="summary-lines">
         <div><dt>Subtotal</dt><dd>R$ {subtotal.toFixed(2).replace('.', ',')}</dd></div>
-        <div><dt>Frete</dt><dd>R$ {shipping.toFixed(2).replace('.', ',')}</dd></div>
+        <div>
+          <dt>Frete{shippingInfo ? ` (${shippingInfo.carrier})` : ''}</dt>
+          <dd>{shipping > 0 ? `R$ ${shipping.toFixed(2).replace('.', ',')}` : 'A calcular'}</dd>
+        </div>
         <div className="summary-total"><dt>Total</dt><dd>R$ {total.toFixed(2).replace('.', ',')}</dd></div>
       </dl>
     </aside>
