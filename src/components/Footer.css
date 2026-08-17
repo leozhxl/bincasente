@@ -119,14 +119,9 @@
   margin-bottom: 12px;
 }
 
-.footer-brand .logo-mark {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.footer-logo-image {
+  height: 76px;
+  width: auto;
 }
 
 .footer-brand p {

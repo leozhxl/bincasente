@@ -7,8 +7,7 @@ export default function Footer() {
       <div className="container footer-grid">
         <div className="footer-brand">
           <div className="logo">
-            <span className="logo-mark" aria-hidden="true">✋</span>
-            <span className="logo-text">Brinca e Sente</span>
+            <img src="/logo.png" alt="Brinca e Sente" className="footer-logo-image" />
           </div>
           <p>Produtos sensoriais de alta qualidade para pessoas com deficiência, com curadoria de terapeutas ocupacionais.</p>
         </div>

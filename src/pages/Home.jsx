@@ -41,20 +41,6 @@ export default function Home() {
                 Conhecer nossa missão
               </Link>
             </div>
-            <dl className="hero-stats">
-              <div>
-                <dt>+8.000</dt>
-                <dd>famílias atendidas</dd>
-              </div>
-              <div>
-                <dt>+120</dt>
-                <dd>produtos com curadoria</dd>
-              </div>
-              <div>
-                <dt>4,9 ★</dt>
-                <dd>avaliação média</dd>
-              </div>
-            </dl>
           </div>
           <div className="hero-visual">
             <div className="hero-crate" aria-hidden="true">
@@ -107,12 +93,6 @@ export default function Home() {
                 <ProductCard product={p} checkered={i % 3 === 0} />
               </Reveal>
             ))}
-          </div>
-
-          <div className="featured-more">
-            <Link to="/loja" className="btn btn-outline">
-              Ver catálogo com filtros →
-            </Link>
           </div>
         </div>
       </Reveal>

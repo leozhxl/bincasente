@@ -50,7 +50,7 @@ export default function Product() {
       </nav>
 
       <div className="product-main">
-        <ProductViewer3D emoji={product.image} name={product.name} />
+        <ProductViewer3D emoji={product.colorImages?.[color] || product.image} name={product.name} />
 
         <div className="product-info">
           <div className="product-badges-row">
@@ -131,11 +131,6 @@ export default function Product() {
             )}
           </form>
 
-          <dl className="product-specs">
-            <div><dt>Faixa etária</dt><dd>{product.ageRange}</dd></div>
-            <div><dt>Material</dt><dd>{product.material}</dd></div>
-            <div><dt>Dimensões</dt><dd>{product.dimensions}</dd></div>
-          </dl>
         </div>
       </div>
 

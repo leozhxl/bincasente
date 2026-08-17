@@ -6,18 +6,27 @@ import { useAuth } from '../context/AuthContext'
 import { useOrders } from '../context/OrdersContext'
 import CheckoutProgress from '../components/CheckoutProgress'
 import { buildPixPayload, orderToTxid } from '../utils/pix'
+import { openReceipt } from '../utils/receipt'
+import { sendOrderToWhatsApp } from '../utils/whatsappOrder'
 import './Checkout.css'
 
 const emptyForm = {
   nome: '',
   email: '',
   telefone: '',
+  cpfCnpj: '',
   cep: '',
   endereco: '',
   numero: '',
   cidade: '',
   estado: '',
   pagamento: 'pix',
+}
+
+const paymentLabels = {
+  pix: 'Pix',
+  cartao: 'Cartão de crédito',
+  boleto: 'Boleto bancário',
 }
 
 export default function Checkout() {
@@ -31,6 +40,7 @@ export default function Checkout() {
   const [asGuest, setAsGuest] = useState(true)
   const [confirmed, setConfirmed] = useState(false)
   const [orderNumber] = useState(() => `BS-${Math.floor(100000 + Math.random() * 900000)}`)
+  const [orderSnapshot, setOrderSnapshot] = useState(null)
 
   const shipping = 24.9
   const total = subtotal + shipping
@@ -67,18 +77,45 @@ export default function Checkout() {
   }
 
   async function finalizeOrder(status) {
+    const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
+    const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits }))
+
+    sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total })
+
     if (user) {
       await addOrder({
         id: orderNumber,
         date: new Date().toLocaleDateString('pt-BR'),
         status,
         total,
-        items: items.map((i) => ({ name: i.name, qty: i.qty, price: i.price })),
+        items: snapshotItems,
       })
     }
+    setOrderSnapshot({
+      date: new Date().toLocaleDateString('pt-BR'),
+      items: snapshotItems,
+      subtotal,
+      shipping,
+      total,
+    })
+
     setConfirmed(true)
     clearCart()
     setStep('confirmacao')
+  }
+
+  function handleReceipt() {
+    if (!orderSnapshot) return
+    openReceipt({
+      orderNumber,
+      date: orderSnapshot.date,
+      customer: form,
+      items: orderSnapshot.items,
+      subtotal: orderSnapshot.subtotal,
+      shipping: orderSnapshot.shipping,
+      total: orderSnapshot.total,
+      payment: paymentLabels[form.pagamento] || form.pagamento,
+    })
   }
 
   if (items.length === 0 && !confirmed) {
@@ -129,6 +166,11 @@ export default function Checkout() {
                 <label htmlFor="telefone">Telefone</label>
                 <input id="telefone" type="tel" value={form.telefone} onChange={(e) => update('telefone', e.target.value)} />
               </div>
+            </div>
+
+            <div className="field">
+              <label htmlFor="cpfCnpj">CPF ou CNPJ (opcional, para nota fiscal)</label>
+              <input id="cpfCnpj" type="text" inputMode="numeric" value={form.cpfCnpj} onChange={(e) => update('cpfCnpj', e.target.value)} />
             </div>
 
             <div className="field-row">
@@ -259,6 +301,9 @@ export default function Checkout() {
         <div className="confirmation card">
           <span className="confirmation-icon" aria-hidden="true">✔</span>
           <h1>Pedido {form.pagamento === 'pix' ? 'registrado' : 'confirmado'}!</h1>
+          <span className="whatsapp-confirm-badge">
+            <span aria-hidden="true">✅</span> Enviamos os detalhes do pedido para o nosso WhatsApp
+          </span>
           <p>Número do pedido: <strong>{orderNumber}</strong></p>
           {form.pagamento === 'pix' ? (
             <p>
@@ -269,9 +314,14 @@ export default function Checkout() {
             <p>Enviamos um e-mail de confirmação para <strong>{form.email}</strong> com todos os detalhes.</p>
           )}
           <p>Prazo estimado de entrega: <strong>4 a 7 dias úteis</strong> após a confirmação do pagamento.</p>
+          <p className="field-hint">
+            A Nota Fiscal Eletrônica (NF-e) será enviada por e-mail assim que emitida. Enquanto isso, você pode
+            baixar um comprovante da compra.
+          </p>
           <div className="confirmation-actions">
             <button type="button" className="btn btn-primary" onClick={() => navigate('/conta')}>Acompanhar pedido</button>
             <button type="button" className="btn btn-outline" onClick={() => navigate('/loja')}>Continuar comprando</button>
+            <button type="button" className="btn btn-ghost" onClick={handleReceipt}>Baixar comprovante</button>
           </div>
         </div>
       )}

@@ -62,8 +62,9 @@ export default function Contact() {
         <div className="contact-info">
           <div className="card contact-info-card">
             <h2>Outros canais</h2>
-            <p>💬 WhatsApp: (00) 00000-0000</p>
-            <p>📧 E-mail: contato@brincaesente.com.br</p>
+            <p>💬 WhatsApp: (48) 99154-2845</p>
+            <p>📧 E-mail: brincaesente@gmail.com</p>
+            <p>📍 Endereço: Estrada Geral, s/n, Encruzo — São João do Sul/SC, CEP 88970-000</p>
             <p>🕐 Atendimento: seg. a sex., 9h às 18h</p>
           </div>
           <div className="card contact-info-card">

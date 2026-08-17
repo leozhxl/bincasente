@@ -5,7 +5,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--color-sage);
+  background: #25d366;
   color: #fff;
   display: flex;
   align-items: center;
@@ -17,7 +17,7 @@
 }
 
 .whatsapp-btn:hover {
-  background: var(--color-petrol-dark);
+  background: #1eb955;
 }
 
 @media (max-width: 640px) {

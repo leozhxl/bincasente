@@ -47,6 +47,7 @@ export function CartProvider({ children }) {
           name: product.name,
           price: product.price,
           image: product.image,
+          benefits: product.benefits || [],
           color,
           qty,
         },
