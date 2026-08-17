@@ -4,28 +4,23 @@ import './Home.css'
 const steps = [
   {
     icon: '🔍',
-    title: 'Escolha por necessidade',
-    text: 'Filtre por condição, faixa etária ou tipo de estímulo e encontre o produto certo em segundos.',
+    title: 'Escolha o seu produto',
+    text: 'Explore nossa coleção e encontre produtos sensoriais que combinam com diferentes preferências, idades e formas de sentir, brincar e explorar.',
   },
   {
-    icon: '🧑‍⚕️',
-    title: 'Curadoria terapêutica',
-    text: 'Cada item é avaliado por terapeutas ocupacionais antes de chegar ao catálogo.',
+    icon: '🛒',
+    title: 'Faça seu pedido',
+    text: 'Selecione seus produtos favoritos, adicione ao carrinho e finalize sua compra de forma prática pelo nosso site.',
   },
   {
     icon: '📦',
-    title: 'Receba com cuidado',
-    text: 'Embalagem protegida, informações claras e frete rastreado até a sua porta.',
-  },
-  {
-    icon: '💬',
-    title: 'Orientação, se precisar',
-    text: 'Tem dúvida sobre qual item é mais adequado? Fale com a gente antes de finalizar a compra.',
+    title: 'Preparamos com cuidado',
+    text: 'Cada pedido é separado e preparado com atenção para que os produtos cheguem até você prontos para proporcionar novas experiências.',
   },
   {
     icon: '📍',
-    title: 'Acompanhe a entrega',
-    text: 'Você recebe atualizações do pedido e pode consultar o status a qualquer momento em "Minha Conta".',
+    title: 'Receba onde estiver',
+    text: 'Seu pedido é enviado para o endereço escolhido, para que a experiência Brinca & Sente chegue até você com praticidade e tranquilidade.',
   },
 ]
 
@@ -37,8 +32,9 @@ export default function HowItWorks() {
           <span className="eyebrow">Como funciona</span>
           <h1>Da escolha à porta da sua casa</h1>
           <p>
-            Simplificamos o processo de compra para que você encontre e receba os produtos sensoriais certos
-            com tranquilidade.
+            Na Brinca &amp; Sente, queremos que escolher uma experiência sensorial seja simples, segura e
+            especial. Por isso, cuidamos de cada etapa, desde a escolha do produto até a chegada do seu
+            pedido.
           </p>
         </div>
       </section>
@@ -60,11 +56,13 @@ export default function HowItWorks() {
 
       <section className="section partners-section">
         <div className="container">
-          <h2>Ficou com alguma dúvida?</h2>
-          <div className="partner-badges">
-            <span className="badge badge-expert">Consulte nosso FAQ</span>
-            <span className="badge badge-expert">Fale Conosco</span>
-          </div>
+          <blockquote className="about-pullquote">
+            <p>Escolha. Sinta. Explore. Descubra.</p>
+            <footer>
+              Porque cada pessoa tem seu jeito de sentir o mundo — e acreditamos que essa experiência merece
+              ser especial.
+            </footer>
+          </blockquote>
         </div>
       </section>
     </div>

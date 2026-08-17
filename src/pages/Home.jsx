@@ -4,12 +4,9 @@ import ProductCard from '../components/ProductCard'
 import Reveal from '../components/Reveal'
 import './Home.css'
 
-const heroShowcase = [
-  { icon: '🖐️', label: 'Esfera Tátil', tile: 'tile-0' },
-  { icon: '✨', label: 'Painel Luminoso', tile: 'tile-1' },
-  { icon: '🌀', label: 'Kit Fidgets', tile: 'tile-2' },
-  { icon: '🧩', label: 'Kit Terapêutico', tile: 'tile-3' },
-]
+const heroCarouselImages = products
+  .filter((p) => p.image?.startsWith('/'))
+  .map((p) => ({ id: p.id, src: p.image, label: p.name }))
 
 const heroDots = ['dot-1', 'dot-2', 'dot-3', 'dot-4', 'dot-5', 'dot-6']
 
@@ -61,13 +58,14 @@ export default function Home() {
           </div>
           <div className="hero-visual">
             <div className="hero-crate" aria-hidden="true">
-              <div className="hero-crate-grid">
-                {heroShowcase.map((item) => (
-                  <div key={item.label} className={`hero-mockup-tile ${item.tile}`}>
-                    <span className="hero-mockup-icon">{item.icon}</span>
-                    <span className="hero-mockup-label">{item.label}</span>
-                  </div>
-                ))}
+              <div className="hero-crate-carousel">
+                <div className="hero-crate-carousel-track">
+                  {[...heroCarouselImages, ...heroCarouselImages].map((item, i) => (
+                    <div key={`${item.id}-${i}`} className="hero-crate-carousel-slide">
+                      <img src={item.src} alt={item.label} loading="lazy" />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -81,7 +79,7 @@ export default function Home() {
               <span aria-hidden="true">🩺</span>
               <div>
                 <strong>Aprovado</strong>
-                <span>por terapeutas ocupacionais</span>
+                <span>por Terapeutas</span>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { products } from '../data/products'
 import { useCart } from '../context/CartContext'
 import ProductViewer3D from '../components/ProductViewer3D'
@@ -10,6 +10,7 @@ export default function Product() {
   const { slug } = useParams()
   const product = products.find((p) => p.slug === slug)
   const { addItem } = useCart()
+  const navigate = useNavigate()
 
   const [color, setColor] = useState(product?.colorOptions?.[0])
   const [qty, setQty] = useState(1)
@@ -45,6 +46,10 @@ export default function Product() {
 
   return (
     <div className="container product-page">
+      <button type="button" className="btn btn-ghost back-btn" onClick={() => navigate(-1)}>
+        ← Voltar
+      </button>
+
       <nav aria-label="Trilha de navegação" className="breadcrumb">
         <Link to="/">Início</Link> / <Link to="/loja">Loja</Link> / <Link to={`/loja/${product.category}`}>{product.category}</Link> / <span>{product.name}</span>
       </nav>

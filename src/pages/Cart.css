@@ -100,6 +100,16 @@
   border: none;
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--text-strong, #1c3b5a);
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.qty-stepper input::-webkit-outer-spin-button,
+.qty-stepper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .cart-item-price {

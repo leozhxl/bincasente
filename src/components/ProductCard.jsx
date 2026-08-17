@@ -33,7 +33,11 @@ export default function ProductCard({ product, checkered = false }) {
           {isWished ? '♥' : '♡'}
         </button>
         <Link to={`/produto/${product.slug}`} className="product-card-image" aria-hidden="true" tabIndex={-1}>
-          <span>{product.image}</span>
+          {product.image?.startsWith('/') ? (
+            <img src={product.image} alt="" loading="lazy" />
+          ) : (
+            <span>{product.image}</span>
+          )}
         </Link>
         <div className="product-card-badges">
           {product.badges.map((b) => (

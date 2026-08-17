@@ -10,7 +10,6 @@ const navLinks = [
   { to: '/', label: 'Início' },
   { to: '/sobre', label: 'Sobre' },
   { to: '/como-funciona', label: 'Como Funciona' },
-  { to: '/blog', label: 'Blog' },
   { to: '/contato', label: 'Contato' },
   { to: '/faq', label: 'FAQ' },
 ]

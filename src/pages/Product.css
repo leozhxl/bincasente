@@ -2,6 +2,16 @@
   padding: 32px 24px 80px;
 }
 
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
 .breadcrumb {
   font-size: 0.85rem;
   color: var(--text-soft);
@@ -51,9 +61,9 @@
 }
 
 .product-price span {
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: var(--text-soft);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong, #1c3b5a);
 }
 
 .product-desc {
@@ -119,27 +129,53 @@
 .qty-stepper {
   display: flex;
   align-items: center;
-  border: 2px solid var(--border);
+  gap: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  overflow: hidden;
+  padding: 4px;
+  box-shadow: var(--shadow-sm);
 }
 
 .qty-stepper button {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border: none;
-  background: var(--bg-muted);
-  font-size: 1.2rem;
+  border-radius: 50%;
+  background: var(--color-sage-light);
+  color: var(--brand);
+  font-size: 1.15rem;
+  font-weight: 700;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.qty-stepper button:hover {
+  background: var(--brand);
+  color: #fff;
+  transform: scale(1.06);
 }
 
 .qty-stepper input {
-  width: 48px;
-  min-height: 44px;
+  width: 44px;
+  min-height: 36px;
   text-align: center;
   border: none;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
+  background: transparent;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong, #1c3b5a);
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.qty-stepper input::-webkit-outer-spin-button,
+.qty-stepper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .product-actions {

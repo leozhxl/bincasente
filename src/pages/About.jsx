@@ -4,46 +4,54 @@ export default function About() {
   return (
     <div className="about-page">
       <section className="about-hero">
-        <div className="container">
+        <div className="container about-hero-inner">
           <span className="eyebrow">Nossa história</span>
-          <h1>Design de alto padrão a serviço da inclusão</h1>
-          <p>
-            A Brinca e Sente nasceu do encontro entre design e terapia ocupacional: acreditamos que produtos
-            sensoriais podem ser, ao mesmo tempo, tecnicamente rigorosos e esteticamente extraordinários —
-            sem infantilizar quem os usa.
+          <h1>Um novo jeito de brincar, sentir e aprender</h1>
+          <p className="about-lead">
+            A Brinca &amp; Sente nasceu da experiência clínica e da percepção de que o brincar pode ir muito
+            além da diversão.
           </p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container about-grid">
-          <div>
-            <h2>Nossa missão</h2>
-            <p>
-              Oferecer produtos sensoriais 3D que apoiem a autonomia, o bem-estar e o desenvolvimento de
-              pessoas com autismo, TDAH, deficiência intelectual, deficiência visual, paralisia cerebral e
-              outras condições — com curadoria técnica e respeito à individualidade de cada pessoa.
-            </p>
-            <h2>Como escolhemos nossos produtos</h2>
-            <p>
-              Cada item passa por avaliação de uma equipe multidisciplinar composta por terapeutas
-              ocupacionais, fisioterapeutas e educadores especializados, considerando segurança, propósito
-              terapêutico e qualidade dos materiais.
-            </p>
-          </div>
-          <div className="about-stats">
-            <div className="stat card">
-              <strong>+120</strong>
-              <span>produtos com curadoria técnica</span>
+      <section className="section about-story-section">
+        <div className="container">
+          <div className="about-story-card">
+            <div className="about-story-grid">
+              <div className="about-story-col">
+                <p>
+                  No dia a dia dos atendimentos, foi possível perceber como texturas, movimentos, encaixes,
+                  formas e desafios podem despertar a curiosidade e transformar cada interação em uma
+                  oportunidade de exploração, descoberta e aprendizagem.
+                </p>
+                <p>
+                  Dessa experiência surgiu o desejo de criar uma marca que unisse conhecimento, criatividade,
+                  funcionalidade e design, desenvolvendo produtos que proporcionassem experiências sensoriais
+                  interessantes, acolhedoras e significativas.
+                </p>
+              </div>
+              <div className="about-story-col">
+                <p>
+                  Assim nasceu a Brinca &amp; Sente, uma marca de produtos sensoriais 3D pensados para
+                  crianças e adultos, incluindo pessoas neurodivergentes, valorizando as diferentes formas de
+                  sentir, explorar e interagir com o mundo.
+                </p>
+                <p>
+                  Cada produto é pensado com atenção aos detalhes, buscando proporcionar experiências por
+                  meio do toque, do movimento, da manipulação e da descoberta, sempre respeitando a
+                  individualidade de quem utiliza.
+                </p>
+              </div>
             </div>
-            <div className="stat card">
-              <strong>+8.000</strong>
-              <span>famílias atendidas</span>
-            </div>
-            <div className="stat card">
-              <strong>15</strong>
-              <span>terapeutas parceiros</span>
-            </div>
+
+            <blockquote className="about-pullquote">
+              <p>Mais do que criar objetos, a Brinca &amp; Sente acredita em criar possibilidades.</p>
+              <footer>
+                Porque brincar também é sentir.<br />
+                Sentir é descobrir.<br />
+                E cada descoberta pode abrir um novo caminho para aprender.
+              </footer>
+            </blockquote>
           </div>
         </div>
       </section>

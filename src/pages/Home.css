@@ -132,6 +132,7 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
+  width: 100%;
 }
 
 .hero-crate {
@@ -139,18 +140,12 @@
   width: min(420px, 85vw);
   aspect-ratio: 4 / 3.2;
   border-radius: var(--radius-lg);
-  background-image:
-    linear-gradient(45deg, #c0392b 25%, transparent 25%, transparent 75%, #c0392b 75%, #c0392b),
-    linear-gradient(45deg, #c0392b 25%, #fff 25%, #fff 75%, #c0392b 75%, #c0392b);
-  background-size: 28px 28px;
-  background-position: 0 0, 14px 14px;
-  background-color: #fff;
   border: 10px solid #a9713f;
   box-shadow: var(--shadow-lg);
-  padding: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   animation: mockup-float 7s ease-in-out infinite;
 }
 
@@ -159,48 +154,45 @@
   50% { transform: translateY(-10px); }
 }
 
-.hero-crate-grid {
+.hero-crate-carousel {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
   width: 100%;
-  max-width: 280px;
-}
-
-.hero-mockup-tile {
-  aspect-ratio: 1;
+  height: 100%;
   border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.hero-crate-carousel-track {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  gap: 0;
+  height: 100%;
+  width: max-content;
+  animation: hero-crate-carousel-scroll 55s linear infinite;
 }
 
-.hero-mockup-tile:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: var(--shadow-md);
+.hero-crate-carousel-slide {
+  flex: 0 0 auto;
+  width: 140px;
+  height: 100%;
 }
 
-.hero-mockup-icon {
-  font-size: 2.1rem;
+.hero-crate-carousel-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.hero-mockup-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
-  text-align: center;
-  padding: 0 6px;
+@keyframes hero-crate-carousel-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
-.tile-0 { background: linear-gradient(155deg, var(--color-pink) 0%, var(--color-pink-dark) 100%); }
-.tile-1 { background: linear-gradient(155deg, var(--color-lavender) 0%, var(--color-lavender-dark) 100%); }
-.tile-2 { background: linear-gradient(155deg, var(--color-sage) 0%, var(--color-mint) 100%); }
-.tile-3 { background: linear-gradient(155deg, var(--color-terracotta) 0%, var(--color-butter) 100%); }
+@media (prefers-reduced-motion: reduce) {
+  .hero-crate-carousel-track {
+    animation: none;
+  }
+}
 
 .hero-rating-card,
 .hero-badge-card {
