@@ -417,7 +417,9 @@ function OrderSummary({ items, subtotal, shipping, total }) {
       <ul className="summary-items">
         {items.map((item) => (
           <li key={item.key}>
-            <span aria-hidden="true">{item.image}</span>
+            <span className="summary-item-image" aria-hidden="true">
+              {item.image?.startsWith('/') ? <img src={item.image} alt="" loading="lazy" /> : item.image}
+            </span>
             <span className="summary-item-name">{item.name} × {item.qty}</span>
             <span>R$ {(item.price * item.qty).toFixed(2).replace('.', ',')}</span>
           </li>

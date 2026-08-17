@@ -569,7 +569,9 @@ function AccountLoggedIn({ user, orders, firstName, tab, setTab, logout, updateP
                 <ul className="wishlist-list">
                   {wishedProducts.map((p) => (
                     <li key={p.id}>
-                      <span aria-hidden="true">{p.image}</span> {p.name} — R$ {p.price.toFixed(2).replace('.', ',')}
+                      <span aria-hidden="true">
+                        {p.image?.startsWith('/') ? <img src={p.image} alt="" className="wishlist-thumb" /> : p.image}
+                      </span> {p.name} — R$ {p.price.toFixed(2).replace('.', ',')}
                     </li>
                   ))}
                 </ul>

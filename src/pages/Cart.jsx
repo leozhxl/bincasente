@@ -52,7 +52,13 @@ export default function Cart() {
           <div className="cart-items">
             {items.map((item) => (
               <div key={item.key} className="cart-item card">
-                <span className="cart-item-image" aria-hidden="true">{item.image}</span>
+                <span className="cart-item-image" aria-hidden="true">
+                  {item.image?.startsWith('/') ? (
+                    <img src={item.image} alt="" loading="lazy" />
+                  ) : (
+                    item.image
+                  )}
+                </span>
                 <div className="cart-item-info">
                   <Link to={`/produto/${item.slug}`} className="cart-item-name">{item.name}</Link>
                   <span className="cart-item-variant">Cor/textura: {item.color}</span>
