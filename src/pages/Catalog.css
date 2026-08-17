@@ -40,6 +40,12 @@
   overflow: hidden;
 }
 
+.best-seller-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .best-seller-name {
   font-weight: 700;
   margin-bottom: 6px;

@@ -138,7 +138,11 @@ export default function Catalog() {
               {bestSellers.map((p) => (
                 <Link key={p.id} to={`/produto/${p.slug}`} className="best-seller-card">
                   <div className="best-seller-image" aria-hidden="true">
-                    <span>{p.image}</span>
+                    {p.image?.startsWith('/') ? (
+                      <img src={p.image} alt="" loading="lazy" />
+                    ) : (
+                      <span>{p.image}</span>
+                    )}
                   </div>
                   <p className="best-seller-name">{p.name}</p>
                   <p className="best-seller-price">
