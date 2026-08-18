@@ -944,6 +944,26 @@ export const products = [
     expertNote: 'Recomendado por psicopedagogos para atividades de raciocínio lógico-matemático e coordenação motora fina.',
     image: '/products/giraconta-desafio-matematico.jpeg',
   },
+  {
+    id: 'p49',
+    slug: 'safari-dos-animais',
+    name: 'Safari dos Animais',
+    category: 'mobiliario',
+    price: 56.0,
+    installments: 'conjunto com os 4 animais',
+    rating: 5.0,
+    reviewsCount: 8,
+    badges: ['new'],
+    ageRange: '0+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'deficiencia-intelectual', 'baixa-visao'],
+    colorOptions: ['Kit com 4 animais'],
+    description: 'Conjunto de 4 silhuetas vazadas de animais de safari — macaco, girafa, elefante e leão — em cores suaves, ideal para decorar quartos e cantinhos sensoriais com contornos simples e contrastantes.',
+    benefits: ['Kit com 4 peças', 'Contornos simples e contrastantes', 'Cores suaves e aconchegantes', 'Fácil de fixar na parede'],
+    dimensions: 'Peças de 20 a 30 cm de altura · kit com 4',
+    expertNote: 'Recomendado por terapeutas ocupacionais para composição de ambientes calmos e estimulação visual suave.',
+    image: '/products/safari-dos-animais.jpeg',
+  },
 ]
 
 export const conditions = [
