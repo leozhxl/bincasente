@@ -25,6 +25,7 @@ export default function Account() {
   const { orders: allOrders } = useOrders()
   const [tab, setTab] = useState(location.state?.initialTab || 'Minha Conta')
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [mode, setMode] = useState('login')
   const [form, setForm] = useState({
     name: '',
@@ -115,25 +116,27 @@ export default function Account() {
                 />
               </div>
 
-              <div className="field password-field">
+              <div className="field">
                 <label htmlFor="login-senha" className="visually-hidden">Senha</label>
-                <input
-                  id="login-senha"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Senha *"
-                  value={form.password}
-                  onChange={(e) => update('password', e.target.value)}
-                  minLength={6}
-                  required
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                >
-                  {showPassword ? '🙈' : '👁️'}
-                </button>
+                <div className="password-field">
+                  <input
+                    id="login-senha"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Senha *"
+                    value={form.password}
+                    onChange={(e) => update('password', e.target.value)}
+                    minLength={6}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  >
+                    {showPassword ? '🙈' : '👁️'}
+                  </button>
+                </div>
               </div>
 
               <label className="remember-check">
@@ -224,35 +227,47 @@ export default function Account() {
               />
             </div>
 
-            <div className="field password-field">
+            <div className="field">
               <label htmlFor="signup-senha">Senha</label>
-              <input
-                id="signup-senha"
-                type={showPassword ? 'text' : 'password'}
-                value={form.password}
-                onChange={(e) => update('password', e.target.value)}
-                minLength={6}
-                required
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-              >
-                {showPassword ? '🙈' : '👁️'}
-              </button>
+              <div className="password-field">
+                <input
+                  id="signup-senha"
+                  type={showPassword ? 'text' : 'password'}
+                  value={form.password}
+                  onChange={(e) => update('password', e.target.value)}
+                  minLength={6}
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
 
             <div className="field">
               <label htmlFor="signup-confirm">Confirmar senha</label>
-              <input
-                id="signup-confirm"
-                type={showPassword ? 'text' : 'password'}
-                value={form.confirm}
-                onChange={(e) => update('confirm', e.target.value)}
-                required
-              />
+              <div className="password-field">
+                <input
+                  id="signup-confirm"
+                  type={showConfirm ? 'text' : 'password'}
+                  value={form.confirm}
+                  onChange={(e) => update('confirm', e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowConfirm((v) => !v)}
+                  aria-label={showConfirm ? 'Ocultar senha' : 'Mostrar senha'}
+                >
+                  {showConfirm ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
 
             <label className="consent-check">

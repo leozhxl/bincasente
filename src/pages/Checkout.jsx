@@ -27,7 +27,6 @@ const emptyForm = {
 const paymentLabels = {
   pix: 'Pix',
   cartao: 'Cartão de crédito',
-  boleto: 'Boleto bancário',
 }
 
 export default function Checkout() {
@@ -38,7 +37,6 @@ export default function Checkout() {
   const [step, setStep] = useState('dados')
   const [form, setForm] = useState({ ...emptyForm, email: user?.email || '', nome: user?.displayName || '' })
   const [errors, setErrors] = useState({})
-  const [asGuest, setAsGuest] = useState(true)
   const [confirmed, setConfirmed] = useState(false)
   const [orderNumber] = useState(() => `BS-${Math.floor(100000 + Math.random() * 900000)}`)
   const [orderSnapshot, setOrderSnapshot] = useState(null)
@@ -88,12 +86,7 @@ export default function Checkout() {
       return
     }
 
-    if (form.pagamento === 'cartao') {
-      await finalizeOrder('Aguardando link de pagamento')
-      return
-    }
-
-    await finalizeOrder('Processando')
+    await finalizeOrder('Aguardando link de pagamento')
   }
 
   async function finalizeOrder(status) {
@@ -157,18 +150,6 @@ export default function Checkout() {
         <div className="checkout-grid">
           <form className="checkout-form" onSubmit={handleDadosSubmit} noValidate>
             <h1>Seus dados</h1>
-
-            <div className="guest-toggle">
-              <button type="button" className={asGuest ? 'active' : ''} onClick={() => setAsGuest(true)}>Comprar como visitante</button>
-              <button type="button" className={!asGuest ? 'active' : ''} onClick={() => setAsGuest(false)}>Entrar / Cadastrar</button>
-            </div>
-
-            {!asGuest && (
-              <div className="field">
-                <label htmlFor="senha">Senha</label>
-                <input id="senha" type="password" placeholder="Sua senha" />
-              </div>
-            )}
 
             <div className="field">
               <label htmlFor="nome">Nome completo</label>
@@ -249,7 +230,6 @@ export default function Checkout() {
               {[
                 { id: 'pix', label: 'Pix (aprovação imediata)' },
                 { id: 'cartao', label: 'Cartão de crédito (em até 10x)' },
-                { id: 'boleto', label: 'Boleto bancário' },
               ].map((opt) => (
                 <label key={opt.id} className="payment-option">
                   <input
@@ -272,9 +252,6 @@ export default function Checkout() {
 
             {form.pagamento === 'pix' && (
               <p className="field-hint">Ao confirmar, você receberá um QR Code Pix para pagamento imediato.</p>
-            )}
-            {form.pagamento === 'boleto' && (
-              <p className="field-hint">O boleto vence em 3 dias úteis. O pedido é processado após a compensação.</p>
             )}
 
             <div className="checkout-actions">
@@ -304,7 +281,7 @@ export default function Checkout() {
       {step === 'confirmacao' && (
         <div className="confirmation card">
           <span className="confirmation-icon" aria-hidden="true">✔</span>
-          <h1>Pedido {form.pagamento === 'boleto' ? 'confirmado' : 'registrado'}!</h1>
+          <h1>Pedido registrado!</h1>
           <span className="whatsapp-confirm-badge">
             <span aria-hidden="true">✅</span> Enviamos os detalhes do pedido para o nosso WhatsApp
           </span>
@@ -320,9 +297,6 @@ export default function Checkout() {
               Nossa equipe vai te enviar, pelo WhatsApp, um <strong>link seguro de pagamento por cartão</strong>{' '}
               para você concluir a compra.
             </p>
-          )}
-          {form.pagamento === 'boleto' && (
-            <p>Enviamos um e-mail de confirmação para <strong>{form.email}</strong> com todos os detalhes.</p>
           )}
           <p>Prazo estimado de entrega: <strong>4 a 7 dias úteis</strong> após a confirmação do pagamento.</p>
           <p className="field-hint">

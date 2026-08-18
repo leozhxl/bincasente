@@ -16,8 +16,6 @@ import Checkout from './pages/Checkout'
 import Account from './pages/Account'
 import About from './pages/About'
 import HowItWorks from './pages/HowItWorks'
-import Blog from './pages/Blog'
-import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
 import AccessibilityPage from './pages/AccessibilityPage'
@@ -44,8 +42,6 @@ export default function App() {
                 <Route path="/conta" element={<Account />} />
                 <Route path="/sobre" element={<About />} />
                 <Route path="/como-funciona" element={<HowItWorks />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/contato" element={<Contact />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/acessibilidade" element={<AccessibilityPage />} />

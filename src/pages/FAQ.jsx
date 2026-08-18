@@ -3,7 +3,7 @@ import './FAQ.css'
 
 const faqData = {
   Compra: [
-    { q: 'Quais formas de pagamento vocês aceitam?', a: 'Aceitamos Pix, cartão de crédito (em até 10x) e boleto bancário.' },
+    { q: 'Quais formas de pagamento vocês aceitam?', a: 'Aceitamos Pix e cartão de crédito (em até 10x).' },
     { q: 'Posso comprar sem criar uma conta?', a: 'Sim, oferecemos checkout como visitante em todas as compras.' },
   ],
   Entrega: [

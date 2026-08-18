@@ -24,7 +24,6 @@ const helpLinks = [
   { icon: 'ℹ️', label: 'Quem Somos', to: '/sobre' },
   { icon: '🎧', label: 'Atendimento ao Cliente', to: '/contato' },
   { icon: '🛒', label: 'Como Comprar', to: '/faq' },
-  { icon: '📝', label: 'Blog', to: '/blog' },
 ]
 
 export default function CategoryMenu({ open, onClose }) {

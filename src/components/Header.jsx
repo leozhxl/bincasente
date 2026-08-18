@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Search, User, ShoppingCart, Menu, X, Sun, Moon, Monitor } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useAccessibility } from '../context/AccessibilityContext'
@@ -14,7 +15,7 @@ const navLinks = [
   { to: '/faq', label: 'FAQ' },
 ]
 
-const themeIcon = { light: '☀️', dark: '🌙', system: '🖥️' }
+const themeIcon = { light: Sun, dark: Moon, system: Monitor }
 const themeLabel = { light: 'Tema claro', dark: 'Tema escuro', system: 'Tema automático' }
 
 export default function Header() {
@@ -25,6 +26,7 @@ export default function Header() {
   const [navOpen, setNavOpen] = useState(false)
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
+  const ThemeIcon = themeIcon[theme]
 
   function closeNav() {
     setNavOpen(false)
@@ -51,12 +53,12 @@ export default function Header() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button type="submit" aria-label="Buscar">→</button>
+          <button type="submit" aria-label="Buscar"><Search size={18} strokeWidth={2.5} /></button>
         </form>
 
         <div className="header-top-actions">
           <Link to="/conta" className="header-account">
-            <span className="header-account-icon" aria-hidden="true">👤</span>
+            <span className="header-account-icon" aria-hidden="true"><User size={22} strokeWidth={2} /></span>
             <span className="header-account-text">
               {user ? (
                 <>Olá, <strong>{user.displayName}</strong></>
@@ -67,7 +69,7 @@ export default function Header() {
           </Link>
 
           <Link to="/carrinho" className="header-cart" aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
-            <span className="header-cart-icon" aria-hidden="true">🛒</span>
+            <span className="header-cart-icon" aria-hidden="true"><ShoppingCart size={20} strokeWidth={2} /></span>
             <span className="header-cart-info">
               <span>{count} {count === 1 ? 'item' : 'itens'}</span>
               <strong>R$ {subtotal.toFixed(2).replace('.', ',')}</strong>
@@ -85,7 +87,7 @@ export default function Header() {
           aria-label={navOpen ? 'Fechar menu' : 'Abrir menu'}
           onClick={() => setNavOpen((v) => !v)}
         >
-          <span aria-hidden="true">{navOpen ? '✕' : '☰'}</span>
+          <span aria-hidden="true">{navOpen ? <X size={22} /> : <Menu size={22} />}</span>
         </button>
 
         <nav id="main-nav" className={`main-nav ${navOpen ? 'open' : ''}`} aria-label="Navegação principal">
@@ -113,7 +115,7 @@ export default function Header() {
             </li>
             <li className="nav-mobile-cart">
               <Link to="/carrinho" className="btn btn-accent btn-block" onClick={closeNav} aria-label={`Carrinho, ${count} ${count === 1 ? 'produto' : 'produtos'}`}>
-                <span aria-hidden="true">🛒</span> Ver Carrinho{count > 0 ? ` (${count})` : ''}
+                <ShoppingCart size={18} strokeWidth={2} /> Ver Carrinho{count > 0 ? ` (${count})` : ''}
               </Link>
             </li>
           </ul>
@@ -125,7 +127,7 @@ export default function Header() {
           onClick={toggleTheme}
           aria-label={`${themeLabel[theme]}. Clique para alternar o tema.`}
         >
-          <span aria-hidden="true">{themeIcon[theme]}</span>
+          <ThemeIcon size={18} strokeWidth={2} aria-hidden="true" />
         </button>
       </div>
 

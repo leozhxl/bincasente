@@ -30,7 +30,6 @@ export default function Footer() {
             <li>Mastercard</li>
             <li>Elo</li>
             <li>Pix</li>
-            <li>Boleto</li>
           </ul>
         </div>
 

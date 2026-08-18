@@ -198,10 +198,16 @@
   }
   .cart-item {
     grid-template-columns: 56px 1fr;
-    grid-template-areas: "img info" "qty price";
+    grid-template-areas: "img info" "qty qty" "price price";
+    row-gap: 12px;
   }
   .cart-item-image { grid-area: img; }
   .cart-item-info { grid-area: info; }
   .cart-item-qty { grid-area: qty; }
-  .cart-item-price { grid-area: price; }
+  .cart-item-price {
+    grid-area: price;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
 }
