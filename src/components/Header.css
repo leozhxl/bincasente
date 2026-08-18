@@ -6,6 +6,12 @@
   z-index: 100;
 }
 
+@media (max-width: 900px) {
+  .site-header {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
 [data-contrast='high'] .site-header {
   background: #000;
 }

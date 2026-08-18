@@ -353,6 +353,16 @@ button, input, select, textarea {
   padding: 40px 0;
 }
 
+@media (max-width: 640px) {
+  .section {
+    padding: 44px 0;
+  }
+
+  .section-tight {
+    padding: 28px 0;
+  }
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.12em;

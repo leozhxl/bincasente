@@ -584,4 +584,41 @@
   .hero-stats {
     gap: 20px;
   }
+
+  .hero {
+    padding-top: 32px;
+  }
+
+  .hero-deco {
+    display: none;
+  }
+
+  .hero-title {
+    letter-spacing: -0.02em;
+  }
+
+  .hero-title span {
+    -webkit-text-stroke-width: 4px;
+  }
+
+  .hero-rating-card {
+    display: none;
+  }
+
+  .hero-badge-card {
+    left: 12px;
+    bottom: 12px;
+    padding: 8px 14px;
+  }
+
+  .hero-trust-strip {
+    margin-top: 32px;
+  }
+
+  .hero-trust-strip-inner {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding: 14px 20px;
+  }
 }
