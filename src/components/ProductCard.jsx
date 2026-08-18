@@ -34,7 +34,15 @@ export default function ProductCard({ product, checkered = false }) {
         </button>
         <Link to={`/produto/${product.slug}`} className="product-card-image" aria-hidden="true" tabIndex={-1}>
           {product.image?.startsWith('/') ? (
-            <img src={product.image} alt="" loading="lazy" />
+            <img
+              src={product.image}
+              alt=""
+              loading="lazy"
+              style={{
+                transform: product.imageZoom ? `scale(${product.imageZoom})` : undefined,
+                objectPosition: product.imagePosition || undefined,
+              }}
+            />
           ) : (
             <span>{product.image}</span>
           )}

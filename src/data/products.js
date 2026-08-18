@@ -682,6 +682,7 @@ export const products = [
     dimensions: '10 cm de comprimento · rosca ajustável',
     expertNote: 'Recomendado por terapeutas ocupacionais para apoio à pega funcional em atividades de escrita.',
     image: '/products/acessorio-regulador-lapis-rosca.jpeg',
+    imagePosition: '65% 22%',
   },
   {
     id: 'p36',
