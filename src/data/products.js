@@ -883,6 +883,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para atividades de rosqueamento, giro do pulso e brincadeira simbólica.',
     image: '/products/desafio-sensorial-garrafa-azeite.jpeg',
   },
+  {
+    id: 'p46',
+    slug: 'bailarina-sensorial',
+    name: 'Bailarina Sensorial',
+    category: 'visual',
+    price: 43.0,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 6,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'tdah', 'ansiedade'],
+    colorOptions: ['Padrão'],
+    description: 'Escultura giratória em formato de bailarina com saia texturizada em camadas espiraladas, que se movimenta ao girar sobre a base, unindo estímulo visual hipnotizante com textura tátil nas ranhuras.',
+    benefits: ['Movimento giratório relaxante', 'Textura tátil nas ranhuras', 'Estímulo visual hipnotizante', 'Peça decorativa e sensorial'],
+    dimensions: '12 cm de diâmetro x 10 cm de altura',
+    expertNote: 'Recomendado por terapeutas ocupacionais como estímulo visual calmante para momentos de autorregulação.',
+    image: '/products/bailarina-sensorial.jpeg',
+  },
 ]
 
 export const conditions = [
