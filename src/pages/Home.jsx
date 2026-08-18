@@ -81,7 +81,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Reveal as="section" className="section featured-section">
+      <section className="section featured-section">
         <div className="container">
           <h2 className="best-sellers-title">
             <span aria-hidden="true">◄◄◄◄◄◄◄◄◄◄</span> MAIS VENDIDOS <span aria-hidden="true">►►►►►►►►►►</span>
@@ -95,7 +95,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </Reveal>
+      </section>
 
     </>
   )
