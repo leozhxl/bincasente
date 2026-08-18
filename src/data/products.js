@@ -964,6 +964,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para composição de ambientes calmos e estimulação visual suave.',
     image: '/products/safari-dos-animais.jpeg',
   },
+  {
+    id: 'p50',
+    slug: 'quebra-cabeca-em-movimento',
+    name: 'Quebra-Cabeça em Movimento',
+    category: 'kits-terapeuticos',
+    price: 69.9,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 7,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'tdah', 'deficiencia-intelectual'],
+    colorOptions: ['Laranja'],
+    description: 'Quebra-cabeça deslizante com moldura emborrachada, onde as peças se movem dentro da grade para formar a imagem de uma laranja, trabalhando planejamento motor, raciocínio espacial e resolução de problemas.',
+    benefits: ['Peças deslizantes na moldura', 'Trabalha planejamento e raciocínio espacial', 'Bordas emborrachadas e seguras', 'Reutilizável, sem peças soltas'],
+    dimensions: '15 x 18 cm',
+    expertNote: 'Indicado por terapeutas ocupacionais para atividades de planejamento motor e resolução de problemas.',
+    image: '/products/quebra-cabeca-em-movimento.jpeg',
+  },
 ]
 
 export const conditions = [
