@@ -30,8 +30,9 @@ export default function Home() {
             </h1>
             <p className="hero-banner-pill">aprender brincando é muito mais divertido!</p>
             <p className="hero-desc">
-              Produtos sensoriais 3D pensados para crianças e adultos neurodivergentes, com curadoria de
-              terapeutas ocupacionais e materiais testados para segurança e conforto.
+              Produtos sensoriais 3D pensados para crianças e adultos neurodivergentes, desenvolvidos com
+              cuidado e materiais selecionados para proporcionar segurança, conforto e experiências
+              sensoriais significativas.
             </p>
             <div className="hero-actions">
               <Link to="/loja" className="btn btn-accent">
