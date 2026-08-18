@@ -16,43 +16,53 @@ export default function About() {
 
       <section className="section about-story-section">
         <div className="container">
-          <div className="about-story-card">
-            <div className="about-story-grid">
-              <div className="about-story-col">
-                <p>
-                  No dia a dia dos atendimentos, foi possível perceber como texturas, movimentos, encaixes,
-                  formas e desafios podem despertar a curiosidade e transformar cada interação em uma
-                  oportunidade de exploração, descoberta e aprendizagem.
-                </p>
-                <p>
-                  Dessa experiência surgiu o desejo de criar uma marca que unisse conhecimento, criatividade,
-                  funcionalidade e design, desenvolvendo produtos que proporcionassem experiências sensoriais
-                  interessantes, acolhedoras e significativas.
-                </p>
-              </div>
-              <div className="about-story-col">
-                <p>
-                  Assim nasceu a Brinca &amp; Sente, uma marca de produtos sensoriais 3D pensados para
-                  crianças e adultos, incluindo pessoas neurodivergentes, valorizando as diferentes formas de
-                  sentir, explorar e interagir com o mundo.
-                </p>
-                <p>
-                  Cada produto é pensado com atenção aos detalhes, buscando proporcionar experiências por
-                  meio do toque, do movimento, da manipulação e da descoberta, sempre respeitando a
-                  individualidade de quem utiliza.
-                </p>
-              </div>
+          <div className="how-grid about-story-grid">
+            <div className="how-card">
+              <span className="how-icon" aria-hidden="true">🔍</span>
+              <h3>Observando de perto</h3>
+              <p>
+                No dia a dia dos atendimentos, foi possível perceber como texturas, movimentos, encaixes,
+                formas e desafios podem despertar a curiosidade e transformar cada interação em uma
+                oportunidade de exploração, descoberta e aprendizagem.
+              </p>
             </div>
-
-            <blockquote className="about-pullquote">
-              <p>Mais do que criar objetos, a Brinca &amp; Sente acredita em criar possibilidades.</p>
-              <footer>
-                Porque brincar também é sentir.<br />
-                Sentir é descobrir.<br />
-                E cada descoberta pode abrir um novo caminho para aprender.
-              </footer>
-            </blockquote>
+            <div className="how-card">
+              <span className="how-icon" aria-hidden="true">💡</span>
+              <h3>Um propósito</h3>
+              <p>
+                Dessa experiência surgiu o desejo de criar uma marca que unisse conhecimento, criatividade,
+                funcionalidade e design, desenvolvendo produtos que proporcionassem experiências sensoriais
+                interessantes, acolhedoras e significativas.
+              </p>
+            </div>
+            <div className="how-card">
+              <span className="how-icon" aria-hidden="true">🧸</span>
+              <h3>Assim nasceu a marca</h3>
+              <p>
+                Assim nasceu a Brinca &amp; Sente, uma marca de produtos sensoriais 3D pensados para
+                crianças e adultos, incluindo pessoas neurodivergentes, valorizando as diferentes formas de
+                sentir, explorar e interagir com o mundo.
+              </p>
+            </div>
+            <div className="how-card">
+              <span className="how-icon" aria-hidden="true">🎨</span>
+              <h3>Cuidado em cada detalhe</h3>
+              <p>
+                Cada produto é pensado com atenção aos detalhes, buscando proporcionar experiências por
+                meio do toque, do movimento, da manipulação e da descoberta, sempre respeitando a
+                individualidade de quem utiliza.
+              </p>
+            </div>
           </div>
+
+          <blockquote className="about-pullquote about-pullquote-card">
+            <p>Mais do que criar objetos, a Brinca &amp; Sente acredita em criar possibilidades.</p>
+            <footer>
+              Porque brincar também é sentir.<br />
+              Sentir é descobrir.<br />
+              E cada descoberta pode abrir um novo caminho para aprender.
+            </footer>
+          </blockquote>
         </div>
       </section>
 
