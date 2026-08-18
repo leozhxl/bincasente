@@ -5,8 +5,10 @@ export default function About() {
     <div className="about-page">
       <section className="about-hero">
         <div className="container about-hero-inner">
-          <span className="eyebrow">Nossa história</span>
-          <h1>Um novo jeito de brincar, sentir e aprender</h1>
+          <span className="eyebrow-pill">Nossa história</span>
+          <h1 className="about-hero-title">
+            Um novo jeito de <span className="about-hero-title-accent">brincar, sentir</span> e aprender
+          </h1>
           <p className="about-lead">
             A Brinca &amp; Sente nasceu da experiência clínica e da percepção de que o brincar pode ir muito
             além da diversão.
