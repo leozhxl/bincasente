@@ -7,6 +7,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 import BackButton from './components/BackButton'
+import ScrollToTop from './components/ScrollToTop'
 
 import Home from './pages/Home'
 import Catalog from './pages/Catalog'
@@ -29,6 +30,7 @@ export default function App() {
         <OrdersProvider>
           <CartProvider>
             <a href="#main-content" className="skip-link">Pular para o conteúdo principal</a>
+            <ScrollToTop />
             <Header />
             <BackButton />
             <main id="main-content">
