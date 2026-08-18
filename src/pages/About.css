@@ -104,6 +104,11 @@
   margin-top: 0;
 }
 
+.about-story-grid .how-card {
+  background: var(--color-sky-light);
+  border-color: var(--border);
+}
+
 .about-pullquote {
   margin: 40px 0 0;
   padding: 24px 0 0 28px;
