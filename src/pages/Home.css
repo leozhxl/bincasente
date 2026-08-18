@@ -557,7 +557,8 @@
 
 @media (max-width: 1000px) {
   .hero-inner {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
   .hero-visual {
     order: -1;
