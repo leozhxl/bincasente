@@ -252,6 +252,8 @@
 }
 
 .hero-trust-strip {
+  position: relative;
+  z-index: 1;
   border-top: 1px solid var(--border);
   margin-top: 56px;
   background: var(--bg-elevated);
