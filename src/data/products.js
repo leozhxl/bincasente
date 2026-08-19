@@ -1004,6 +1004,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para treino de independência alimentar em crianças e adultos com dificuldades motoras.',
     image: '/products/suporte-adaptador-colher-garfo.jpeg',
   },
+  {
+    id: 'p52',
+    slug: 'adaptador-lapis',
+    name: 'Adaptador Lápis',
+    category: 'kits-terapeuticos',
+    price: 29.9,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 3,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'ABS resistente',
+    condition: ['deficiencia-intelectual', 'autismo', 'tdah'],
+    colorOptions: ['Azul'],
+    description: 'Suporte que se ajusta à mão e prende o lápis na posição correta de escrita, dispensando força de preensão e ajudando no desenvolvimento da coordenação motora fina durante atividades de escrita e desenho.',
+    benefits: ['Não exige força de preensão', 'Ajuste rápido com parafuso', 'Mantém o lápis na posição correta', 'Estimula a coordenação motora fina'],
+    dimensions: '14 cm de comprimento · ajustável',
+    expertNote: 'Recomendado por terapeutas ocupacionais para treino de escrita e preensão em crianças com dificuldades motoras finas.',
+    image: '/products/adaptador-lapis.jpeg',
+  },
 ]
 
 export const conditions = [
