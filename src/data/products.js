@@ -1104,6 +1104,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para crianças com dificuldade de preensão fina que ainda não sustentam a pegada tripod.',
     image: '/products/suporte-escrita-modelo-bola.jpeg',
   },
+  {
+    id: 'p57',
+    slug: 'adaptador-escova-de-dentes',
+    name: 'Adaptador para Escova de Dentes',
+    category: 'kits-terapeuticos',
+    price: 24.0,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 2,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['deficiencia-intelectual', 'autismo', 'tdah'],
+    colorOptions: ['Vermelho'],
+    description: 'Suporte que fixa a escova de dente na posição vertical sobre a pia, dispensando a necessidade de segurar o cabo com firmeza durante a escovação. Facilita a rotina de higiene bucal para quem tem dificuldades motoras.',
+    benefits: ['Fixa a escova na posição correta', 'Dispensa força de preensão', 'Base estável sobre a pia', 'Facilita a rotina de higiene'],
+    dimensions: '11 cm de altura',
+    expertNote: 'Recomendado por terapeutas ocupacionais para promover independência em atividades de vida diária, como a escovação dos dentes.',
+    image: '/products/adaptador-escova-de-dentes.jpeg',
+  },
 ]
 
 export const conditions = [
