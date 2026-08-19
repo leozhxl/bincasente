@@ -622,4 +622,21 @@
     flex-wrap: nowrap;
     padding: 14px 20px;
   }
+
+  .hero-trust-strip-inner span {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .best-sellers-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.05rem;
+  }
+
+  .best-sellers-title span[aria-hidden] {
+    display: none;
+  }
 }
