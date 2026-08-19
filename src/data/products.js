@@ -1064,6 +1064,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para regulação sensorial por movimento repetitivo das mãos.',
     image: '/products/infinito-sensorial.jpeg',
   },
+  {
+    id: 'p55',
+    slug: 'apoio-da-escrita',
+    name: 'Apoio da Escrita',
+    category: 'kits-terapeuticos',
+    price: 12.9,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 2,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'Silicone atóxico',
+    condition: ['deficiencia-intelectual', 'autismo', 'tdah'],
+    colorOptions: ['Roxo', 'Laranja'],
+    description: 'Empunhadura emborrachada que se encaixa no lápis, guiando os dedos para a pegada correta de escrita e reduzindo o esforço na hora de segurar o lápis por longos períodos.',
+    benefits: ['Guia a pegada correta', 'Material macio e confortável', 'Reduz fadiga na escrita', 'Encaixa em lápis e canetas comuns'],
+    dimensions: '4 cm de comprimento',
+    expertNote: 'Recomendado por terapeutas ocupacionais para desenvolvimento da pegada tripod e treino de escrita.',
+    image: '/products/apoio-da-escrita.jpeg',
+  },
 ]
 
 export const conditions = [
