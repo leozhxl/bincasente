@@ -1044,6 +1044,26 @@ export const products = [
     expertNote: 'Indicado por terapeutas ocupacionais para atividades de planejamento motor e regulação por foco repetitivo.',
     image: '/products/labirinto-sensorial-equilibrio.jpeg',
   },
+  {
+    id: 'p54',
+    slug: 'infinito-sensorial',
+    name: 'Infinito Sensorial',
+    category: 'fidgets',
+    price: 43.0,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 2,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'tdah', 'ansiedade'],
+    colorOptions: ['Verde'],
+    description: 'Peça em formato de laço infinito com uma bolinha que percorre a trilha interna ao girar as mãos, criando um movimento contínuo e hipnótico. Ideal para manter as mãos ocupadas durante momentos de ansiedade ou concentração.',
+    benefits: ['Movimento contínuo e hipnótico', 'Formato ergonômico para as duas mãos', 'Bolinha embutida sem soltar', 'Atividade calma e repetitiva'],
+    dimensions: '18 cm de largura',
+    expertNote: 'Recomendado por terapeutas ocupacionais para regulação sensorial por movimento repetitivo das mãos.',
+    image: '/products/infinito-sensorial.jpeg',
+  },
 ]
 
 export const conditions = [
