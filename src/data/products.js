@@ -1244,6 +1244,26 @@ export const products = [
     expertNote: 'Indicado por terapeutas ocupacionais para atividades de classificação, encaixe e coordenação motora fina.',
     image: '/products/descobrindo-as-formas.jpeg',
   },
+  {
+    id: 'p64',
+    slug: 'batalha-na-arvore',
+    name: 'Batalha na Árvore',
+    category: 'kits-terapeuticos',
+    price: 119.0,
+    installments: '2x de R$ 59,50',
+    rating: 5.0,
+    reviewsCount: 3,
+    badges: ['new'],
+    ageRange: '5+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'tdah', 'deficiencia-intelectual'],
+    colorOptions: ['Verde, Laranja e Cinza'],
+    description: 'Jogo de estratégia com tabuleiro em formato de árvore hexagonal e dois exércitos de miniaturas para posicionar e disputar espaço, trabalhando planejamento, turnos e interação social em dupla.',
+    benefits: ['Tabuleiro em formato de árvore', '2 exércitos com 20 miniaturas cada', 'Trabalha planejamento e turnos', 'Estimula interação social em dupla'],
+    dimensions: '18 cm de diâmetro · conjunto com 41 peças',
+    expertNote: 'Recomendado por terapeutas ocupacionais para atividades de espera de turno, planejamento estratégico e interação social.',
+    image: '/products/batalha-na-arvore.jpeg',
+  },
 ]
 
 export const conditions = [
