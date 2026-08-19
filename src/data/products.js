@@ -1084,6 +1084,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para desenvolvimento da pegada tripod e treino de escrita.',
     image: '/products/apoio-da-escrita.jpeg',
   },
+  {
+    id: 'p56',
+    slug: 'suporte-escrita-modelo-bola',
+    name: 'Suporte da Escrita (modelo bola)',
+    category: 'kits-terapeuticos',
+    price: 22.0,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 2,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['deficiencia-intelectual', 'autismo', 'tdah'],
+    colorOptions: ['Branco'],
+    description: 'Empunhadura em formato de bola que envolve o lápis ou caneta, oferecendo uma superfície ampla e confortável para mãos com dificuldade de pegada fina, facilitando o controle na hora de escrever ou desenhar.',
+    benefits: ['Superfície ampla e confortável', 'Facilita a pegada com a mão toda', 'Encaixa em lápis e canetas comuns', 'Reduz fadiga na escrita'],
+    dimensions: '4,5 cm de diâmetro',
+    expertNote: 'Recomendado por terapeutas ocupacionais para crianças com dificuldade de preensão fina que ainda não sustentam a pegada tripod.',
+    image: '/products/suporte-escrita-modelo-bola.jpeg',
+  },
 ]
 
 export const conditions = [
