@@ -1124,6 +1124,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para promover independência em atividades de vida diária, como a escovação dos dentes.',
     image: '/products/adaptador-escova-de-dentes.jpeg',
   },
+  {
+    id: 'p58',
+    slug: 'guia-da-escrita',
+    name: 'Guia da Escrita',
+    category: 'kits-terapeuticos',
+    price: 13.0,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 2,
+    badges: ['new'],
+    ageRange: '4+ anos',
+    material: 'PVC flexível',
+    condition: ['deficiencia-intelectual', 'autismo', 'tdah', 'baixa-visao'],
+    colorOptions: ['Branco'],
+    description: 'Gabarito vazado com linhas guia que se encaixa sobre a folha, ajudando a manter a escrita alinhada e dentro do espaço correto. Ideal para quem tem dificuldade em organizar o traçado das letras na linha.',
+    benefits: ['Mantém a escrita alinhada', 'Flexível e reutilizável', 'Fácil de posicionar sobre a folha', 'Ajuda na organização espacial da letra'],
+    dimensions: '15 x 18 cm',
+    expertNote: 'Recomendado por terapeutas ocupacionais para treino de organização espacial e alinhamento na escrita.',
+    image: '/products/guia-da-escrita.jpeg',
+  },
 ]
 
 export const conditions = [
