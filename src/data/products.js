@@ -1024,6 +1024,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para treino de escrita e preensão em crianças com dificuldades motoras finas.',
     image: '/products/adaptador-lapis.jpeg',
   },
+  {
+    id: 'p53',
+    slug: 'labirinto-sensorial-equilibrio',
+    name: 'Labirinto Sensorial de Equilíbrio',
+    category: 'fidgets',
+    price: 49.9,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 4,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'tdah', 'ansiedade'],
+    colorOptions: ['Verde'],
+    description: 'Disco com trilhas espiraladas em relevo por onde bolinhas percorrem até o centro, inclinando e girando a peça com as mãos. Trabalha coordenação motora fina, paciência e foco de forma lúdica e repetitiva.',
+    benefits: ['Trilhas em relevo tátil', 'Trabalha coordenação e paciência', 'Acompanha bolinhas', 'Atividade calma e repetitiva'],
+    dimensions: '20 cm de diâmetro',
+    expertNote: 'Indicado por terapeutas ocupacionais para atividades de planejamento motor e regulação por foco repetitivo.',
+    image: '/products/labirinto-sensorial-equilibrio.jpeg',
+  },
 ]
 
 export const conditions = [
