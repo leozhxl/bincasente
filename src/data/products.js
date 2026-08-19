@@ -984,6 +984,26 @@ export const products = [
     expertNote: 'Indicado por terapeutas ocupacionais para atividades de planejamento motor e resolução de problemas.',
     image: '/products/quebra-cabeca-em-movimento.jpeg',
   },
+  {
+    id: 'p51',
+    slug: 'suporte-adaptador-colher-garfo',
+    name: 'Suporte Adaptador de Colher e Garfo',
+    category: 'kits-terapeuticos',
+    price: 29.9,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 3,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'ABS resistente + talher de inox',
+    condition: ['deficiencia-intelectual', 'autismo'],
+    colorOptions: ['Azul'],
+    description: 'Suporte adaptador que se prende à mão, mantendo o garfo ou a colher posicionados sem exigir força de preensão, facilitando a independência na hora de comer para quem tem dificuldades motoras finas.',
+    benefits: ['Não exige força de preensão', 'Encaixe ajustável na mão', 'Talher de inox destacável', 'Promove independência à mesa'],
+    dimensions: '16 cm de comprimento · ajustável',
+    expertNote: 'Recomendado por terapeutas ocupacionais para treino de independência alimentar em crianças e adultos com dificuldades motoras.',
+    image: '/products/suporte-adaptador-colher-garfo.jpeg',
+  },
 ]
 
 export const conditions = [
