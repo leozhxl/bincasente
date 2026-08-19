@@ -1184,6 +1184,26 @@ export const products = [
     expertNote: 'Indicado por terapeutas ocupacionais para estimulação tátil combinada com atividades de descoberta e causa-efeito.',
     image: '/products/ovo-surpresa-sensorial.jpeg',
   },
+  {
+    id: 'p61',
+    slug: 'gira-e-encaixa-formas-divertidas',
+    name: 'Gira & Encaixa – Formas Divertidas',
+    category: 'kits-terapeuticos',
+    price: 49.9,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 4,
+    badges: ['new'],
+    ageRange: '1+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'deficiencia-intelectual', 'tdah'],
+    colorOptions: ['Multicolorido'],
+    description: 'Torre empilhável com peças em formato de engrenagem que se encaixam em uma haste central, trabalhando coordenação motora fina, reconhecimento de cores e noção de encaixe e empilhamento.',
+    benefits: ['Peças de encaixe fácil na haste', 'Trabalha coordenação motora fina', 'Cores vibrantes e contrastantes', 'Reutilizável e resistente'],
+    dimensions: '12 cm de altura · 4 peças',
+    expertNote: 'Recomendado por terapeutas ocupacionais para atividades de empilhamento, encaixe e planejamento motor.',
+    image: '/products/gira-e-encaixa-formas-divertidas.jpeg',
+  },
 ]
 
 export const conditions = [
