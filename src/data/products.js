@@ -1144,6 +1144,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para treino de organização espacial e alinhamento na escrita.',
     image: '/products/guia-da-escrita.jpeg',
   },
+  {
+    id: 'p59',
+    slug: 'tenis-da-autonomia',
+    name: 'Tênis da Autonomia',
+    category: 'kits-terapeuticos',
+    price: 48.0,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 3,
+    badges: ['new', 'expert'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'deficiencia-intelectual', 'tdah'],
+    colorOptions: ['Vermelho e Branco'],
+    description: 'Miniatura de tênis com furos e cadarço de verdade para treinar o passo a passo de amarrar os sapatos de forma lúdica e sem pressa, longe do pé, trabalhando coordenação motora fina e sequência de movimentos.',
+    benefits: ['Cadarço de tecido real', 'Treina o amarrar passo a passo', 'Trabalha coordenação motora fina', 'Base estável, não precisa segurar'],
+    dimensions: '13 cm de altura',
+    expertNote: 'Recomendado por terapeutas ocupacionais para treino de autonomia em atividades de vida diária, como amarrar os sapatos.',
+    image: '/products/tenis-da-autonomia.jpeg',
+  },
 ]
 
 export const conditions = [
