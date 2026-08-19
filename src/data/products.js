@@ -1164,6 +1164,26 @@ export const products = [
     expertNote: 'Recomendado por terapeutas ocupacionais para treino de autonomia em atividades de vida diária, como amarrar os sapatos.',
     image: '/products/tenis-da-autonomia.jpeg',
   },
+  {
+    id: 'p60',
+    slug: 'ovo-surpresa-sensorial',
+    name: 'Ovo Surpresa Sensorial',
+    category: 'tatil',
+    price: 19.9,
+    installments: 'à vista',
+    rating: 5.0,
+    reviewsCount: 3,
+    badges: ['new'],
+    ageRange: '3+ anos',
+    material: 'PLA atóxico impresso em 3D',
+    condition: ['autismo', 'tdah', 'ansiedade'],
+    colorOptions: ['Branco'],
+    description: 'Ovo que se abre ao meio revelando uma textura interna em favo de mel, com um "ovo frito" colorido escondido dentro. Estimula o tato através da textura vazada e traz o elemento surpresa da descoberta ao abrir.',
+    benefits: ['Textura em relevo tipo favo de mel', 'Surpresa colorida escondida dentro', 'Encaixe fácil de abrir e fechar', 'Tamanho compacto para levar na bolsa'],
+    dimensions: '6 cm de diâmetro',
+    expertNote: 'Indicado por terapeutas ocupacionais para estimulação tátil combinada com atividades de descoberta e causa-efeito.',
+    image: '/products/ovo-surpresa-sensorial.jpeg',
+  },
 ]
 
 export const conditions = [
