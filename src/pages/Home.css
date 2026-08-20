@@ -167,7 +167,7 @@
   gap: 0;
   height: 100%;
   width: max-content;
-  animation: hero-crate-carousel-scroll 55s linear infinite;
+  animation: hero-crate-carousel-scroll 140s linear infinite;
 }
 
 .hero-crate-carousel-slide {

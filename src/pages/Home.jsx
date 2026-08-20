@@ -55,20 +55,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            <div className="hero-rating-card">
-              <span className="stars" aria-hidden="true">★★★★★</span>
-              <strong>4,9</strong>
-              <span>+2.400 avaliações</span>
-            </div>
-
-            <div className="hero-badge-card">
-              <span aria-hidden="true">🩺</span>
-              <div>
-                <strong>Aprovado</strong>
-                <span>por Terapeutas</span>
-              </div>
-            </div>
           </div>
         </div>
         <div className="hero-trust-strip">
