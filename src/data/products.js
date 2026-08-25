@@ -45,7 +45,7 @@ export const products = [
     benefits: ['Atóxico', 'Formato ergonômico', 'Múltiplas texturas', 'Tamanho compacto'],
     dimensions: '9 cm de altura · 120g',
     expertNote: 'Recomendado para uso discreto em sala de aula e consultório.',
-    image: '/products/ovo-tatil-degrade.jpeg',
+    image: '/products/ovo-de-dragao.jpeg',
   },
   {
     id: 'p13',

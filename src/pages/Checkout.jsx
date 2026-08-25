@@ -95,15 +95,17 @@ export default function Checkout() {
 
     sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
 
-    if (user) {
-      await addOrder({
-        id: orderNumber,
-        date: new Date().toLocaleDateString('pt-BR'),
-        status,
-        total,
-        items: snapshotItems,
-      })
-    }
+    await addOrder({
+      id: orderNumber,
+      date: new Date().toLocaleDateString('pt-BR'),
+      status,
+      total,
+      items: snapshotItems,
+      customer: form,
+      paymentMethod: form.pagamento,
+      subtotal,
+      shipping,
+    })
     setOrderSnapshot({
       date: new Date().toLocaleDateString('pt-BR'),
       items: snapshotItems,

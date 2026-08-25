@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import { AccessibilityProvider } from './context/AccessibilityContext'
 import { AuthProvider } from './context/AuthContext'
@@ -22,6 +22,7 @@ import FAQ from './pages/FAQ'
 import AccessibilityPage from './pages/AccessibilityPage'
 import ExchangePolicy from './pages/ExchangePolicy'
 import NotFound from './pages/NotFound'
+import Admin from './pages/Admin'
 
 export default function App() {
   return (
@@ -31,31 +32,43 @@ export default function App() {
           <CartProvider>
             <a href="#main-content" className="skip-link">Pular para o conteúdo principal</a>
             <ScrollToTop />
-            <Header />
-            <BackButton />
-            <main id="main-content">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/loja" element={<Catalog />} />
-                <Route path="/loja/:categorySlug" element={<Catalog />} />
-                <Route path="/produto/:slug" element={<Product />} />
-                <Route path="/carrinho" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/conta" element={<Account />} />
-                <Route path="/sobre" element={<About />} />
-                <Route path="/como-funciona" element={<HowItWorks />} />
-                <Route path="/contato" element={<Contact />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/acessibilidade" element={<AccessibilityPage />} />
-                <Route path="/politica-trocas" element={<ExchangePolicy />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-            <WhatsAppButton />
+            <AppShell />
           </CartProvider>
         </OrdersProvider>
       </AuthProvider>
     </AccessibilityProvider>
+  )
+}
+
+function AppShell() {
+  const location = useLocation()
+  const isAdmin = location.pathname.startsWith('/admin')
+
+  return (
+    <>
+      {!isAdmin && <Header />}
+      {!isAdmin && <BackButton />}
+      <main id="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/loja" element={<Catalog />} />
+          <Route path="/loja/:categorySlug" element={<Catalog />} />
+          <Route path="/produto/:slug" element={<Product />} />
+          <Route path="/carrinho" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/conta" element={<Account />} />
+          <Route path="/sobre" element={<About />} />
+          <Route path="/como-funciona" element={<HowItWorks />} />
+          <Route path="/contato" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/acessibilidade" element={<AccessibilityPage />} />
+          <Route path="/politica-trocas" element={<ExchangePolicy />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      {!isAdmin && <Footer />}
+      {!isAdmin && <WhatsAppButton />}
+    </>
   )
 }

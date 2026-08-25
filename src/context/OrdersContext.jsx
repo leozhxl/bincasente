@@ -20,7 +20,7 @@ export function OrdersProvider({ children }) {
 
   async function addOrder(order) {
     await api('/orders', { method: 'POST', body: order })
-    setOrders((prev) => [order, ...prev])
+    if (user) setOrders((prev) => [order, ...prev])
   }
 
   return <OrdersContext.Provider value={{ orders, addOrder }}>{children}</OrdersContext.Provider>

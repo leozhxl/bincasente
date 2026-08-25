@@ -5,6 +5,11 @@ import loginHandler from '../api/login.js'
 import meHandler from '../api/me.js'
 import ordersHandler from '../api/orders.js'
 import shippingHandler from '../api/shipping.js'
+import adminLoginHandler from '../api/admin-login.js'
+import adminOrdersHandler from '../api/admin-orders.js'
+import adminSettingsHandler from '../api/admin-settings.js'
+import adminCustomersHandler from '../api/admin-customers.js'
+import adminDealsHandler from '../api/admin-deals.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -17,6 +22,11 @@ app.post('/api/login', loginHandler)
 app.all('/api/me', meHandler)
 app.all('/api/orders', ordersHandler)
 app.post('/api/shipping', shippingHandler)
+app.post('/api/admin-login', adminLoginHandler)
+app.all('/api/admin-orders', adminOrdersHandler)
+app.all('/api/admin-settings', adminSettingsHandler)
+app.all('/api/admin-customers', adminCustomersHandler)
+app.all('/api/admin-deals', adminDealsHandler)
 
 app.listen(PORT, () => {
   console.log(`Brinca e Sente API rodando em http://localhost:${PORT}`)
