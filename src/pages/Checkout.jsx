@@ -54,6 +54,7 @@ export default function Checkout() {
     const errs = {}
     if (!form.nome.trim()) errs.nome = 'Informe seu nome completo.'
     if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = 'Informe um e-mail válido.'
+    if (form.telefone.replace(/\D/g, '').length < 10) errs.telefone = 'Informe um telefone válido com DDD.'
     if (form.cep.replace(/\D/g, '').length !== 8) errs.cep = 'CEP deve ter 8 dígitos.'
     if (!form.endereco.trim()) errs.endereco = 'Informe o endereço.'
     if (!form.cidade.trim()) errs.cidade = 'Informe a cidade.'
@@ -167,7 +168,16 @@ export default function Checkout() {
               </div>
               <div className="field">
                 <label htmlFor="telefone">Telefone</label>
-                <input id="telefone" type="tel" value={form.telefone} onChange={(e) => update('telefone', e.target.value)} />
+                <input
+                  id="telefone"
+                  type="tel"
+                  value={form.telefone}
+                  onChange={(e) => update('telefone', e.target.value)}
+                  placeholder="(00) 00000-0000"
+                  aria-invalid={!!errors.telefone}
+                  aria-describedby={errors.telefone ? 'err-telefone' : undefined}
+                />
+                {errors.telefone && <p className="field-error" id="err-telefone">{errors.telefone}</p>}
               </div>
             </div>
 
