@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useOrders } from '../context/OrdersContext'
-import { products } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import './Account.css'
 
 const addresses = [
@@ -42,6 +42,7 @@ export default function Account() {
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const { wishlist } = useCart()
+  const { products } = useProducts()
   const wishedProducts = products.filter((p) => wishlist.includes(p.id))
 
   function update(field, value) {

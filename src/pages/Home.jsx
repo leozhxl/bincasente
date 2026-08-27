@@ -1,16 +1,19 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { products } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import ProductCard from '../components/ProductCard'
 import Reveal from '../components/Reveal'
 import './Home.css'
 
-const heroCarouselImages = products
-  .filter((p) => p.image?.startsWith('/'))
-  .map((p) => ({ id: p.id, src: p.image, label: p.name }))
-
 const heroDots = ['dot-1', 'dot-2', 'dot-3', 'dot-4', 'dot-5', 'dot-6']
 
 export default function Home() {
+  const { products } = useProducts()
+  const heroCarouselImages = useMemo(
+    () => products.filter((p) => p.image?.startsWith('/')).map((p) => ({ id: p.id, src: p.image, label: p.name })),
+    [products]
+  )
+
   return (
     <>
       <section className="hero">

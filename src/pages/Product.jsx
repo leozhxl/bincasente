@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { products } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import { useCart } from '../context/CartContext'
 import { calculateShipping } from '../api'
 import ProductViewer3D from '../components/ProductViewer3D'
@@ -9,6 +9,7 @@ import './Product.css'
 
 export default function Product() {
   const { slug } = useParams()
+  const { products } = useProducts()
   const product = products.find((p) => p.slug === slug)
   const { addItem } = useCart()
 

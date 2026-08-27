@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { categories, products } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import './CategoryMenu.css'
 
 const conditionLabels = {
@@ -12,13 +12,6 @@ const conditionLabels = {
   ansiedade: 'Ansiedade',
 }
 
-const categoryItems = categories.map((cat) => {
-  const conditionsInCategory = [
-    ...new Set(products.filter((p) => p.category === cat.slug).flatMap((p) => p.condition)),
-  ]
-  return { ...cat, conditions: conditionsInCategory }
-})
-
 const helpLinks = [
   { icon: '👤', label: 'Minha Conta', to: '/conta' },
   { icon: 'ℹ️', label: 'Quem Somos', to: '/sobre' },
@@ -27,8 +20,20 @@ const helpLinks = [
 ]
 
 export default function CategoryMenu({ open, onClose }) {
+  const { products, categories } = useProducts()
   const [expanded, setExpanded] = useState(null)
   const panelRef = useRef(null)
+
+  const categoryItems = useMemo(
+    () =>
+      categories.map((cat) => {
+        const conditionsInCategory = [
+          ...new Set(products.filter((p) => p.category === cat.slug).flatMap((p) => p.condition)),
+        ]
+        return { ...cat, conditions: conditionsInCategory }
+      }),
+    [categories, products]
+  )
 
   useEffect(() => {
     if (!open) return

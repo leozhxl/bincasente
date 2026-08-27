@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useCart } from '../context/CartContext'
-import { products } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import { calculateShipping } from '../api'
 import CheckoutProgress from '../components/CheckoutProgress'
 import ProductCard from '../components/ProductCard'
@@ -9,6 +9,7 @@ import './Cart.css'
 
 export default function Cart() {
   const { items, updateQty, removeItem, subtotal, count } = useCart()
+  const { products } = useProducts()
   const [cep, setCep] = useState('')
   const [shipping, setShipping] = useState(null)
   const [loadingShipping, setLoadingShipping] = useState(false)
