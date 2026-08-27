@@ -956,6 +956,77 @@
   margin-top: 4px;
 }
 
+.crm-product-card-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px 14px;
+  margin-top: auto;
+}
+
+.crm-product-card-actions .btn {
+  flex: 1;
+}
+
+.crm-modal-lg {
+  max-width: 640px;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1f2b;
+  margin-bottom: 6px;
+}
+
+.crm-image-upload {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.crm-image-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #e2e4e9;
+  flex-shrink: 0;
+}
+
+.crm-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  font-size: 2rem;
+  color: var(--text-soft);
+}
+
+.crm-image-upload .field-hint {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.crm-checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.crm-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
 /* Pipeline */
 
 .crm-kanban {
@@ -1035,27 +1106,91 @@
 
 .crm-modal {
   background: #fff;
-  border-radius: 14px;
-  padding: 28px;
+  border-radius: 16px;
   width: 100%;
   max-width: 460px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 14px;
 }
 
 .crm-modal h2 {
   color: #1a1f2b;
-  font-size: 1.15rem;
+  font-size: 1.3rem;
 }
 
 .crm-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 6px;
+  padding: 18px 32px;
+  border-top: 1px solid #f0f1f4;
+  background: #fff;
+}
+
+/* Formulário de produto (maior, organizado em seções) */
+
+.crm-modal-lg {
+  max-width: 780px;
+}
+
+.crm-modal-header {
+  padding: 26px 32px 18px;
+  border-bottom: 1px solid #f0f1f4;
+}
+
+.crm-modal-header h2 {
+  margin-bottom: 4px;
+}
+
+.crm-modal-body {
+  padding: 24px 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.crm-form-section {
+  background: #f8f9fb;
+  border: 1px solid #f0f1f4;
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+
+.crm-form-section h3 {
+  font-size: 0.95rem;
+  color: #1a1f2b;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e7e9ee;
+}
+
+.crm-form-section .field:last-child {
+  margin-bottom: 0;
+}
+
+.crm-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 20px;
+}
+
+.crm-field-full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+  .crm-field-grid {
+    grid-template-columns: 1fr;
+  }
+  .crm-modal-header,
+  .crm-modal-body,
+  .crm-modal-actions {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
 .crm-customer-orders {

@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
+import { ProductsProvider } from './context/ProductsContext'
 import { AccessibilityProvider } from './context/AccessibilityContext'
 import { AuthProvider } from './context/AuthContext'
 import { OrdersProvider } from './context/OrdersContext'
@@ -28,13 +29,15 @@ export default function App() {
   return (
     <AccessibilityProvider>
       <AuthProvider>
-        <OrdersProvider>
-          <CartProvider>
-            <a href="#main-content" className="skip-link">Pular para o conteúdo principal</a>
-            <ScrollToTop />
-            <AppShell />
-          </CartProvider>
-        </OrdersProvider>
+        <ProductsProvider>
+          <OrdersProvider>
+            <CartProvider>
+              <a href="#main-content" className="skip-link">Pular para o conteúdo principal</a>
+              <ScrollToTop />
+              <AppShell />
+            </CartProvider>
+          </OrdersProvider>
+        </ProductsProvider>
       </AuthProvider>
     </AccessibilityProvider>
   )

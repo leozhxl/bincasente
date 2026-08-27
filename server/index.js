@@ -10,12 +10,14 @@ import adminOrdersHandler from '../api/admin-orders.js'
 import adminSettingsHandler from '../api/admin-settings.js'
 import adminCustomersHandler from '../api/admin-customers.js'
 import adminDealsHandler from '../api/admin-deals.js'
+import productsHandler from '../api/products.js'
+import adminProductsHandler from '../api/admin-products.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
 
 app.use(cors())
-app.use(express.json())
+app.use(express.json({ limit: '8mb' }))
 
 app.post('/api/register', registerHandler)
 app.post('/api/login', loginHandler)
@@ -27,6 +29,8 @@ app.all('/api/admin-orders', adminOrdersHandler)
 app.all('/api/admin-settings', adminSettingsHandler)
 app.all('/api/admin-customers', adminCustomersHandler)
 app.all('/api/admin-deals', adminDealsHandler)
+app.all('/api/products', productsHandler)
+app.all('/api/admin-products', adminProductsHandler)
 
 app.listen(PORT, () => {
   console.log(`Brinca e Sente API rodando em http://localhost:${PORT}`)

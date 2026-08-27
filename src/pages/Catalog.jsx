@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { products, categories, conditions } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import ProductCard from '../components/ProductCard'
 import './Catalog.css'
 
 export default function Catalog() {
   const { categorySlug } = useParams()
+  const { products, categories, conditions } = useProducts()
   const [searchParams] = useSearchParams()
   const busca = searchParams.get('busca') || ''
 
@@ -47,7 +48,7 @@ export default function Catalog() {
         break
     }
     return list
-  }, [categorySlug, selectedCategory, selectedConditions, maxPrice, sort, busca])
+  }, [products, categorySlug, selectedCategory, selectedConditions, maxPrice, sort, busca])
 
   function toggleCondition(slug) {
     setSelectedConditions((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]))
