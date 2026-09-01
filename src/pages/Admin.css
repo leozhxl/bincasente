@@ -9,7 +9,7 @@
 .admin-login-card {
   width: 100%;
   max-width: 380px;
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 16px;
   padding: 40px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
@@ -67,7 +67,7 @@
 }
 
 .admin-stat-card {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 18px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
@@ -93,7 +93,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--border);
 }
 
 .admin-tabs button {
@@ -124,14 +124,14 @@
   min-width: 220px;
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   font-size: 0.9rem;
 }
 
 .admin-toolbar select {
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   font-size: 0.9rem;
 }
 
@@ -149,7 +149,7 @@
   resize: vertical;
   padding: 8px 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   font-family: inherit;
   font-size: 0.88rem;
 }
@@ -161,7 +161,7 @@
 }
 
 .admin-customer-card {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 16px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
@@ -211,7 +211,7 @@
 }
 
 .admin-customer-header {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 20px 24px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
@@ -247,7 +247,7 @@
 }
 
 .admin-finance .card {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
@@ -272,7 +272,7 @@
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
-  border-bottom: 1px dashed #eee;
+  border-bottom: 1px dashed var(--border);
   font-size: 0.95rem;
 }
 
@@ -329,11 +329,11 @@
 }
 
 .admin-finance-table thead {
-  background: #f7f7f7;
+  background: var(--bg-muted);
 }
 
 .admin-finance-table tbody tr {
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border);
 }
 
 .admin-profit-positive {
@@ -353,7 +353,7 @@
 }
 
 .admin-order-card {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 20px 24px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
@@ -411,7 +411,7 @@
 .admin-order-bottom select {
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   font-size: 0.9rem;
 }
 
@@ -420,14 +420,14 @@
 .crm-shell {
   display: flex;
   min-height: 100vh;
-  background: #f5f6f8;
+  background: var(--bg);
 }
 
 .crm-sidebar {
   width: 260px;
   flex-shrink: 0;
-  background: #fff;
-  border-right: 1px solid #eceef1;
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   padding: 20px 16px;
@@ -439,7 +439,7 @@
   gap: 12px;
   padding: 10px 8px 26px;
   margin-bottom: 4px;
-  border-bottom: 1px solid #f0f1f4;
+  border-bottom: 1px solid var(--border);
 }
 
 .crm-brand-logo {
@@ -454,7 +454,7 @@
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: #1a1f2b;
+  color: var(--text);
 }
 
 .crm-brand span {
@@ -481,12 +481,12 @@
   background: none;
   text-align: left;
   font-size: 0.92rem;
-  color: #4a5063;
+  color: var(--text-soft);
   cursor: pointer;
 }
 
 .crm-nav button:hover {
-  background: #f5f6f8;
+  background: var(--bg-muted);
 }
 
 .crm-nav button.active {
@@ -506,7 +506,7 @@
   align-items: center;
   gap: 10px;
   padding: 12px 8px;
-  border-top: 1px solid #eceef1;
+  border-top: 1px solid var(--border);
 }
 
 .crm-user-avatar {
@@ -525,7 +525,7 @@
 .crm-user strong {
   display: block;
   font-size: 0.85rem;
-  color: #1a1f2b;
+  color: var(--text);
 }
 
 .crm-user > div span {
@@ -544,13 +544,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 18px 32px;
-  background: #fff;
-  border-bottom: 1px solid #eceef1;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
 }
 
 .crm-topbar h1 {
   font-size: 1.2rem;
-  color: #1a1f2b;
+  color: var(--text);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -560,6 +560,24 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.crm-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.crm-theme-toggle:hover {
+  background: var(--bg-muted);
 }
 
 .crm-online {
@@ -599,7 +617,7 @@
 }
 
 .crm-card {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 14px;
   padding: 20px 22px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -640,7 +658,7 @@
 .crm-card-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1f2b;
+  color: var(--text);
 }
 
 .crm-card-label {
@@ -656,7 +674,7 @@
 }
 
 .crm-panel {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 14px;
   padding: 22px 24px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -664,7 +682,7 @@
 
 .crm-panel h2 {
   font-size: 1rem;
-  color: #1a1f2b;
+  color: var(--text);
   margin-bottom: 4px;
 }
 
@@ -729,7 +747,7 @@
 
 .crm-status-bar {
   height: 6px;
-  background: #f0f1f4;
+  background: var(--bg-muted);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -752,7 +770,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.88rem;
-  color: #1a1f2b;
+  color: var(--text);
 }
 
 .crm-mini-sub {
@@ -778,7 +796,7 @@
 
 .crm-page-head h2 {
   font-size: 1.3rem;
-  color: #1a1f2b;
+  color: var(--text);
 }
 
 .crm-page-head p {
@@ -815,16 +833,16 @@
   width: 100%;
   padding: 12px 14px 12px 38px;
   border-radius: 10px;
-  border: 1px solid #e2e4e9;
+  border: 1px solid var(--border);
   font-size: 0.9rem;
 }
 
 .crm-toolbar select {
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid #e2e4e9;
+  border: 1px solid var(--border);
   font-size: 0.9rem;
-  background: #fff;
+  background: var(--bg-elevated);
 }
 
 .crm-list-panel {
@@ -845,7 +863,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #f0f1f4;
+  background: var(--bg-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -855,7 +873,7 @@
 }
 
 .crm-empty-block strong {
-  color: #1a1f2b;
+  color: var(--text);
   font-size: 1rem;
 }
 
@@ -873,19 +891,19 @@
   align-items: center;
   justify-content: space-between;
   padding: 18px 24px;
-  border-bottom: 1px solid #f0f1f4;
+  border-bottom: 1px solid var(--border);
   cursor: pointer;
   gap: 12px;
   flex-wrap: wrap;
 }
 
 .crm-entity-list li:hover {
-  background: #fafbfc;
+  background: var(--bg-muted);
 }
 
 .crm-entity-list li strong {
   display: block;
-  color: #1a1f2b;
+  color: var(--text);
   font-size: 0.95rem;
 }
 
@@ -912,7 +930,7 @@
 .crm-badge-lead { background: #fff4e0; color: #d98e04; }
 .crm-badge-ativo { background: #e6f8ee; color: #1e9e5a; }
 .crm-badge-cliente { background: #e8f0ff; color: #2f6fed; }
-.crm-badge-inativo { background: #f0f1f4; color: var(--text-soft); }
+.crm-badge-inativo { background: var(--bg-muted); color: var(--text-soft); }
 
 /* Produtos */
 
@@ -925,7 +943,7 @@
 }
 
 .crm-product-card {
-  border: 1px solid #f0f1f4;
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
@@ -947,7 +965,7 @@
 
 .crm-product-card strong {
   font-size: 0.9rem;
-  color: #1a1f2b;
+  color: var(--text);
 }
 
 .crm-product-price {
@@ -975,7 +993,7 @@
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #1a1f2b;
+  color: var(--text);
   margin-bottom: 6px;
 }
 
@@ -990,7 +1008,7 @@
   height: 120px;
   object-fit: cover;
   border-radius: 12px;
-  border: 1px solid #e2e4e9;
+  border: 1px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -998,7 +1016,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: var(--bg-elevated);
   font-size: 2rem;
   color: var(--text-soft);
 }
@@ -1038,7 +1056,7 @@
 }
 
 .crm-kanban-col {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 12px;
   padding: 14px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -1065,7 +1083,7 @@
 }
 
 .crm-deal-card {
-  background: #f8f9fb;
+  background: var(--bg-muted);
   border-radius: 10px;
   padding: 12px;
   display: flex;
@@ -1075,7 +1093,7 @@
 }
 
 .crm-deal-card strong {
-  color: #1a1f2b;
+  color: var(--text);
 }
 
 .crm-deal-value {
@@ -1087,7 +1105,7 @@
   margin-top: 6px;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid #e2e4e9;
+  border: 1px solid var(--border);
   font-size: 0.78rem;
 }
 
@@ -1105,7 +1123,7 @@
 }
 
 .crm-modal {
-  background: #fff;
+  background: var(--bg-elevated);
   border-radius: 16px;
   width: 100%;
   max-width: 460px;
@@ -1116,7 +1134,7 @@
 }
 
 .crm-modal h2 {
-  color: #1a1f2b;
+  color: var(--text);
   font-size: 1.3rem;
 }
 
@@ -1125,8 +1143,8 @@
   justify-content: flex-end;
   gap: 10px;
   padding: 18px 32px;
-  border-top: 1px solid #f0f1f4;
-  background: #fff;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
 }
 
 /* Formulário de produto (maior, organizado em seções) */
@@ -1137,7 +1155,7 @@
 
 .crm-modal-header {
   padding: 26px 32px 18px;
-  border-bottom: 1px solid #f0f1f4;
+  border-bottom: 1px solid var(--border);
 }
 
 .crm-modal-header h2 {
@@ -1153,18 +1171,18 @@
 }
 
 .crm-form-section {
-  background: #f8f9fb;
-  border: 1px solid #f0f1f4;
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 20px 22px;
 }
 
 .crm-form-section h3 {
   font-size: 0.95rem;
-  color: #1a1f2b;
+  color: var(--text);
   margin-bottom: 16px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e7e9ee;
+  border-bottom: 1px solid var(--border);
 }
 
 .crm-form-section .field:last-child {
@@ -1196,12 +1214,12 @@
 .crm-customer-orders {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid #f0f1f4;
+  border-top: 1px solid var(--border);
 }
 
 .crm-customer-orders h3 {
   font-size: 0.95rem;
-  color: #1a1f2b;
+  color: var(--text);
   margin-bottom: 12px;
 }
 

@@ -1,3 +1,9 @@
+import { Sun, Moon, Monitor } from 'lucide-react'
+import { useAccessibility } from '../../context/AccessibilityContext'
+
+const themeIcon = { light: Sun, dark: Moon, system: Monitor }
+const themeLabel = { light: 'Tema claro', dark: 'Tema escuro', system: 'Tema automático' }
+
 const navItems = [
   { key: 'dashboard', label: 'Dashboard', icon: '▦' },
   { key: 'clientes', label: 'Clientes', icon: '◑' },
@@ -17,6 +23,9 @@ const pageTitles = {
 }
 
 export default function AdminLayout({ active, onChangeTab, onLogout, children }) {
+  const { theme, toggleTheme } = useAccessibility()
+  const ThemeIcon = themeIcon[theme]
+
   return (
     <div className="crm-shell">
       <aside className="crm-sidebar">
@@ -56,6 +65,15 @@ export default function AdminLayout({ active, onChangeTab, onLogout, children })
           <h1><span className="crm-nav-icon" aria-hidden="true">{navItems.find((n) => n.key === active)?.icon}</span> {pageTitles[active]}</h1>
           <div className="crm-topbar-actions">
             <span className="crm-online"><i /> Sistema online</span>
+            <button
+              type="button"
+              className="crm-theme-toggle"
+              onClick={toggleTheme}
+              aria-label={`${themeLabel[theme]}. Clique para alternar o tema.`}
+              title={themeLabel[theme]}
+            >
+              <ThemeIcon size={18} strokeWidth={2} aria-hidden="true" />
+            </button>
             <button type="button" className="btn btn-ghost" onClick={onLogout}>Sair</button>
           </div>
         </header>
