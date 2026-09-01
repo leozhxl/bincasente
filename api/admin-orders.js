@@ -1,4 +1,5 @@
 import { getDb, getFinanceSettings } from '../lib/db.js'
+import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { requireAdmin } from '../lib/auth.js'
 
 function feeRateFor(paymentMethod, settings) {
@@ -24,7 +25,7 @@ function round2(n) {
   return Math.round(n * 100) / 100
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (!requireAdmin(req, res)) return
 
   const db = await getDb()
@@ -146,3 +147,5 @@ export default async function handler(req, res) {
 
   res.status(405).json({ error: 'Método não permitido.' })
 }
+
+export default withErrorHandler(handler)

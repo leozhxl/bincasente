@@ -1,6 +1,7 @@
 import { signAdminToken } from '../lib/auth.js'
+import { withErrorHandler } from '../lib/withErrorHandler.js'
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' })
 
   const adminPassword = process.env.ADMIN_PASSWORD
@@ -16,3 +17,5 @@ export default async function handler(req, res) {
   const token = signAdminToken()
   res.json({ token })
 }
+
+export default withErrorHandler(handler)

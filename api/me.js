@@ -1,7 +1,8 @@
 import { getDb } from '../lib/db.js'
+import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { requireAuth, toPublicUser } from '../lib/auth.js'
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   const userId = requireAuth(req, res)
   if (!userId) return
 
@@ -32,3 +33,5 @@ export default async function handler(req, res) {
 
   res.status(405).json({ error: 'Método não permitido.' })
 }
+
+export default withErrorHandler(handler)

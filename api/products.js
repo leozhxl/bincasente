@@ -1,4 +1,5 @@
 import { getDb } from '../lib/db.js'
+import { withErrorHandler } from '../lib/withErrorHandler.js'
 
 export function rowToProduct(r) {
   return {
@@ -25,10 +26,12 @@ export function rowToProduct(r) {
   }
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Método não permitido.' })
 
   const db = await getDb()
   const result = await db.execute('SELECT * FROM crm_products ORDER BY created_at ASC')
   return res.json({ products: result.rows.map(rowToProduct) })
 }
+
+export default withErrorHandler(handler)

@@ -1,7 +1,8 @@
 import { getFinanceSettings, setFinanceSettings } from '../lib/db.js'
+import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { requireAdmin } from '../lib/auth.js'
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (!requireAdmin(req, res)) return
 
   if (req.method === 'GET') {
@@ -16,3 +17,5 @@ export default async function handler(req, res) {
 
   res.status(405).json({ error: 'Método não permitido.' })
 }
+
+export default withErrorHandler(handler)

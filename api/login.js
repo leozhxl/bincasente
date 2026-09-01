@@ -1,7 +1,8 @@
 import { getDb } from '../lib/db.js'
+import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { comparePassword, signToken, toPublicUser } from '../lib/auth.js'
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' })
 
   const { email, password } = req.body || {}
@@ -17,3 +18,5 @@ export default async function handler(req, res) {
   const token = signToken(Number(user.id))
   res.json({ token, user: toPublicUser(user) })
 }
+
+export default withErrorHandler(handler)
