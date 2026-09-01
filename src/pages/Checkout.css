@@ -203,6 +203,16 @@
   flex-wrap: wrap;
 }
 
+.btn-whatsapp {
+  background: #25d366;
+  color: #fff;
+  border: none;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe57;
+}
+
 @media (max-width: 900px) {
   .checkout-grid {
     grid-template-columns: 1fr;

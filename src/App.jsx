@@ -1,4 +1,5 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import { ProductsProvider } from './context/ProductsContext'
 import { AccessibilityProvider } from './context/AccessibilityContext'
@@ -45,7 +46,19 @@ export default function App() {
 
 function AppShell() {
   const location = useLocation()
+  const navigate = useNavigate()
   const isAdmin = location.pathname.startsWith('/admin')
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault()
+        navigate('/admin')
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [navigate])
 
   return (
     <>

@@ -140,34 +140,36 @@ function NovoClienteModal({ onClose, onCreate }) {
   return (
     <div className="crm-modal-backdrop" onClick={onClose}>
       <form className="crm-modal" onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
-        <h2>Novo cliente</h2>
-        <div className="field">
-          <label htmlFor="c-name">Nome</label>
-          <input id="c-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} autoFocus />
-        </div>
-        <div className="field">
-          <label htmlFor="c-email">E-mail</label>
-          <input id="c-email" type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
-        </div>
-        <div className="field-row">
+        <div className="crm-modal-body">
+          <h2>Novo cliente</h2>
           <div className="field">
-            <label htmlFor="c-phone">Telefone</label>
-            <input id="c-phone" value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} />
+            <label htmlFor="c-name">Nome</label>
+            <input id="c-name" type="text" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} autoFocus />
           </div>
           <div className="field">
-            <label htmlFor="c-company">Empresa</label>
-            <input id="c-company" value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} />
+            <label htmlFor="c-email">E-mail</label>
+            <input id="c-email" type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
           </div>
+          <div className="field-row">
+            <div className="field">
+              <label htmlFor="c-phone">Telefone</label>
+              <input id="c-phone" type="tel" value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} />
+            </div>
+            <div className="field">
+              <label htmlFor="c-company">Empresa</label>
+              <input id="c-company" type="text" value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} />
+            </div>
+          </div>
+          <div className="field">
+            <label htmlFor="c-status">Status</label>
+            <select id="c-status" value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}>
+              <option value="lead">Lead</option>
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+            </select>
+          </div>
+          {error && <p className="field-error">{error}</p>}
         </div>
-        <div className="field">
-          <label htmlFor="c-status">Status</label>
-          <select id="c-status" value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}>
-            <option value="lead">Lead</option>
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-          </select>
-        </div>
-        {error && <p className="field-error">{error}</p>}
         <div className="crm-modal-actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancelar</button>
           <button type="submit" className="btn btn-accent" disabled={saving}>{saving ? 'Salvando...' : 'Cadastrar'}</button>

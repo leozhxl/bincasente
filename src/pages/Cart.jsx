@@ -1,38 +1,15 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useProducts } from '../context/ProductsContext'
-import { calculateShipping } from '../api'
 import CheckoutProgress from '../components/CheckoutProgress'
 import ProductCard from '../components/ProductCard'
 import './Cart.css'
 
 export default function Cart() {
-  const { items, updateQty, removeItem, subtotal, count } = useCart()
+  const { items, updateQty, removeItem, subtotal } = useCart()
   const { products } = useProducts()
-  const [cep, setCep] = useState('')
-  const [shipping, setShipping] = useState(null)
-  const [loadingShipping, setLoadingShipping] = useState(false)
 
-  const shippingCost = shipping?.price ?? 0
-  const total = subtotal + shippingCost
-
-  async function calcShipping(e) {
-    e.preventDefault()
-    if (cep.replace(/\D/g, '').length !== 8) {
-      setShipping({ error: true })
-      return
-    }
-    setLoadingShipping(true)
-    try {
-      const cheapest = await calculateShipping(cep, count)
-      setShipping({ price: cheapest.price, days: `${cheapest.days} dias úteis`, carrier: `${cheapest.carrier} · ${cheapest.service}` })
-    } catch {
-      setShipping({ error: true })
-    } finally {
-      setLoadingShipping(false)
-    }
-  }
+  const total = subtotal
 
   const crossSell = products.filter((p) => !items.some((i) => i.id === p.id)).slice(0, 4)
 
@@ -90,19 +67,17 @@ export default function Cart() {
           <aside className="cart-summary card">
             <h2>Resumo do pedido</h2>
 
-            <form className="coupon-form" onSubmit={calcShipping}>
-              <label htmlFor="cart-cep">Calcular frete (CEP)</label>
-              <div className="coupon-row">
-                <input id="cart-cep" type="text" value={cep} onChange={(e) => setCep(e.target.value)} placeholder="00000-000" inputMode="numeric" />
-                <button type="submit" className="btn btn-ghost" disabled={loadingShipping}>{loadingShipping ? '...' : 'OK'}</button>
-              </div>
-              {shipping?.error && <p className="field-error">Não foi possível calcular o frete para esse CEP.</p>}
-              {shipping && !shipping.error && <p className="field-hint">{shipping.carrier} · Prazo: {shipping.days}</p>}
-            </form>
+            <p className="field-hint">
+              Quer saber o valor e o prazo do frete?{' '}
+              <a href="https://www2.correios.com.br/sistemas/precosPrazos/" target="_blank" rel="noopener noreferrer">
+                Consulte pelo seu CEP no site dos Correios
+              </a>
+              .
+            </p>
 
             <dl className="summary-lines">
               <div><dt>Subtotal</dt><dd>R$ {subtotal.toFixed(2).replace('.', ',')}</dd></div>
-              <div><dt>Frete</dt><dd>{shipping && !shipping.error ? `R$ ${shippingCost.toFixed(2).replace('.', ',')}` : 'A calcular'}</dd></div>
+              <div><dt>Frete</dt><dd>A combinar</dd></div>
               <div className="summary-total"><dt>Total</dt><dd>R$ {total.toFixed(2).replace('.', ',')}</dd></div>
             </dl>
 

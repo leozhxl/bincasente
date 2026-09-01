@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useProducts } from '../context/ProductsContext'
 import { useCart } from '../context/CartContext'
-import { calculateShipping } from '../api'
 import ProductViewer3D from '../components/ProductViewer3D'
 import ProductCard from '../components/ProductCard'
 import './Product.css'
@@ -15,8 +14,6 @@ export default function Product() {
 
   const [color, setColor] = useState(product?.colorOptions?.[0])
   const [qty, setQty] = useState(1)
-  const [cep, setCep] = useState('')
-  const [shippingInfo, setShippingInfo] = useState(null)
   const [added, setAdded] = useState(false)
 
   if (!product) {
@@ -34,20 +31,6 @@ export default function Product() {
     addItem(product, { color, qty })
     setAdded(true)
     setTimeout(() => setAdded(false), 2500)
-  }
-
-  async function handleCep(e) {
-    e.preventDefault()
-    if (cep.replace(/\D/g, '').length !== 8) {
-      setShippingInfo({ error: true })
-      return
-    }
-    try {
-      const cheapest = await calculateShipping(cep, qty)
-      setShippingInfo({ price: cheapest.price, days: `${cheapest.days} dias úteis`, carrier: `${cheapest.carrier} · ${cheapest.service}` })
-    } catch {
-      setShippingInfo({ error: true })
-    }
   }
 
   return (
@@ -126,17 +109,13 @@ export default function Product() {
           </div>
           {added && <p className="added-confirmation" role="status">✔ Adicionado ao carrinho</p>}
 
-          <form className="cep-form" onSubmit={handleCep}>
-            <label htmlFor="cep">Calcular frete e prazo</label>
-            <div className="cep-row">
-              <input id="cep" type="text" placeholder="00000-000" value={cep} onChange={(e) => setCep(e.target.value)} inputMode="numeric" />
-              <button type="submit" className="btn btn-ghost">Calcular</button>
-            </div>
-            {shippingInfo?.error && <p className="field-error">Não foi possível calcular o frete para esse CEP.</p>}
-            {shippingInfo && !shippingInfo.error && (
-              <p className="field-hint">Frete ({shippingInfo.carrier}): R$ {shippingInfo.price.toFixed(2).replace('.', ',')} · Prazo: {shippingInfo.days}</p>
-            )}
-          </form>
+          <p className="field-hint">
+            Quer saber o valor e o prazo de entrega para o seu CEP?{' '}
+            <a href="https://www2.correios.com.br/sistemas/precosPrazos/" target="_blank" rel="noopener noreferrer">
+              Consulte no site dos Correios
+            </a>
+            .
+          </p>
 
         </div>
       </div>

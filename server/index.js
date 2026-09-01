@@ -4,7 +4,6 @@ import registerHandler from '../api/register.js'
 import loginHandler from '../api/login.js'
 import meHandler from '../api/me.js'
 import ordersHandler from '../api/orders.js'
-import shippingHandler from '../api/shipping.js'
 import adminLoginHandler from '../api/admin-login.js'
 import adminOrdersHandler from '../api/admin-orders.js'
 import adminSettingsHandler from '../api/admin-settings.js'
@@ -23,7 +22,6 @@ app.post('/api/register', registerHandler)
 app.post('/api/login', loginHandler)
 app.all('/api/me', meHandler)
 app.all('/api/orders', ordersHandler)
-app.post('/api/shipping', shippingHandler)
 app.post('/api/admin-login', adminLoginHandler)
 app.all('/api/admin-orders', adminOrdersHandler)
 app.all('/api/admin-settings', adminSettingsHandler)

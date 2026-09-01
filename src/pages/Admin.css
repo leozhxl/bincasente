@@ -528,7 +528,7 @@
   color: #1a1f2b;
 }
 
-.crm-user span {
+.crm-user > div span {
   display: block;
   font-size: 0.75rem;
   color: var(--text-soft);

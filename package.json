@@ -7,7 +7,8 @@
     "dev": "vite",
     "server": "node --watch --env-file=.env server/index.js",
     "dev:all": "concurrently -n web,api -c blue,green \"npm:dev\" \"npm:server\"",
-    "build": "vite build",
+    "sitemap": "node scripts/generate-sitemap.js",
+    "build": "npm run sitemap && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },

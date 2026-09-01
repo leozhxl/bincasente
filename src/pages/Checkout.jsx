@@ -8,7 +8,6 @@ import CheckoutProgress from '../components/CheckoutProgress'
 import { buildPixPayload, orderToTxid } from '../utils/pix'
 import { openReceipt } from '../utils/receipt'
 import { sendOrderToWhatsApp } from '../utils/whatsappOrder'
-import { calculateShipping } from '../api'
 import './Checkout.css'
 
 const emptyForm = {
@@ -30,7 +29,7 @@ const paymentLabels = {
 }
 
 export default function Checkout() {
-  const { items, subtotal, count, clearCart } = useCart()
+  const { items, subtotal, clearCart } = useCart()
   const { user } = useAuth()
   const { addOrder } = useOrders()
   const navigate = useNavigate()
@@ -40,10 +39,9 @@ export default function Checkout() {
   const [confirmed, setConfirmed] = useState(false)
   const [orderNumber] = useState(() => `BS-${Math.floor(100000 + Math.random() * 900000)}`)
   const [orderSnapshot, setOrderSnapshot] = useState(null)
-  const [shippingInfo, setShippingInfo] = useState(null)
-  const [calculatingShipping, setCalculatingShipping] = useState(false)
+  const [whatsappItems, setWhatsappItems] = useState(null)
 
-  const shipping = shippingInfo?.price ?? 0
+  const shipping = 0
   const total = subtotal + shipping
 
   function update(field, value) {
@@ -62,20 +60,9 @@ export default function Checkout() {
     return Object.keys(errs).length === 0
   }
 
-  async function handleDadosSubmit(e) {
+  function handleDadosSubmit(e) {
     e.preventDefault()
     if (!validateDados()) return
-
-    setCalculatingShipping(true)
-    try {
-      const cheapest = await calculateShipping(form.cep, count)
-      setShippingInfo(cheapest)
-    } catch {
-      setErrors((prev) => ({ ...prev, cep: 'Não foi possível calcular o frete para esse CEP.' }))
-      setCalculatingShipping(false)
-      return
-    }
-    setCalculatingShipping(false)
     setStep('pagamento')
   }
 
@@ -94,6 +81,7 @@ export default function Checkout() {
     const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
     const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits }))
 
+    setWhatsappItems(whatsappItems)
     sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
 
     await addOrder({
@@ -118,6 +106,11 @@ export default function Checkout() {
     setConfirmed(true)
     clearCart()
     setStep('confirmacao')
+  }
+
+  function handleSendWhatsApp() {
+    if (!whatsappItems) return
+    sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
   }
 
   function handleReceipt() {
@@ -223,12 +216,12 @@ export default function Checkout() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-accent btn-block" disabled={calculatingShipping}>
-              {calculatingShipping ? 'Calculando frete...' : 'Continuar para pagamento'}
+            <button type="submit" className="btn btn-accent btn-block">
+              Continuar para pagamento
             </button>
           </form>
 
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} shippingInfo={shippingInfo} />
+          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
         </div>
       )}
 
@@ -274,7 +267,7 @@ export default function Checkout() {
             </div>
           </form>
 
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} shippingInfo={shippingInfo} />
+          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
         </div>
       )}
 
@@ -286,7 +279,7 @@ export default function Checkout() {
             onBack={() => setStep('pagamento')}
             onConfirm={() => finalizeOrder('Pendente')}
           />
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} shippingInfo={shippingInfo} />
+          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
         </div>
       )}
 
@@ -316,6 +309,9 @@ export default function Checkout() {
             baixar um comprovante da compra.
           </p>
           <div className="confirmation-actions">
+            <button type="button" className="btn btn-whatsapp" onClick={handleSendWhatsApp}>
+              <span aria-hidden="true">💬</span> Falar no WhatsApp sobre o pedido
+            </button>
             <button type="button" className="btn btn-primary" onClick={() => navigate('/conta')}>Acompanhar pedido</button>
             <button type="button" className="btn btn-outline" onClick={() => navigate('/loja')}>Continuar comprando</button>
             <button type="button" className="btn btn-ghost" onClick={handleReceipt}>Baixar comprovante</button>
@@ -407,7 +403,7 @@ function PixPayment({ orderNumber, total, onBack, onConfirm }) {
   )
 }
 
-function OrderSummary({ items, subtotal, shipping, total, shippingInfo }) {
+function OrderSummary({ items, subtotal, total }) {
   return (
     <aside className="checkout-summary card">
       <h2>Resumo do pedido</h2>
@@ -425,11 +421,18 @@ function OrderSummary({ items, subtotal, shipping, total, shippingInfo }) {
       <dl className="summary-lines">
         <div><dt>Subtotal</dt><dd>R$ {subtotal.toFixed(2).replace('.', ',')}</dd></div>
         <div>
-          <dt>Frete{shippingInfo ? ` (${shippingInfo.carrier})` : ''}</dt>
-          <dd>{shipping > 0 ? `R$ ${shipping.toFixed(2).replace('.', ',')}` : 'A calcular'}</dd>
+          <dt>Frete</dt>
+          <dd>A combinar</dd>
         </div>
         <div className="summary-total"><dt>Total</dt><dd>R$ {total.toFixed(2).replace('.', ',')}</dd></div>
       </dl>
+      <p className="field-hint">
+        Quer saber o valor e o prazo do frete?{' '}
+        <a href="https://www2.correios.com.br/sistemas/precosPrazos/" target="_blank" rel="noopener noreferrer">
+          Consulte pelo seu CEP no site dos Correios
+        </a>
+        .
+      </p>
     </aside>
   )
 }

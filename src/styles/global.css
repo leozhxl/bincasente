@@ -393,11 +393,7 @@ label {
   margin-bottom: 6px;
 }
 
-input[type='text'],
-input[type='email'],
-input[type='tel'],
-input[type='password'],
-input[type='number'],
+input:where(:not([type='checkbox']):not([type='radio']):not([type='file'])),
 select,
 textarea {
   width: 100%;

@@ -288,7 +288,7 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
             <div className="crm-field-grid">
               <div className="field">
                 <label htmlFor="p-name">Nome</label>
-                <input id="p-name" value={form.name} onChange={(e) => update('name', e.target.value)} autoFocus />
+                <input id="p-name" type="text" value={form.name} onChange={(e) => update('name', e.target.value)} autoFocus />
               </div>
               <div className="field">
                 <label htmlFor="p-category">Categoria</label>
@@ -303,19 +303,19 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
               </div>
               <div className="field">
                 <label htmlFor="p-installments">Parcelamento / condição de pagamento</label>
-                <input id="p-installments" value={form.installments} onChange={(e) => update('installments', e.target.value)} placeholder="Ex.: à vista, 2x de R$ 34,95" />
+                <input id="p-installments" type="text" value={form.installments} onChange={(e) => update('installments', e.target.value)} placeholder="Ex.: à vista, 2x de R$ 34,95" />
               </div>
               <div className="field">
                 <label htmlFor="p-age">Faixa etária</label>
-                <input id="p-age" value={form.ageRange} onChange={(e) => update('ageRange', e.target.value)} placeholder="Ex.: 3+ anos" />
+                <input id="p-age" type="text" value={form.ageRange} onChange={(e) => update('ageRange', e.target.value)} placeholder="Ex.: 3+ anos" />
               </div>
               <div className="field">
                 <label htmlFor="p-dimensions">Dimensões</label>
-                <input id="p-dimensions" value={form.dimensions} onChange={(e) => update('dimensions', e.target.value)} />
+                <input id="p-dimensions" type="text" value={form.dimensions} onChange={(e) => update('dimensions', e.target.value)} />
               </div>
               <div className="field crm-field-full">
                 <label htmlFor="p-material">Material</label>
-                <input id="p-material" value={form.material} onChange={(e) => update('material', e.target.value)} />
+                <input id="p-material" type="text" value={form.material} onChange={(e) => update('material', e.target.value)} />
               </div>
             </div>
           </section>
@@ -329,15 +329,15 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
             <div className="crm-field-grid">
               <div className="field">
                 <label htmlFor="p-benefits">Benefícios (separados por vírgula)</label>
-                <input id="p-benefits" value={form.benefits} onChange={(e) => update('benefits', e.target.value)} placeholder="Ex.: Atóxico, Leve, Giro suave" />
+                <input id="p-benefits" type="text" value={form.benefits} onChange={(e) => update('benefits', e.target.value)} placeholder="Ex.: Atóxico, Leve, Giro suave" />
               </div>
               <div className="field">
                 <label htmlFor="p-colors">Opções de cor (separadas por vírgula)</label>
-                <input id="p-colors" value={form.colorOptions} onChange={(e) => update('colorOptions', e.target.value)} placeholder="Ex.: Rosa, Azul, Roxo" />
+                <input id="p-colors" type="text" value={form.colorOptions} onChange={(e) => update('colorOptions', e.target.value)} placeholder="Ex.: Rosa, Azul, Roxo" />
               </div>
               <div className="field crm-field-full">
                 <label htmlFor="p-expert">Nota de especialista</label>
-                <input id="p-expert" value={form.expertNote} onChange={(e) => update('expertNote', e.target.value)} />
+                <input id="p-expert" type="text" value={form.expertNote} onChange={(e) => update('expertNote', e.target.value)} />
               </div>
             </div>
           </section>

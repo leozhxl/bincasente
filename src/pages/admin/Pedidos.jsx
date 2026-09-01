@@ -178,43 +178,45 @@ function NovoPedidoModal({ onClose, onCreate }) {
   return (
     <div className="crm-modal-backdrop" onClick={onClose}>
       <form className="crm-modal" onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit}>
-        <h2>Novo pedido</h2>
-        <div className="field">
-          <label htmlFor="p-nome">Nome do cliente</label>
-          <input id="p-nome" value={form.nome} onChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))} autoFocus />
-        </div>
-        <div className="field-row">
+        <div className="crm-modal-body">
+          <h2>Novo pedido</h2>
           <div className="field">
-            <label htmlFor="p-email">E-mail</label>
-            <input id="p-email" type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
+            <label htmlFor="p-nome">Nome do cliente</label>
+            <input id="p-nome" type="text" value={form.nome} onChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))} autoFocus />
+          </div>
+          <div className="field-row">
+            <div className="field">
+              <label htmlFor="p-email">E-mail</label>
+              <input id="p-email" type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
+            </div>
+            <div className="field">
+              <label htmlFor="p-telefone">Telefone</label>
+              <input id="p-telefone" type="tel" value={form.telefone} onChange={(e) => setForm((f) => ({ ...f, telefone: e.target.value }))} />
+            </div>
           </div>
           <div className="field">
-            <label htmlFor="p-telefone">Telefone</label>
-            <input id="p-telefone" value={form.telefone} onChange={(e) => setForm((f) => ({ ...f, telefone: e.target.value }))} />
+            <label htmlFor="p-item">Item</label>
+            <input id="p-item" type="text" value={form.itemNome} onChange={(e) => setForm((f) => ({ ...f, itemNome: e.target.value }))} placeholder="Ex: Ovo de dragão" />
           </div>
-        </div>
-        <div className="field">
-          <label htmlFor="p-item">Item</label>
-          <input id="p-item" value={form.itemNome} onChange={(e) => setForm((f) => ({ ...f, itemNome: e.target.value }))} placeholder="Ex: Ovo de dragão" />
-        </div>
-        <div className="field-row">
+          <div className="field-row">
+            <div className="field">
+              <label htmlFor="p-qtd">Quantidade</label>
+              <input id="p-qtd" type="number" min="1" value={form.itemQtd} onChange={(e) => setForm((f) => ({ ...f, itemQtd: e.target.value }))} />
+            </div>
+            <div className="field">
+              <label htmlFor="p-preco">Preço unitário (R$)</label>
+              <input id="p-preco" type="number" step="0.01" min="0" value={form.itemPreco} onChange={(e) => setForm((f) => ({ ...f, itemPreco: e.target.value }))} />
+            </div>
+          </div>
           <div className="field">
-            <label htmlFor="p-qtd">Quantidade</label>
-            <input id="p-qtd" type="number" min="1" value={form.itemQtd} onChange={(e) => setForm((f) => ({ ...f, itemQtd: e.target.value }))} />
+            <label htmlFor="p-pagamento">Pagamento</label>
+            <select id="p-pagamento" value={form.pagamento} onChange={(e) => setForm((f) => ({ ...f, pagamento: e.target.value }))}>
+              <option value="pix">Pix</option>
+              <option value="cartao">Cartão</option>
+            </select>
           </div>
-          <div className="field">
-            <label htmlFor="p-preco">Preço unitário (R$)</label>
-            <input id="p-preco" type="number" step="0.01" min="0" value={form.itemPreco} onChange={(e) => setForm((f) => ({ ...f, itemPreco: e.target.value }))} />
-          </div>
+          {error && <p className="field-error">{error}</p>}
         </div>
-        <div className="field">
-          <label htmlFor="p-pagamento">Pagamento</label>
-          <select id="p-pagamento" value={form.pagamento} onChange={(e) => setForm((f) => ({ ...f, pagamento: e.target.value }))}>
-            <option value="pix">Pix</option>
-            <option value="cartao">Cartão</option>
-          </select>
-        </div>
-        {error && <p className="field-error">{error}</p>}
         <div className="crm-modal-actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancelar</button>
           <button type="submit" className="btn btn-accent" disabled={saving}>{saving ? 'Salvando...' : 'Criar pedido'}</button>
