@@ -86,6 +86,8 @@ export const products = [
     dimensions: '12 x 8 x 6 cm · conjunto com 3 xícaras',
     expertNote: 'Utilizado em terapia ocupacional para atividades de faz de conta e motricidade fina.',
     image: '/products/moedor-cafe-miniatura.jpeg',
+    imageZoom: 1.7,
+    imagePosition: '50% 38%',
   },
   {
     id: 'p5',
