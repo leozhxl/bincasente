@@ -134,6 +134,19 @@ export function OrderCard({ order, onUpdate }) {
         <select value={order.status} onChange={(e) => onUpdate(order.id, { status: e.target.value })}>
           {statusOptions.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
+        {order.status !== 'Cancelado' && (
+          <button
+            type="button"
+            className="btn btn-outline btn-danger"
+            onClick={() => {
+              if (window.confirm(`Cancelar o pedido #${order.id}? Essa ação marcará o pedido como cancelado.`)) {
+                onUpdate(order.id, { status: 'Cancelado' })
+              }
+            }}
+          >
+            Cancelar pedido
+          </button>
+        )}
       </div>
     </article>
   )

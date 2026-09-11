@@ -27,21 +27,6 @@ export default function Financeiro({ orders, dre, settings, onSaveSettings }) {
 
   return (
     <div className="crm-page admin-finance">
-      <section className="admin-dre card">
-        <h2>Resumo financeiro (DRE)</h2>
-        <p className="field-hint">
-          Estimativa com base nas taxas configuradas abaixo. Aplicado sobre o valor dos produtos (sem frete).
-        </p>
-        <dl className="admin-dre-list">
-          <div><dt>Receita bruta (produtos)</dt><dd>{formatMoney(dre.grossRevenue)}</dd></div>
-          <div><dt>Frete cobrado dos clientes</dt><dd>{formatMoney(dre.shippingRevenue)}</dd></div>
-          <div className="admin-dre-negative"><dt>(–) Tarifas de pagamento</dt><dd>-{formatMoney(dre.tariff)}</dd></div>
-          <div className="admin-dre-negative"><dt>(–) Custo dos produtos</dt><dd>-{formatMoney(dre.cost)}</dd></div>
-          <div className="admin-dre-negative"><dt>(–) Impostos</dt><dd>-{formatMoney(dre.tax)}</dd></div>
-          <div className="admin-dre-total"><dt>(=) Lucro líquido</dt><dd>{formatMoney(dre.netProfit)}</dd></div>
-        </dl>
-      </section>
-
       <form className="admin-settings card" onSubmit={handleSave}>
         <h2>Taxas usadas no cálculo</h2>
         <p className="field-hint">Ajuste conforme a realidade do seu negócio. Isso recalcula o resumo acima e o lucro de cada pedido.</p>
@@ -78,9 +63,6 @@ export default function Financeiro({ orders, dre, settings, onSaveSettings }) {
                 <th>Data</th>
                 <th>Receita</th>
                 <th>Frete</th>
-                <th>Tarifa</th>
-                <th>Custo</th>
-                <th>Imposto</th>
                 <th>Lucro líquido</th>
               </tr>
             </thead>
@@ -91,11 +73,8 @@ export default function Financeiro({ orders, dre, settings, onSaveSettings }) {
                   <td>{o.date}</td>
                   <td>{formatMoney(o.finance.subtotal)}</td>
                   <td>{formatMoney(o.finance.shipping)}</td>
-                  <td>-{formatMoney(o.finance.tariff)}</td>
-                  <td>-{formatMoney(o.finance.cost)}</td>
-                  <td>-{formatMoney(o.finance.tax)}</td>
-                  <td className={o.finance.netProfit >= 0 ? 'admin-profit-positive' : 'admin-profit-negative'}>
-                    {formatMoney(o.finance.netProfit)}
+                  <td className="admin-profit-positive">
+                    {formatMoney(o.finance.subtotal + o.finance.shipping)}
                   </td>
                 </tr>
               ))}

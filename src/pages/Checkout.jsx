@@ -8,6 +8,7 @@ import CheckoutProgress from '../components/CheckoutProgress'
 import { buildPixPayload, orderToTxid } from '../utils/pix'
 import { openReceipt } from '../utils/receipt'
 import { sendOrderToWhatsApp } from '../utils/whatsappOrder'
+import { calcShippingByCep } from '../utils/shipping'
 import './Checkout.css'
 
 const emptyForm = {
@@ -41,11 +42,37 @@ export default function Checkout() {
   const [orderSnapshot, setOrderSnapshot] = useState(null)
   const [whatsappItems, setWhatsappItems] = useState(null)
 
-  const shipping = 0
+  const [shippingInfo, setShippingInfo] = useState(null) // { price, days, uf, cidade... }
+  const [shippingLoading, setShippingLoading] = useState(false)
+  const [shippingError, setShippingError] = useState('')
+
+  const shipping = shippingInfo?.price || 0
   const total = subtotal + shipping
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }))
+  }
+
+  async function handleCepBlur() {
+    const digits = form.cep.replace(/\D/g, '')
+    if (digits.length !== 8) return
+    setShippingLoading(true)
+    setShippingError('')
+    try {
+      const info = await calcShippingByCep(digits)
+      setShippingInfo(info)
+      setForm((f) => ({
+        ...f,
+        cidade: f.cidade || info.cidade || f.cidade,
+        estado: f.estado || info.uf || f.estado,
+        endereco: f.endereco || info.endereco || f.endereco,
+      }))
+    } catch (err) {
+      setShippingInfo(null)
+      setShippingError(err.message || 'Não foi possível calcular o frete.')
+    } finally {
+      setShippingLoading(false)
+    }
   }
 
   function validateDados() {
@@ -56,6 +83,7 @@ export default function Checkout() {
     if (form.cep.replace(/\D/g, '').length !== 8) errs.cep = 'CEP deve ter 8 dígitos.'
     if (!form.endereco.trim()) errs.endereco = 'Informe o endereço.'
     if (!form.cidade.trim()) errs.cidade = 'Informe a cidade.'
+    if (!shippingInfo) errs.cep = errs.cep || 'Aguarde o cálculo do frete para esse CEP.'
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -182,7 +210,23 @@ export default function Checkout() {
             <div className="field-row">
               <div className="field">
                 <label htmlFor="cep">CEP</label>
-                <input id="cep" type="text" inputMode="numeric" value={form.cep} onChange={(e) => update('cep', e.target.value)} aria-invalid={!!errors.cep} aria-describedby={errors.cep ? 'err-cep' : undefined} />
+                <input
+                  id="cep"
+                  type="text"
+                  inputMode="numeric"
+                  value={form.cep}
+                  onChange={(e) => { update('cep', e.target.value); setShippingInfo(null); setShippingError('') }}
+                  onBlur={handleCepBlur}
+                  aria-invalid={!!errors.cep}
+                  aria-describedby={errors.cep ? 'err-cep' : undefined}
+                />
+                {shippingLoading && <p className="field-hint">Calculando frete...</p>}
+                {!shippingLoading && shippingInfo && (
+                  <p className="field-hint">
+                    Frete para {shippingInfo.cidade}/{shippingInfo.uf}: <strong>R$ {shippingInfo.price.toFixed(2).replace('.', ',')}</strong> · {shippingInfo.days}
+                  </p>
+                )}
+                {!shippingLoading && shippingError && <p className="field-error">{shippingError}</p>}
                 {errors.cep && <p className="field-error" id="err-cep">{errors.cep}</p>}
               </div>
               <div className="field">
@@ -403,7 +447,7 @@ function PixPayment({ orderNumber, total, onBack, onConfirm }) {
   )
 }
 
-function OrderSummary({ items, subtotal, total }) {
+function OrderSummary({ items, subtotal, shipping, total }) {
   return (
     <aside className="checkout-summary card">
       <h2>Resumo do pedido</h2>
@@ -422,17 +466,10 @@ function OrderSummary({ items, subtotal, total }) {
         <div><dt>Subtotal</dt><dd>R$ {subtotal.toFixed(2).replace('.', ',')}</dd></div>
         <div>
           <dt>Frete</dt>
-          <dd>A combinar</dd>
+          <dd>{shipping > 0 ? `R$ ${shipping.toFixed(2).replace('.', ',')}` : 'Informe o CEP'}</dd>
         </div>
         <div className="summary-total"><dt>Total</dt><dd>R$ {total.toFixed(2).replace('.', ',')}</dd></div>
       </dl>
-      <p className="field-hint">
-        Quer saber o valor e o prazo do frete?{' '}
-        <a href="https://www2.correios.com.br/sistemas/precosPrazos/" target="_blank" rel="noopener noreferrer">
-          Consulte pelo seu CEP no site dos Correios
-        </a>
-        .
-      </p>
     </aside>
   )
 }

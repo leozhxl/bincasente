@@ -415,6 +415,11 @@
   font-size: 0.9rem;
 }
 
+.admin-order-bottom .btn-danger {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
 /* ---------- CRM shell (sidebar layout) ---------- */
 
 .crm-shell {
