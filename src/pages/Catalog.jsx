@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useProducts } from '../context/ProductsContext'
 import ProductCard from '../components/ProductCard'
+import { isImageSrc } from '../utils/image'
 import './Catalog.css'
 
 export default function Catalog() {
@@ -139,7 +140,7 @@ export default function Catalog() {
               {bestSellers.map((p) => (
                 <Link key={p.id} to={`/produto/${p.slug}`} className="best-seller-card">
                   <div className="best-seller-image" aria-hidden="true">
-                    {p.image?.startsWith('/') ? (
+                    {isImageSrc(p.image) ? (
                       <img src={p.image} alt="" loading="lazy" />
                     ) : (
                       <span>{p.image}</span>

@@ -9,6 +9,7 @@ import { buildPixPayload, orderToTxid } from '../utils/pix'
 import { openReceipt } from '../utils/receipt'
 import { sendOrderToWhatsApp } from '../utils/whatsappOrder'
 import { calcShippingByCep } from '../utils/shipping'
+import { isImageSrc } from '../utils/image'
 import './Checkout.css'
 
 const emptyForm = {
@@ -455,7 +456,7 @@ function OrderSummary({ items, subtotal, shipping, total }) {
         {items.map((item) => (
           <li key={item.key}>
             <span className="summary-item-image" aria-hidden="true">
-              {item.image?.startsWith('/') ? <img src={item.image} alt="" loading="lazy" /> : item.image}
+              {isImageSrc(item.image) ? <img src={item.image} alt="" loading="lazy" /> : item.image}
             </span>
             <span className="summary-item-name">{item.name} × {item.qty}</span>
             <span>R$ {(item.price * item.qty).toFixed(2).replace('.', ',')}</span>

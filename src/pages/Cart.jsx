@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext'
 import { useProducts } from '../context/ProductsContext'
 import CheckoutProgress from '../components/CheckoutProgress'
 import ProductCard from '../components/ProductCard'
+import { isImageSrc } from '../utils/image'
 import './Cart.css'
 
 export default function Cart() {
@@ -29,7 +30,7 @@ export default function Cart() {
             {items.map((item) => (
               <div key={item.key} className="cart-item card">
                 <span className="cart-item-image" aria-hidden="true">
-                  {item.image?.startsWith('/') ? (
+                  {isImageSrc(item.image) ? (
                     <img src={item.image} alt="" loading="lazy" />
                   ) : (
                     item.image

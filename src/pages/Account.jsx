@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useOrders } from '../context/OrdersContext'
 import { useProducts } from '../context/ProductsContext'
+import { isImageSrc } from '../utils/image'
 import './Account.css'
 
 const addresses = [
@@ -586,7 +587,7 @@ function AccountLoggedIn({ user, orders, firstName, tab, setTab, logout, updateP
                   {wishedProducts.map((p) => (
                     <li key={p.id}>
                       <span aria-hidden="true">
-                        {p.image?.startsWith('/') ? <img src={p.image} alt="" className="wishlist-thumb" /> : p.image}
+                        {isImageSrc(p.image) ? <img src={p.image} alt="" className="wishlist-thumb" /> : p.image}
                       </span> {p.name} — R$ {p.price.toFixed(2).replace('.', ',')}
                     </li>
                   ))}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { isImageSrc } from '../utils/image'
 import './ProductCard.css'
 
 const badgeMap = {
@@ -33,7 +34,7 @@ export default function ProductCard({ product, checkered = false }) {
           {isWished ? '♥' : '♡'}
         </button>
         <Link to={`/produto/${product.slug}`} className="product-card-image" aria-hidden="true" tabIndex={-1}>
-          {product.image?.startsWith('/') ? (
+          {isImageSrc(product.image) ? (
             <img
               src={product.image}
               alt=""
