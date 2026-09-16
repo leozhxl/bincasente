@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useOrders } from '../context/OrdersContext'
@@ -22,6 +22,7 @@ const tabs = [
 
 export default function Account() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { user, loading, login, signup, logout, updateProfile, deleteAccount } = useAuth()
   const { orders: allOrders } = useOrders()
   const [tab, setTab] = useState(location.state?.initialTab || 'Minha Conta')
@@ -80,6 +81,9 @@ export default function Account() {
           rg: form.rg,
         })
       }
+      if (location.state?.from) {
+        navigate(location.state.from, { replace: true })
+      }
     } catch (err) {
       setError(err.message)
     } finally {
@@ -103,6 +107,12 @@ export default function Account() {
             <form className="login-panel" onSubmit={handleSubmit} noValidate>
               <h1>Acesse sua conta</h1>
               <p className="login-subtitle">Informe seus dados para continuar</p>
+
+              {location.state?.from === '/checkout' && (
+                <p className="field-hint" role="status">
+                  Faça login ou crie uma conta para finalizar sua compra e acompanhar o pedido em "Meus Pedidos".
+                </p>
+              )}
 
               {error && <p className="field-error login-error" role="alert">{error}</p>}
 

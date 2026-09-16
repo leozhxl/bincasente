@@ -33,9 +33,15 @@ const paymentLabels = {
 
 export default function Checkout() {
   const { items, subtotal, clearCart } = useCart()
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const { addOrder } = useOrders()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/conta', { state: { initialTab: 'Minha Conta', from: '/checkout' }, replace: true })
+    }
+  }, [authLoading, user, navigate])
   const [step, setStep] = useState('dados')
   const [form, setForm] = useState({ ...emptyForm, email: user?.email || '', nome: user?.displayName || '' })
   const [errors, setErrors] = useState({})
@@ -174,6 +180,15 @@ export default function Checkout() {
       total: orderSnapshot.total,
       payment: paymentLabels[form.pagamento] || form.pagamento,
     })
+  }
+
+  if (authLoading || !user) {
+    return (
+      <div className="container section">
+        <h1>Redirecionando...</h1>
+        <p>Você precisa estar logado para finalizar a compra.</p>
+      </div>
+    )
   }
 
   if (items.length === 0 && !confirmed) {

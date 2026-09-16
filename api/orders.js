@@ -1,6 +1,6 @@
 import { getDb } from '../lib/db.js'
 import { withErrorHandler } from '../lib/withErrorHandler.js'
-import { getUserId, requireAuth } from '../lib/auth.js'
+import { requireAuth } from '../lib/auth.js'
 
 async function handler(req, res) {
   const db = await getDb()
@@ -31,7 +31,9 @@ async function handler(req, res) {
     const { id, date, status, total, items, customer, paymentMethod, subtotal, shipping } = req.body || {}
     if (!id || total == null) return res.status(400).json({ error: 'Pedido inválido.' })
 
-    const userId = getUserId(req)
+    const userId = requireAuth(req, res)
+    if (!userId) return
+
     const address = customer?.entrega === 'retirada'
       ? 'Retirar no local'
       : customer
@@ -43,7 +45,7 @@ async function handler(req, res) {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         id,
-        userId || null,
+        userId,
         date,
         status || 'Processando',
         total,
