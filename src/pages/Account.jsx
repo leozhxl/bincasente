@@ -462,28 +462,29 @@ function AccountLoggedIn({ user, orders, firstName, tab, setTab, logout, updateP
               {orders.length === 0 ? (
                 <p>Você ainda não fez nenhum pedido. Que tal <Link to="/loja">explorar o catálogo</Link>?</p>
               ) : (
-                <table className="orders-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Pedido</th>
-                      <th scope="col">Data</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Total</th>
-                      <th scope="col">Rastreio</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orders.map((o) => (
-                      <tr key={o.id}>
-                        <td>{o.id}</td>
-                        <td>{o.date}</td>
-                        <td><span className={`status-pill status-${o.status.toLowerCase()}`}>{o.status}</span></td>
-                        <td>R$ {o.total.toFixed(2).replace('.', ',')}</td>
-                        <td><a href="#rastreio">Ver rastreio</a></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="orders-list">
+                  {orders.map((o) => (
+                    <div key={o.id} className="order-card card">
+                      <div className="order-card-header">
+                        <div>
+                          <strong>Pedido {o.id}</strong>
+                          <span className="muted"> · {o.date}</span>
+                        </div>
+                        <span className={`status-pill status-${o.status.toLowerCase()}`}>{o.status}</span>
+                      </div>
+                      <ul className="order-items-list">
+                        {o.items.map((item, i) => (
+                          <li key={i}>
+                            {item.qty}x {item.name} — R$ {(item.price * item.qty).toFixed(2).replace('.', ',')}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="order-card-footer">
+                        <strong>Total: R$ {o.total.toFixed(2).replace('.', ',')}</strong>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           )}

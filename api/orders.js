@@ -32,9 +32,11 @@ async function handler(req, res) {
     if (!id || total == null) return res.status(400).json({ error: 'Pedido inválido.' })
 
     const userId = getUserId(req)
-    const address = customer
-      ? [customer.endereco, customer.numero, customer.cidade, customer.estado].filter(Boolean).join(', ')
-      : ''
+    const address = customer?.entrega === 'retirada'
+      ? 'Retirar no local'
+      : customer
+        ? [customer.endereco, customer.numero, customer.cidade, customer.estado].filter(Boolean).join(', ')
+        : ''
 
     await db.execute({
       sql: `INSERT INTO orders (id, user_id, date, status, total, items, customer_name, customer_email, customer_phone, customer_address, payment_method, subtotal, shipping)

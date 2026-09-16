@@ -274,6 +274,43 @@
   background: var(--bg-muted);
 }
 
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.order-card {
+  padding: 16px 20px;
+}
+
+.order-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.order-items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.92rem;
+  color: var(--text-secondary, #5b6b7a);
+}
+
+.order-card-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  text-align: right;
+}
+
 .status-entregue { background: var(--color-sage-light); color: var(--color-sage-dark); }
 .status-enviado { background: #e5eef2; color: var(--color-petrol-dark); }
 .status-processando { background: #f6e6dd; color: var(--color-terracotta-dark); }

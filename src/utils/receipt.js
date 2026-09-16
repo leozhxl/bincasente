@@ -45,7 +45,9 @@ export function openReceipt({ orderNumber, date, customer, items, subtotal, ship
     <p><strong>Cliente:</strong> ${escapeHtml(customer.nome)}</p>
     ${customer.cpfCnpj ? `<p><strong>CPF/CNPJ:</strong> ${escapeHtml(customer.cpfCnpj)}</p>` : ''}
     <p><strong>E-mail:</strong> ${escapeHtml(customer.email)}</p>
-    <p><strong>Endereço:</strong> ${escapeHtml(customer.endereco)}, ${escapeHtml(customer.numero || 's/n')} — ${escapeHtml(customer.cidade)}/${escapeHtml(customer.estado)}, CEP ${escapeHtml(customer.cep)}</p>
+    <p><strong>Entrega:</strong> ${customer.entrega === 'retirada'
+      ? 'Retirar no local'
+      : `${escapeHtml(customer.endereco)}, ${escapeHtml(customer.numero || 's/n')} — ${escapeHtml(customer.cidade)}/${escapeHtml(customer.estado)}, CEP ${escapeHtml(customer.cep)}`}</p>
     <p><strong>Forma de pagamento:</strong> ${escapeHtml(payment)}</p>
   </div>
 

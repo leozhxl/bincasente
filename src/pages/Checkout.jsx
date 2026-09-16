@@ -23,6 +23,7 @@ const emptyForm = {
   cidade: '',
   estado: '',
   pagamento: 'pix',
+  entrega: 'envio',
 }
 
 const paymentLabels = {
@@ -49,7 +50,8 @@ export default function Checkout() {
   const [shippingError, setShippingError] = useState('')
   const [orderError, setOrderError] = useState('')
 
-  const shipping = shippingInfo?.price || 0
+  const isPickup = form.entrega === 'retirada'
+  const shipping = isPickup ? 0 : shippingInfo?.price || 0
   const total = subtotal + shipping
 
   function update(field, value) {
@@ -83,10 +85,12 @@ export default function Checkout() {
     if (!form.nome.trim()) errs.nome = 'Informe seu nome completo.'
     if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = 'Informe um e-mail válido.'
     if (form.telefone.replace(/\D/g, '').length < 10) errs.telefone = 'Informe um telefone válido com DDD.'
-    if (form.cep.replace(/\D/g, '').length !== 8) errs.cep = 'CEP deve ter 8 dígitos.'
-    if (!form.endereco.trim()) errs.endereco = 'Informe o endereço.'
-    if (!form.cidade.trim()) errs.cidade = 'Informe a cidade.'
-    if (!shippingInfo) errs.cep = errs.cep || 'Aguarde o cálculo do frete para esse CEP.'
+    if (!isPickup) {
+      if (form.cep.replace(/\D/g, '').length !== 8) errs.cep = 'CEP deve ter 8 dígitos.'
+      if (!form.endereco.trim()) errs.endereco = 'Informe o endereço.'
+      if (!form.cidade.trim()) errs.cidade = 'Informe a cidade.'
+      if (!shippingInfo) errs.cep = errs.cep || 'Aguarde o cálculo do frete para esse CEP.'
+    }
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -224,58 +228,88 @@ export default function Checkout() {
               <input id="cpfCnpj" type="text" inputMode="numeric" value={form.cpfCnpj} onChange={(e) => update('cpfCnpj', e.target.value)} />
             </div>
 
-            <div className="field-row">
-              <div className="field">
-                <label htmlFor="cep">CEP</label>
+            <fieldset className="payment-options">
+              <legend>Como você quer receber?</legend>
+              <label className="payment-option">
                 <input
-                  id="cep"
-                  type="text"
-                  inputMode="numeric"
-                  value={form.cep}
-                  onChange={(e) => { update('cep', e.target.value); setShippingInfo(null); setShippingError('') }}
-                  onBlur={handleCepBlur}
-                  aria-invalid={!!errors.cep}
-                  aria-describedby={errors.cep ? 'err-cep' : undefined}
+                  type="radio"
+                  name="entrega"
+                  checked={form.entrega === 'envio'}
+                  onChange={() => update('entrega', 'envio')}
                 />
-                {shippingLoading && <p className="field-hint">Calculando frete...</p>}
-                {!shippingLoading && shippingInfo && (
-                  <p className="field-hint">
-                    Frete para {shippingInfo.cidade}/{shippingInfo.uf}: <strong>R$ {shippingInfo.price.toFixed(2).replace('.', ',')}</strong> · {shippingInfo.days}
-                  </p>
-                )}
-                {!shippingLoading && shippingError && <p className="field-error">{shippingError}</p>}
-                {errors.cep && <p className="field-error" id="err-cep">{errors.cep}</p>}
-              </div>
-              <div className="field">
-                <label htmlFor="numero">Número</label>
-                <input id="numero" type="text" value={form.numero} onChange={(e) => update('numero', e.target.value)} />
-              </div>
-            </div>
+                Entrega no meu endereço
+              </label>
+              <label className="payment-option">
+                <input
+                  type="radio"
+                  name="entrega"
+                  checked={form.entrega === 'retirada'}
+                  onChange={() => update('entrega', 'retirada')}
+                />
+                Retirar no local
+              </label>
+            </fieldset>
 
-            <div className="field">
-              <label htmlFor="endereco">Endereço</label>
-              <input id="endereco" type="text" value={form.endereco} onChange={(e) => update('endereco', e.target.value)} aria-invalid={!!errors.endereco} aria-describedby={errors.endereco ? 'err-endereco' : undefined} />
-              {errors.endereco && <p className="field-error" id="err-endereco">{errors.endereco}</p>}
-            </div>
+            {isPickup ? (
+              <p className="field-hint">
+                Combinaremos o local e horário de retirada com você pelo WhatsApp após a confirmação do pedido.
+              </p>
+            ) : (
+              <>
+                <div className="field-row">
+                  <div className="field">
+                    <label htmlFor="cep">CEP</label>
+                    <input
+                      id="cep"
+                      type="text"
+                      inputMode="numeric"
+                      value={form.cep}
+                      onChange={(e) => { update('cep', e.target.value); setShippingInfo(null); setShippingError('') }}
+                      onBlur={handleCepBlur}
+                      aria-invalid={!!errors.cep}
+                      aria-describedby={errors.cep ? 'err-cep' : undefined}
+                    />
+                    {shippingLoading && <p className="field-hint">Calculando frete...</p>}
+                    {!shippingLoading && shippingInfo && (
+                      <p className="field-hint">
+                        Frete para {shippingInfo.cidade}/{shippingInfo.uf}: <strong>R$ {shippingInfo.price.toFixed(2).replace('.', ',')}</strong> · {shippingInfo.days}
+                      </p>
+                    )}
+                    {!shippingLoading && shippingError && <p className="field-error">{shippingError}</p>}
+                    {errors.cep && <p className="field-error" id="err-cep">{errors.cep}</p>}
+                  </div>
+                  <div className="field">
+                    <label htmlFor="numero">Número</label>
+                    <input id="numero" type="text" value={form.numero} onChange={(e) => update('numero', e.target.value)} />
+                  </div>
+                </div>
 
-            <div className="field-row">
-              <div className="field">
-                <label htmlFor="cidade">Cidade</label>
-                <input id="cidade" type="text" value={form.cidade} onChange={(e) => update('cidade', e.target.value)} aria-invalid={!!errors.cidade} aria-describedby={errors.cidade ? 'err-cidade' : undefined} />
-                {errors.cidade && <p className="field-error" id="err-cidade">{errors.cidade}</p>}
-              </div>
-              <div className="field">
-                <label htmlFor="estado">Estado</label>
-                <select id="estado" value={form.estado} onChange={(e) => update('estado', e.target.value)}>
-                  <option value="">Selecione</option>
-                  <option>SP</option>
-                  <option>RJ</option>
-                  <option>MG</option>
-                  <option>RS</option>
-                  <option>Outro</option>
-                </select>
-              </div>
-            </div>
+                <div className="field">
+                  <label htmlFor="endereco">Endereço</label>
+                  <input id="endereco" type="text" value={form.endereco} onChange={(e) => update('endereco', e.target.value)} aria-invalid={!!errors.endereco} aria-describedby={errors.endereco ? 'err-endereco' : undefined} />
+                  {errors.endereco && <p className="field-error" id="err-endereco">{errors.endereco}</p>}
+                </div>
+
+                <div className="field-row">
+                  <div className="field">
+                    <label htmlFor="cidade">Cidade</label>
+                    <input id="cidade" type="text" value={form.cidade} onChange={(e) => update('cidade', e.target.value)} aria-invalid={!!errors.cidade} aria-describedby={errors.cidade ? 'err-cidade' : undefined} />
+                    {errors.cidade && <p className="field-error" id="err-cidade">{errors.cidade}</p>}
+                  </div>
+                  <div className="field">
+                    <label htmlFor="estado">Estado</label>
+                    <select id="estado" value={form.estado} onChange={(e) => update('estado', e.target.value)}>
+                      <option value="">Selecione</option>
+                      <option>SP</option>
+                      <option>RJ</option>
+                      <option>MG</option>
+                      <option>RS</option>
+                      <option>Outro</option>
+                    </select>
+                  </div>
+                </div>
+              </>
+            )}
 
             <button type="submit" className="btn btn-accent btn-block">
               Continuar para pagamento
