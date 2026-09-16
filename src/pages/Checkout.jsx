@@ -64,8 +64,7 @@ export default function Checkout() {
     setShippingLoading(true)
     setShippingError('')
     try {
-      const totalQty = items.reduce((sum, i) => sum + i.qty, 0)
-      const info = await calcShippingByCep(digits, totalQty)
+      const info = await calcShippingByCep(digits)
       setShippingInfo(info)
       setForm((f) => ({
         ...f,

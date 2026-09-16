@@ -1,9 +1,7 @@
-// Cálculo de frete: tenta primeiro uma cotação real via Melhor Envio
-// (Correios/transportadoras, configurado em api/shipping.js). Se a API não
-// estiver disponível (sem token configurado, fora do ar, etc.), cai numa
-// tabela de preços fixos por região, calculada a partir do CEP via ViaCEP.
-
-import { api } from '../api'
+// Cálculo de frete por região, usando o CEP informado no checkout.
+// Não é uma cotação real de transportadora — é uma tabela de preços por
+// região que você mesmo define, mas calculada automaticamente a partir do
+// estado do cliente (via ViaCEP), em vez de um valor fixo pra todo mundo.
 
 // Estado de onde os pedidos são enviados. Ajuste se mudar a origem.
 const ORIGIN_UF = 'SP'
@@ -26,7 +24,7 @@ function regionFor(uf) {
 
 // Busca o endereço/UF pelo CEP na ViaCEP (gratuita, sem chave de API) e
 // devolve o valor e prazo de frete para aquele destino.
-export async function calcShippingByCep(cepRaw, quantity = 1) {
+export async function calcShippingByCep(cepRaw) {
   const cep = String(cepRaw || '').replace(/\D/g, '')
   if (cep.length !== 8) {
     throw new Error('CEP inválido.')
@@ -37,20 +35,15 @@ export async function calcShippingByCep(cepRaw, quantity = 1) {
   const data = await res.json()
   if (data.erro) throw new Error('CEP não encontrado.')
 
-  const address = {
+  const region = regionFor(data.uf)
+  const rate = RATES[region]
+
+  return {
+    price: rate.price,
+    days: rate.days,
     uf: data.uf,
     cidade: data.localidade,
     endereco: data.logradouro,
     bairro: data.bairro,
-  }
-
-  try {
-    const real = await api('/shipping', { method: 'POST', body: { cepDestino: cep, quantity } })
-    const cheapest = real.options[0]
-    return { price: cheapest.price, days: `${cheapest.days} dias úteis (${cheapest.carrier} · ${cheapest.service})`, ...address }
-  } catch {
-    const region = regionFor(data.uf)
-    const rate = RATES[region]
-    return { price: rate.price, days: rate.days, ...address }
   }
 }
