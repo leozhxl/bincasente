@@ -9,9 +9,12 @@ async function handler(req, res) {
     const userId = requireAuth(req, res)
     if (!userId) return
 
+    const userResult = await db.execute({ sql: 'SELECT email FROM users WHERE id = ?', args: [userId] })
+    const email = userResult.rows[0]?.email || ''
+
     const result = await db.execute({
-      sql: 'SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC',
-      args: [userId],
+      sql: 'SELECT * FROM orders WHERE user_id = ? OR (user_id IS NULL AND customer_email = ?) ORDER BY created_at DESC',
+      args: [userId, email],
     })
     return res.json({
       orders: result.rows.map((r) => ({

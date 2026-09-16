@@ -36,5 +36,6 @@ Total: R$ ${total.toFixed(2).replace('.', ',')}
 Endereço de entrega: ${address}${footer}`
 
   const url = `https://wa.me/${COMPANY_WHATSAPP}?text=${encodeURIComponent(message)}`
-  window.open(url, '_blank', 'noopener,noreferrer')
+  const win = window.open(url, '_blank', 'noopener,noreferrer')
+  return { url, blocked: !win }
 }

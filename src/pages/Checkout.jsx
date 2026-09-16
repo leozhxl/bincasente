@@ -42,10 +42,12 @@ export default function Checkout() {
   const [orderNumber] = useState(() => `BS-${Math.floor(100000 + Math.random() * 900000)}`)
   const [orderSnapshot, setOrderSnapshot] = useState(null)
   const [whatsappItems, setWhatsappItems] = useState(null)
+  const [whatsappBlockedUrl, setWhatsappBlockedUrl] = useState(null)
 
   const [shippingInfo, setShippingInfo] = useState(null) // { price, days, uf, cidade... }
   const [shippingLoading, setShippingLoading] = useState(false)
   const [shippingError, setShippingError] = useState('')
+  const [orderError, setOrderError] = useState('')
 
   const shipping = shippingInfo?.price || 0
   const total = subtotal + shipping
@@ -103,27 +105,40 @@ export default function Checkout() {
       return
     }
 
-    await finalizeOrder('Aguardando link de pagamento')
+    try {
+      await finalizeOrder('Aguardando link de pagamento')
+    } catch {
+      // erro já exposto via orderError
+    }
   }
 
   async function finalizeOrder(status) {
     const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
     const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits }))
 
-    setWhatsappItems(whatsappItems)
-    sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    setOrderError('')
 
-    await addOrder({
-      id: orderNumber,
-      date: new Date().toLocaleDateString('pt-BR'),
-      status,
-      total,
-      items: snapshotItems,
-      customer: form,
-      paymentMethod: form.pagamento,
-      subtotal,
-      shipping,
-    })
+    try {
+      await addOrder({
+        id: orderNumber,
+        date: new Date().toLocaleDateString('pt-BR'),
+        status,
+        total,
+        items: snapshotItems,
+        customer: form,
+        paymentMethod: form.pagamento,
+        subtotal,
+        shipping,
+      })
+    } catch (err) {
+      setOrderError(err.message || 'Não foi possível registrar seu pedido. Tente novamente ou fale com a gente pelo WhatsApp.')
+      throw err
+    }
+
+    setWhatsappItems(whatsappItems)
+    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    setWhatsappBlockedUrl(blocked ? url : null)
+
     setOrderSnapshot({
       date: new Date().toLocaleDateString('pt-BR'),
       items: snapshotItems,
@@ -139,7 +154,8 @@ export default function Checkout() {
 
   function handleSendWhatsApp() {
     if (!whatsappItems) return
-    sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    setWhatsappBlockedUrl(blocked ? url : null)
   }
 
   function handleReceipt() {
@@ -304,6 +320,8 @@ export default function Checkout() {
               <p className="field-hint">Ao confirmar, você receberá um QR Code Pix para pagamento imediato.</p>
             )}
 
+            {orderError && <p className="field-error">{orderError}</p>}
+
             <div className="checkout-actions">
               <button type="button" className="btn btn-ghost" onClick={() => setStep('dados')}>← Voltar</button>
               <button type="submit" className="btn btn-accent">
@@ -323,6 +341,7 @@ export default function Checkout() {
             total={total}
             onBack={() => setStep('pagamento')}
             onConfirm={() => finalizeOrder('Pendente')}
+            orderError={orderError}
           />
           <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
         </div>
@@ -332,9 +351,19 @@ export default function Checkout() {
         <div className="confirmation card">
           <span className="confirmation-icon" aria-hidden="true">✔</span>
           <h1>Pedido registrado!</h1>
-          <span className="whatsapp-confirm-badge">
-            <span aria-hidden="true">✅</span> Enviamos os detalhes do pedido para o nosso WhatsApp
-          </span>
+          {whatsappBlockedUrl ? (
+            <p className="field-error">
+              Seu navegador bloqueou a abertura do WhatsApp. Seu pedido já está registrado, mas{' '}
+              <a href={whatsappBlockedUrl} target="_blank" rel="noopener noreferrer">
+                clique aqui para enviar os detalhes pelo WhatsApp
+              </a>{' '}
+              e agilizar seu atendimento.
+            </p>
+          ) : (
+            <span className="whatsapp-confirm-badge">
+              <span aria-hidden="true">✅</span> Enviamos os detalhes do pedido para o nosso WhatsApp
+            </span>
+          )}
           <p>Número do pedido: <strong>{orderNumber}</strong></p>
           {form.pagamento === 'pix' && (
             <p>
@@ -367,7 +396,7 @@ export default function Checkout() {
   )
 }
 
-function PixPayment({ orderNumber, total, onBack, onConfirm }) {
+function PixPayment({ orderNumber, total, onBack, onConfirm, orderError }) {
   const [qrDataUrl, setQrDataUrl] = useState(null)
   const [copied, setCopied] = useState(false)
   const [confirming, setConfirming] = useState(false)
@@ -397,7 +426,11 @@ function PixPayment({ orderNumber, total, onBack, onConfirm }) {
 
   async function handleConfirm() {
     setConfirming(true)
-    await onConfirm()
+    try {
+      await onConfirm()
+    } catch {
+      setConfirming(false)
+    }
   }
 
   return (
@@ -437,6 +470,8 @@ function PixPayment({ orderNumber, total, onBack, onConfirm }) {
       <p className="field-hint">
         Seu pedido fica com status <strong>Pendente</strong> até nossa equipe confirmar o recebimento do Pix.
       </p>
+
+      {orderError && <p className="field-error">{orderError}</p>}
 
       <div className="checkout-actions">
         <button type="button" className="btn btn-ghost" onClick={onBack} disabled={confirming}>← Voltar</button>
