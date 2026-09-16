@@ -28,6 +28,15 @@ async function handler(req, res) {
     args: [email, passwordHash, name || '', lastName || '', docType || 'Pessoa Física', cpf || '', rg || ''],
   })
 
+  const fullName = [name, lastName].filter(Boolean).join(' ') || email.split('@')[0]
+  const existingCustomer = await db.execute({ sql: 'SELECT id FROM crm_customers WHERE email = ?', args: [email] })
+  if (existingCustomer.rows.length === 0) {
+    await db.execute({
+      sql: 'INSERT INTO crm_customers (name, email, status) VALUES (?, ?, ?)',
+      args: [fullName, email, 'ativo'],
+    })
+  }
+
   const created = await db.execute({
     sql: 'SELECT * FROM users WHERE id = ?',
     args: [insert.lastInsertRowid],

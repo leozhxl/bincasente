@@ -206,16 +206,28 @@ function buildCustomersFromOrders(orders) {
 }
 
 function mergeCustomers(orderCustomers, manualCustomers) {
-  const manualMapped = manualCustomers.map((c) => ({
-    key: `manual-${c.id}`,
-    id: c.id,
-    name: c.name,
-    email: c.email,
-    phone: c.phone,
-    company: c.company,
-    status: c.status,
-    notes: c.notes,
-    createdAt: c.createdAt,
-  }))
-  return [...manualMapped, ...orderCustomers]
+  const orderByEmail = new Map(orderCustomers.filter((c) => c.email).map((c) => [c.email, c]))
+  const usedEmails = new Set()
+
+  const manualMapped = manualCustomers.map((c) => {
+    const matching = c.email && orderByEmail.get(c.email)
+    if (matching) usedEmails.add(c.email)
+    return {
+      key: `manual-${c.id}`,
+      id: c.id,
+      name: c.name,
+      email: c.email,
+      phone: c.phone || matching?.phone,
+      address: matching?.address,
+      company: c.company,
+      status: c.status,
+      notes: c.notes,
+      orders: matching?.orders,
+      totalSpent: matching?.totalSpent,
+      createdAt: c.createdAt,
+    }
+  })
+
+  const remainingOrderCustomers = orderCustomers.filter((c) => !c.email || !usedEmails.has(c.email))
+  return [...manualMapped, ...remainingOrderCustomers]
 }
