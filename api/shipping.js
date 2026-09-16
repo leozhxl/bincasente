@@ -75,7 +75,8 @@ export default async function handler(req, res) {
     }
 
     return res.json({ options })
-  } catch {
+  } catch (err) {
+    console.error('shipping error:', err)
     return res.status(502).json({ error: 'Erro ao consultar o frete. Tente novamente.' })
   }
 }
