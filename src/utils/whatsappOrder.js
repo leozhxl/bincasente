@@ -7,11 +7,12 @@ export function sendOrderToWhatsApp({ orderNumber, customer, items, total, payme
 
   const itemsText = items
     .map((item, i) => {
+      const description = item.description ? `\n   Descrição: ${item.description}` : ''
       const features = item.benefits?.length ? `\n   Características: ${item.benefits.join(', ')}` : ''
       const color = item.color && item.color !== 'Padrão' ? ` (${item.color})` : ''
       return `${i + 1}. ${item.name}${color}
    Valor: R$ ${item.price.toFixed(2).replace('.', ',')}
-   Quantidade: ${item.qty}${features}`
+   Quantidade: ${item.qty}${description}${features}`
     })
     .join('\n\n')
 

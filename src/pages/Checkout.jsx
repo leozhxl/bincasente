@@ -118,7 +118,7 @@ export default function Checkout() {
 
   async function finalizeOrder(status) {
     const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
-    const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits }))
+    const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits, description: i.description }))
 
     setOrderError('')
 
