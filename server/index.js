@@ -11,6 +11,7 @@ import adminCustomersHandler from '../api/admin-customers.js'
 import adminDealsHandler from '../api/admin-deals.js'
 import productsHandler from '../api/products.js'
 import adminProductsHandler from '../api/admin-products.js'
+import shippingHandler from '../api/shipping.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -29,6 +30,7 @@ app.all('/api/admin-customers', adminCustomersHandler)
 app.all('/api/admin-deals', adminDealsHandler)
 app.all('/api/products', productsHandler)
 app.all('/api/admin-products', adminProductsHandler)
+app.post('/api/shipping', shippingHandler)
 
 app.listen(PORT, () => {
   console.log(`Brinca e Sente API rodando em http://localhost:${PORT}`)
