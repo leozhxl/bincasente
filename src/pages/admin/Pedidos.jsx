@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { formatMoney } from './adminApi'
 
-const statusOptions = ['Pendente', 'Aguardando link de pagamento', 'Processando', 'Enviado', 'Entregue', 'Cancelado']
+const statusOptions = ['Aguardando pagamento', 'Pendente', 'Aguardando link de pagamento', 'Processando', 'Enviado', 'Entregue', 'Cancelado']
 
 export default function Pedidos({ orders, onUpdateOrder, onCreateOrder }) {
   const [search, setSearch] = useState('')

@@ -34,7 +34,7 @@ const paymentLabels = {
 export default function Checkout() {
   const { items, subtotal, clearCart } = useCart()
   const { user, loading: authLoading } = useAuth()
-  const { addOrder } = useOrders()
+  const { addOrder, updateOrderStatus } = useOrders()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export default function Checkout() {
   const [shippingLoading, setShippingLoading] = useState(false)
   const [shippingError, setShippingError] = useState('')
   const [orderError, setOrderError] = useState('')
+  const [pixOrderCreated, setPixOrderCreated] = useState(false)
 
   const isPickup = form.entrega === 'retirada'
   const shipping = isPickup ? 0 : shippingInfo?.price || 0
@@ -111,7 +112,12 @@ export default function Checkout() {
     e.preventDefault()
 
     if (form.pagamento === 'pix') {
-      setStep('pix')
+      try {
+        await createPixOrder()
+        setStep('pix')
+      } catch {
+        // erro já exposto via orderError
+      }
       return
     }
 
@@ -120,6 +126,63 @@ export default function Checkout() {
     } catch {
       // erro já exposto via orderError
     }
+  }
+
+  // O pedido do Pix é salvo assim que o cliente chega nesta tela, com status
+  // "Aguardando pagamento" — se ele pagar pelo app do banco e nunca voltar para
+  // clicar em "Já paguei", o pedido ainda aparece no admin em vez de sumir.
+  async function createPixOrder() {
+    if (pixOrderCreated) return
+
+    const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
+    setOrderError('')
+
+    try {
+      await addOrder({
+        id: orderNumber,
+        date: new Date().toLocaleDateString('pt-BR'),
+        status: 'Aguardando pagamento',
+        total,
+        items: snapshotItems,
+        customer: form,
+        paymentMethod: form.pagamento,
+        subtotal,
+        shipping,
+      })
+      setPixOrderCreated(true)
+    } catch (err) {
+      setOrderError(err.message || 'Não foi possível registrar seu pedido. Tente novamente ou fale com a gente pelo WhatsApp.')
+      throw err
+    }
+  }
+
+  async function confirmPixPayment() {
+    setOrderError('')
+    try {
+      await updateOrderStatus(orderNumber, 'Pendente')
+    } catch (err) {
+      setOrderError(err.message || 'Não foi possível confirmar seu pedido. Tente novamente ou fale com a gente pelo WhatsApp.')
+      throw err
+    }
+
+    const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
+    const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits, description: i.description }))
+
+    setWhatsappItems(whatsappItems)
+    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    setWhatsappBlockedUrl(blocked ? url : null)
+
+    setOrderSnapshot({
+      date: new Date().toLocaleDateString('pt-BR'),
+      items: snapshotItems,
+      subtotal,
+      shipping,
+      total,
+    })
+
+    setConfirmed(true)
+    clearCart()
+    setStep('confirmacao')
   }
 
   async function finalizeOrder(status) {
@@ -389,7 +452,7 @@ export default function Checkout() {
             orderNumber={orderNumber}
             total={total}
             onBack={() => setStep('pagamento')}
-            onConfirm={() => finalizeOrder('Pendente')}
+            onConfirm={confirmPixPayment}
             orderError={orderError}
           />
           <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />

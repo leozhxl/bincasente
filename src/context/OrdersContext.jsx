@@ -23,7 +23,12 @@ export function OrdersProvider({ children }) {
     if (user) setOrders((prev) => [order, ...prev])
   }
 
-  return <OrdersContext.Provider value={{ orders, addOrder }}>{children}</OrdersContext.Provider>
+  async function updateOrderStatus(id, status) {
+    await api('/orders', { method: 'PATCH', body: { id, status } })
+    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)))
+  }
+
+  return <OrdersContext.Provider value={{ orders, addOrder, updateOrderStatus }}>{children}</OrdersContext.Provider>
 }
 
 export function useOrders() {

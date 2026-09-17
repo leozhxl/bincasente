@@ -62,6 +62,20 @@ async function handler(req, res) {
     return res.status(201).json({ ok: true })
   }
 
+  if (req.method === 'PATCH') {
+    const { id, status } = req.body || {}
+    if (!id || !status) return res.status(400).json({ error: 'Dados inválidos.' })
+
+    const userId = requireAuth(req, res)
+    if (!userId) return
+
+    await db.execute({
+      sql: 'UPDATE orders SET status = ? WHERE id = ? AND user_id = ?',
+      args: [status, id, userId],
+    })
+    return res.json({ ok: true })
+  }
+
   res.status(405).json({ error: 'Método não permitido.' })
 }
 
