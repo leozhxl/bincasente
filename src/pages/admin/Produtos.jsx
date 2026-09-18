@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { adminApi, formatMoney } from './adminApi'
+import { upload } from '@vercel/blob/client'
+import { adminApi, formatMoney, getAdminToken } from './adminApi'
 import { useProducts } from '../../context/ProductsContext'
 
 const emptyForm = {
@@ -20,6 +21,7 @@ const emptyForm = {
   condition: [],
   badges: [],
   image: '',
+  video: '',
 }
 
 function compressImage(file, maxSize = 900, quality = 0.82) {
@@ -202,12 +204,15 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
           condition: product.condition || [],
           badges: product.badges || [],
           image: product.image || '',
+          video: product.video || '',
         }
       : emptyForm
   )
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [imageLoading, setImageLoading] = useState(false)
+  const [videoLoading, setVideoLoading] = useState(false)
+  const [videoProgress, setVideoProgress] = useState(0)
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }))
@@ -232,6 +237,37 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
     } finally {
       setImageLoading(false)
     }
+  }
+
+  async function handleVideoChange(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('video/')) {
+      setError('Selecione um arquivo de vídeo válido.')
+      return
+    }
+    setVideoLoading(true)
+    setVideoProgress(0)
+    setError('')
+    try {
+      const token = getAdminToken()
+      const blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/admin-upload-video',
+        clientPayload: null,
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        onUploadProgress: ({ percentage }) => setVideoProgress(percentage),
+      })
+      update('video', blob.url)
+    } catch {
+      setError('Não foi possível enviar esse vídeo.')
+    } finally {
+      setVideoLoading(false)
+    }
+  }
+
+  function handleRemoveVideo() {
+    update('video', '')
   }
 
   async function handleSubmit(e) {
@@ -279,6 +315,27 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
                   <input type="file" accept="image/*" onChange={handleImageChange} hidden />
                 </label>
                 <p className="field-hint">JPG ou PNG. A imagem é redimensionada automaticamente.</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="crm-form-section">
+            <h3>Vídeo do produto</h3>
+            <div className="crm-image-upload">
+              {form.video ? (
+                <video src={form.video} className="crm-image-preview" controls muted />
+              ) : (
+                <div className="crm-image-preview crm-image-placeholder" aria-hidden="true">▶</div>
+              )}
+              <div>
+                <label className="btn btn-outline btn-sm">
+                  {videoLoading ? `Enviando... ${videoProgress}%` : form.video ? 'Trocar vídeo' : 'Enviar vídeo'}
+                  <input type="file" accept="video/*" onChange={handleVideoChange} hidden disabled={videoLoading} />
+                </label>
+                {form.video && !videoLoading && (
+                  <button type="button" className="btn btn-ghost btn-sm" onClick={handleRemoveVideo}>Remover vídeo</button>
+                )}
+                <p className="field-hint">MP4 ou WebM, até 100MB. Exibido na página do produto na loja.</p>
               </div>
             </div>
           </section>
@@ -389,7 +446,7 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
 
         <div className="crm-modal-actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancelar</button>
-          <button type="submit" className="btn btn-accent" disabled={saving || imageLoading}>
+          <button type="submit" className="btn btn-accent" disabled={saving || imageLoading || videoLoading}>
             {saving ? 'Salvando...' : product ? 'Salvar alterações' : 'Cadastrar produto'}
           </button>
         </div>

@@ -314,7 +314,10 @@
 .status-entregue { background: var(--color-sage-light); color: var(--color-sage-dark); }
 .status-enviado { background: #e5eef2; color: var(--color-petrol-dark); }
 .status-processando { background: #f6e6dd; color: var(--color-terracotta-dark); }
-.status-pendente { background: var(--color-butter-light); color: #8a6a10; }
+.status-pago { background: var(--color-sage-light); color: var(--color-sage-dark); }
+.status-aguardando-pagamento,
+.status-aguardando-link-de-pagamento { background: var(--color-butter-light); color: #8a6a10; }
+.status-cancelado { background: #f3dede; color: #9a3b3b; }
 
 .btn-sm {
   min-height: 36px;

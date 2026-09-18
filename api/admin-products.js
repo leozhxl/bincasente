@@ -50,14 +50,14 @@ async function handler(req, res) {
 
     await db.execute({
       sql: `INSERT INTO crm_products
-        (id, slug, name, category, price, installments, rating, reviews_count, badges, age_range, material, condition, color_options, color_images, description, benefits, dimensions, expert_note, image, image_position)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (id, slug, name, category, price, installments, rating, reviews_count, badges, age_range, material, condition, color_options, color_images, description, benefits, dimensions, expert_note, image, image_position, video)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         id, slug, b.name.trim(), b.category || '', Number(b.price) || 0, b.installments || 'à vista',
         Number(b.rating) || 5, Number(b.reviewsCount) || 0, JSON.stringify(b.badges || []), b.ageRange || '',
         b.material || '', JSON.stringify(b.condition || []), JSON.stringify(b.colorOptions || []),
         JSON.stringify(b.colorImages || {}), b.description || '', JSON.stringify(b.benefits || []),
-        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '',
+        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '',
       ],
     })
     return res.status(201).json({ id })
@@ -79,7 +79,7 @@ async function handler(req, res) {
       sql: `UPDATE crm_products SET
         slug = ?, name = ?, category = ?, price = ?, installments = ?, rating = ?, reviews_count = ?,
         badges = ?, age_range = ?, material = ?, condition = ?, color_options = ?, color_images = ?,
-        description = ?, benefits = ?, dimensions = ?, expert_note = ?, image = ?, image_position = ?,
+        description = ?, benefits = ?, dimensions = ?, expert_note = ?, image = ?, image_position = ?, video = ?,
         updated_at = datetime('now')
         WHERE id = ?`,
       args: [
@@ -87,7 +87,7 @@ async function handler(req, res) {
         Number(b.rating) || 5, Number(b.reviewsCount) || 0, JSON.stringify(b.badges || []), b.ageRange || '',
         b.material || '', JSON.stringify(b.condition || []), JSON.stringify(b.colorOptions || []),
         JSON.stringify(b.colorImages || {}), b.description || '', JSON.stringify(b.benefits || []),
-        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '',
+        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '',
         b.id,
       ],
     })

@@ -7,6 +7,10 @@ import { useProducts } from '../context/ProductsContext'
 import { isImageSrc } from '../utils/image'
 import './Account.css'
 
+function statusSlug(status) {
+  return status.toLowerCase().replace(/\s+/g, '-')
+}
+
 const addresses = [
   { label: 'Endereço de Entrega Padrão', text: 'Rua das Acácias, 120 — São Paulo, SP' },
   { label: 'Endereço de Cobrança Padrão', text: 'Rua das Acácias, 120 — São Paulo, SP' },
@@ -415,7 +419,7 @@ function AccountLoggedIn({ user, orders, firstName, tab, setTab, logout, updateP
                       <li key={o.id}>
                         <span>{o.id}</span>
                         <span>{o.date}</span>
-                        <span className={`status-pill status-${o.status.toLowerCase()}`}>{o.status}</span>
+                        <span className={`status-pill status-${statusSlug(o.status)}`}>{o.status}</span>
                         <span>R$ {o.total.toFixed(2).replace('.', ',')}</span>
                       </li>
                     ))}
@@ -480,7 +484,7 @@ function AccountLoggedIn({ user, orders, firstName, tab, setTab, logout, updateP
                           <strong>Pedido {o.id}</strong>
                           <span className="muted"> · {o.date}</span>
                         </div>
-                        <span className={`status-pill status-${o.status.toLowerCase()}`}>{o.status}</span>
+                        <span className={`status-pill status-${statusSlug(o.status)}`}>{o.status}</span>
                       </div>
                       <ul className="order-items-list">
                         {o.items.map((item, i) => (

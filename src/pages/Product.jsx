@@ -40,7 +40,12 @@ export default function Product() {
       </nav>
 
       <div className="product-main">
-        <ProductViewer3D emoji={product.colorImages?.[color] || product.image} name={product.name} />
+        <div>
+          <ProductViewer3D emoji={product.colorImages?.[color] || product.image} name={product.name} />
+          {product.video && (
+            <video className="product-video" src={product.video} controls playsInline preload="metadata" />
+          )}
+        </div>
 
         <div className="product-info">
           <div className="product-badges-row">

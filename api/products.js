@@ -23,6 +23,7 @@ export function rowToProduct(r) {
     expertNote: r.expert_note,
     image: r.image,
     imagePosition: r.image_position || undefined,
+    video: r.video || '',
   }
 }
 

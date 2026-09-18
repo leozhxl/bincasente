@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import QRCode from 'qrcode'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useOrders } from '../context/OrdersContext'
 import CheckoutProgress from '../components/CheckoutProgress'
-import { buildPixPayload, orderToTxid } from '../utils/pix'
+import { api } from '../api'
 import { openReceipt } from '../utils/receipt'
 import { sendOrderToWhatsApp } from '../utils/whatsappOrder'
 import { calcShippingByCep } from '../utils/shipping'
@@ -34,7 +33,7 @@ const paymentLabels = {
 export default function Checkout() {
   const { items, subtotal, clearCart } = useCart()
   const { user, loading: authLoading } = useAuth()
-  const { addOrder, updateOrderStatus } = useOrders()
+  const { addOrder, orders, refreshOrders } = useOrders()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -50,6 +49,7 @@ export default function Checkout() {
   const [orderSnapshot, setOrderSnapshot] = useState(null)
   const [whatsappItems, setWhatsappItems] = useState(null)
   const [whatsappBlockedUrl, setWhatsappBlockedUrl] = useState(null)
+  const [pixData, setPixData] = useState(null)
 
   const [shippingInfo, setShippingInfo] = useState(null) // { price, days, uf, cidade... }
   const [shippingLoading, setShippingLoading] = useState(false)
@@ -128,9 +128,10 @@ export default function Checkout() {
     }
   }
 
-  // O pedido do Pix é salvo assim que o cliente chega nesta tela, com status
-  // "Aguardando pagamento" — se ele pagar pelo app do banco e nunca voltar para
-  // clicar em "Já paguei", o pedido ainda aparece no admin em vez de sumir.
+  // O pedido do Pix é criado no Mercado Pago e salvo assim que o cliente chega
+  // nesta tela, com status "Aguardando pagamento". A confirmação de pagamento é
+  // automática: o Mercado Pago avisa nosso servidor por webhook assim que o Pix
+  // cai, e o status muda sozinho para "Pago" (ver handlePixPaidAutomatically).
   async function createPixOrder() {
     if (pixOrderCreated) return
 
@@ -138,33 +139,27 @@ export default function Checkout() {
     setOrderError('')
 
     try {
-      await addOrder({
-        id: orderNumber,
-        date: new Date().toLocaleDateString('pt-BR'),
-        status: 'Aguardando pagamento',
-        total,
-        items: snapshotItems,
-        customer: form,
-        paymentMethod: form.pagamento,
-        subtotal,
-        shipping,
+      const result = await api('/create-pix-order', {
+        method: 'POST',
+        body: {
+          id: orderNumber,
+          date: new Date().toLocaleDateString('pt-BR'),
+          total,
+          items: snapshotItems,
+          customer: form,
+          subtotal,
+          shipping,
+        },
       })
+      setPixData(result)
       setPixOrderCreated(true)
     } catch (err) {
-      setOrderError(err.message || 'Não foi possível registrar seu pedido. Tente novamente ou fale com a gente pelo WhatsApp.')
+      setOrderError(err.message || 'Não foi possível gerar o Pix. Tente novamente ou fale com a gente pelo WhatsApp.')
       throw err
     }
   }
 
-  async function confirmPixPayment() {
-    setOrderError('')
-    try {
-      await updateOrderStatus(orderNumber, 'Pendente')
-    } catch (err) {
-      setOrderError(err.message || 'Não foi possível confirmar seu pedido. Tente novamente ou fale com a gente pelo WhatsApp.')
-      throw err
-    }
-
+  function handlePixPaidAutomatically() {
     const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
     const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits, description: i.description }))
 
@@ -184,6 +179,20 @@ export default function Checkout() {
     clearCart()
     setStep('confirmacao')
   }
+
+  // Enquanto o cliente está na tela do QR Code, verificamos periodicamente se o
+  // webhook do Mercado Pago já confirmou o pagamento, pra avançar sozinho.
+  useEffect(() => {
+    if (step !== 'pix') return
+    const interval = setInterval(() => refreshOrders(), 4000)
+    return () => clearInterval(interval)
+  }, [step])
+
+  useEffect(() => {
+    if (step !== 'pix') return
+    const current = orders.find((o) => o.id === orderNumber)
+    if (current?.status === 'Pago') handlePixPaidAutomatically()
+  }, [orders, step])
 
   async function finalizeOrder(status) {
     const snapshotItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price }))
@@ -449,10 +458,10 @@ export default function Checkout() {
       {step === 'pix' && (
         <div className="checkout-grid">
           <PixPayment
-            orderNumber={orderNumber}
             total={total}
+            pixData={pixData}
             onBack={() => setStep('pagamento')}
-            onConfirm={confirmPixPayment}
+            onCheckNow={refreshOrders}
             orderError={orderError}
           />
           <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
@@ -479,8 +488,8 @@ export default function Checkout() {
           <p>Número do pedido: <strong>{orderNumber}</strong></p>
           {form.pagamento === 'pix' && (
             <p>
-              Assim que identificarmos o pagamento do Pix, seu pedido passa para <strong>Processando</strong>.
-              Você pode acompanhar o status em <strong>Minha Conta</strong>.
+              Seu pagamento via Pix já foi confirmado automaticamente! Você pode acompanhar o status em{' '}
+              <strong>Minha Conta</strong>.
             </p>
           )}
           {form.pagamento === 'cartao' && (
@@ -508,27 +517,13 @@ export default function Checkout() {
   )
 }
 
-function PixPayment({ orderNumber, total, onBack, onConfirm, orderError }) {
-  const [qrDataUrl, setQrDataUrl] = useState(null)
+function PixPayment({ total, pixData, onBack, onCheckNow, orderError }) {
   const [copied, setCopied] = useState(false)
-  const [confirming, setConfirming] = useState(false)
-
-  const txid = orderToTxid(orderNumber)
-  const payload = buildPixPayload({ amount: total, txid })
-
-  useEffect(() => {
-    let cancelled = false
-    QRCode.toDataURL(payload, { width: 260, margin: 1 }).then((url) => {
-      if (!cancelled) setQrDataUrl(url)
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [payload])
+  const [checking, setChecking] = useState(false)
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(payload)
+      await navigator.clipboard.writeText(pixData?.qrCode || '')
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)
     } catch {
@@ -536,13 +531,10 @@ function PixPayment({ orderNumber, total, onBack, onConfirm, orderError }) {
     }
   }
 
-  async function handleConfirm() {
-    setConfirming(true)
-    try {
-      await onConfirm()
-    } catch {
-      setConfirming(false)
-    }
+  async function handleCheckNow() {
+    setChecking(true)
+    await onCheckNow()
+    setChecking(false)
   }
 
   return (
@@ -555,8 +547,13 @@ function PixPayment({ orderNumber, total, onBack, onConfirm, orderError }) {
       <div className="pix-amount">R$ {total.toFixed(2).replace('.', ',')}</div>
 
       <div className="pix-qr-wrap">
-        {qrDataUrl ? (
-          <img src={qrDataUrl} alt={`QR Code Pix para pagamento de R$ ${total.toFixed(2).replace('.', ',')}`} width={260} height={260} />
+        {pixData?.qrCodeBase64 ? (
+          <img
+            src={`data:image/png;base64,${pixData.qrCodeBase64}`}
+            alt={`QR Code Pix para pagamento de R$ ${total.toFixed(2).replace('.', ',')}`}
+            width={260}
+            height={260}
+          />
         ) : (
           <div className="pix-qr-loading" aria-hidden="true" />
         )}
@@ -565,7 +562,7 @@ function PixPayment({ orderNumber, total, onBack, onConfirm, orderError }) {
       <div className="field">
         <label htmlFor="pix-copia-cola">Pix copia e cola</label>
         <div className="pix-copy-row">
-          <input id="pix-copia-cola" type="text" readOnly value={payload} onFocus={(e) => e.target.select()} />
+          <input id="pix-copia-cola" type="text" readOnly value={pixData?.qrCode || ''} onFocus={(e) => e.target.select()} />
           <button type="button" className="btn btn-outline" onClick={handleCopy}>
             {copied ? 'Copiado ✔' : 'Copiar'}
           </button>
@@ -576,19 +573,18 @@ function PixPayment({ orderNumber, total, onBack, onConfirm, orderError }) {
         <li>Abra o app do seu banco e escolha pagar via Pix.</li>
         <li>Escaneie o QR Code ou cole o código copiado.</li>
         <li>Confirme o pagamento de <strong>R$ {total.toFixed(2).replace('.', ',')}</strong>.</li>
-        <li>Depois de pagar, clique em "Já paguei" abaixo.</li>
       </ol>
 
       <p className="field-hint">
-        Seu pedido fica com status <strong>Pendente</strong> até nossa equipe confirmar o recebimento do Pix.
+        Assim que identificarmos seu pagamento, esta página avança sozinha — não precisa fazer nada.
       </p>
 
       {orderError && <p className="field-error">{orderError}</p>}
 
       <div className="checkout-actions">
-        <button type="button" className="btn btn-ghost" onClick={onBack} disabled={confirming}>← Voltar</button>
-        <button type="button" className="btn btn-accent" onClick={handleConfirm} disabled={confirming}>
-          {confirming ? 'Registrando...' : 'Já paguei'}
+        <button type="button" className="btn btn-ghost" onClick={onBack}>← Voltar</button>
+        <button type="button" className="btn btn-accent" onClick={handleCheckNow} disabled={checking}>
+          {checking ? 'Verificando...' : 'Já paguei, verificar agora'}
         </button>
       </div>
     </div>

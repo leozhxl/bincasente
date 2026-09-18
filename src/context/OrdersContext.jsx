@@ -13,10 +13,18 @@ export function OrdersProvider({ children }) {
       setOrders([])
       return
     }
-    api('/orders')
-      .then((data) => setOrders(data.orders))
-      .catch(() => setOrders([]))
+    refreshOrders()
   }, [user])
+
+  async function refreshOrders() {
+    if (!user) return
+    try {
+      const data = await api('/orders')
+      setOrders(data.orders)
+    } catch {
+      // mantém a lista atual em caso de falha pontual
+    }
+  }
 
   async function addOrder(order) {
     await api('/orders', { method: 'POST', body: order })
@@ -28,7 +36,7 @@ export function OrdersProvider({ children }) {
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)))
   }
 
-  return <OrdersContext.Provider value={{ orders, addOrder, updateOrderStatus }}>{children}</OrdersContext.Provider>
+  return <OrdersContext.Provider value={{ orders, addOrder, updateOrderStatus, refreshOrders }}>{children}</OrdersContext.Provider>
 }
 
 export function useOrders() {
