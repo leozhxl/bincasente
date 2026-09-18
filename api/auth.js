@@ -1,10 +1,23 @@
 import { getDb } from '../lib/db.js'
 import { withErrorHandler } from '../lib/withErrorHandler.js'
-import { hashPassword, signToken, toPublicUser } from '../lib/auth.js'
+import { comparePassword, hashPassword, signAdminToken, signToken, toPublicUser } from '../lib/auth.js'
 
-async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' })
+async function handleLogin(req, res) {
+  const { email, password } = req.body || {}
+  const db = await getDb()
 
+  const result = await db.execute({ sql: 'SELECT * FROM users WHERE email = ?', args: [email || ''] })
+  const user = result.rows[0]
+
+  if (!user || !comparePassword(password || '', user.password_hash)) {
+    return res.status(401).json({ error: 'E-mail ou senha incorretos.' })
+  }
+
+  const token = signToken(Number(user.id))
+  res.json({ token, user: toPublicUser(user) })
+}
+
+async function handleRegister(req, res) {
   const { email, password, name, lastName, docType, cpf, rg } = req.body || {}
 
   if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
@@ -44,6 +57,31 @@ async function handler(req, res) {
   const user = created.rows[0]
   const token = signToken(Number(user.id))
   res.status(201).json({ token, user: toPublicUser(user) })
+}
+
+async function handleAdminLogin(req, res) {
+  const adminPassword = process.env.ADMIN_PASSWORD
+  if (!adminPassword) {
+    return res.status(500).json({ error: 'ADMIN_PASSWORD não configurada no servidor.' })
+  }
+
+  const { password } = req.body || {}
+  if (password !== adminPassword) {
+    return res.status(401).json({ error: 'Senha incorreta.' })
+  }
+
+  const token = signAdminToken()
+  res.json({ token })
+}
+
+async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' })
+
+  const action = req.query?.action
+  if (action === 'login') return handleLogin(req, res)
+  if (action === 'register') return handleRegister(req, res)
+  if (action === 'admin-login') return handleAdminLogin(req, res)
+  return res.status(400).json({ error: 'Ação inválida.' })
 }
 
 export default withErrorHandler(handler)

@@ -253,7 +253,7 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
       const token = getAdminToken()
       const blob = await upload(file.name, file, {
         access: 'public',
-        handleUploadUrl: '/api/admin-upload-video',
+        handleUploadUrl: '/api/admin-products?action=upload-video',
         clientPayload: null,
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         onUploadProgress: ({ percentage }) => setVideoProgress(percentage),

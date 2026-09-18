@@ -1,3 +1,4 @@
+import { handleUpload } from '@vercel/blob/client'
 import { getDb } from '../lib/db.js'
 import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { requireAdmin } from '../lib/auth.js'
@@ -33,6 +34,20 @@ async function uniqueSlug(db, base, ignoreId) {
 
 async function handler(req, res) {
   if (!requireAdmin(req, res)) return
+
+  if (req.method === 'POST' && req.query?.action === 'upload-video') {
+    const jsonResponse = await handleUpload({
+      body: req.body,
+      request: req,
+      onBeforeGenerateToken: async () => ({
+        allowedContentTypes: ['video/mp4', 'video/webm', 'video/quicktime', 'video/ogg'],
+        maximumSizeInBytes: 100 * 1024 * 1024,
+        addRandomSuffix: true,
+      }),
+      onUploadCompleted: async () => {},
+    })
+    return res.json(jsonResponse)
+  }
 
   const db = await getDb()
 

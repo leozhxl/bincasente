@@ -36,7 +36,7 @@ function AdminLogin({ onLogin }) {
     setError('')
     setLoading(true)
     try {
-      const data = await adminApi('/admin-login', { method: 'POST', body: { password } })
+      const data = await adminApi('/auth?action=admin-login', { method: 'POST', body: { password } })
       onLogin(data.token)
     } catch (err) {
       setError(err.message)
