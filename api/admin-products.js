@@ -52,7 +52,7 @@ async function handler(req, res) {
   const db = await getDb()
 
   if (req.method === 'GET') {
-    const result = await db.execute('SELECT * FROM crm_products ORDER BY created_at DESC')
+    const result = await db.execute('SELECT * FROM crm_products ORDER BY created_at DESC, rowid DESC')
     return res.json({ products: result.rows.map(rowToProduct) })
   }
 

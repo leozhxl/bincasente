@@ -31,7 +31,7 @@ async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Método não permitido.' })
 
   const db = await getDb()
-  const result = await db.execute('SELECT * FROM crm_products ORDER BY created_at ASC')
+  const result = await db.execute('SELECT * FROM crm_products ORDER BY created_at DESC, rowid DESC')
   return res.json({ products: result.rows.map(rowToProduct) })
 }
 
