@@ -52,8 +52,18 @@ async function handler(req, res) {
   const db = await getDb()
 
   if (req.method === 'GET') {
-    const result = await db.execute('SELECT * FROM crm_products ORDER BY created_at DESC, rowid DESC')
+    const result = await db.execute('SELECT * FROM crm_products ORDER BY sort_order ASC, created_at DESC, rowid DESC')
     return res.json({ products: result.rows.map(rowToProduct) })
+  }
+
+  if (req.method === 'PUT' && req.query?.action === 'reorder') {
+    const { ids } = req.body || {}
+    if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: 'Lista de produtos é obrigatória.' })
+    await db.batch(
+      ids.map((id, i) => ({ sql: 'UPDATE crm_products SET sort_order = ? WHERE id = ?', args: [i, id] })),
+      'write'
+    )
+    return res.json({ ok: true })
   }
 
   if (req.method === 'POST') {
@@ -62,17 +72,19 @@ async function handler(req, res) {
 
     const slug = await uniqueSlug(db, b.slug || b.name)
     const id = `p-${Date.now().toString(36)}`
+    const minOrder = await db.execute('SELECT COALESCE(MIN(sort_order), 0) AS min FROM crm_products')
+    const sortOrder = Number(minOrder.rows[0].min) - 1
 
     await db.execute({
       sql: `INSERT INTO crm_products
-        (id, slug, name, category, price, installments, rating, reviews_count, badges, age_range, material, condition, color_options, color_images, description, benefits, dimensions, expert_note, image, image_position, video)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (id, slug, name, category, price, installments, rating, reviews_count, badges, age_range, material, condition, color_options, color_images, description, benefits, dimensions, expert_note, image, image_position, video, sort_order)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         id, slug, b.name.trim(), b.category || '', Number(b.price) || 0, b.installments || 'à vista',
         Number(b.rating) || 5, Number(b.reviewsCount) || 0, JSON.stringify(b.badges || []), b.ageRange || '',
         b.material || '', JSON.stringify(b.condition || []), JSON.stringify(b.colorOptions || []),
         JSON.stringify(b.colorImages || {}), b.description || '', JSON.stringify(b.benefits || []),
-        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '',
+        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '', sortOrder,
       ],
     })
     return res.status(201).json({ id })

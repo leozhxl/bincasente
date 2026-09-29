@@ -46,6 +46,15 @@ function compressImage(file, maxSize = 900, quality = 0.82) {
   })
 }
 
+function moveWithin(all, visible, fromIndex, toIndex) {
+  const moved = [...visible]
+  const [item] = moved.splice(fromIndex, 1)
+  moved.splice(toIndex, 0, item)
+  const visibleIds = new Set(visible.map((p) => p.id))
+  let k = 0
+  return all.map((p) => (visibleIds.has(p.id) ? moved[k++] : p))
+}
+
 export default function Produtos() {
   const { categories, conditions, refetch: refetchStorefront } = useProducts()
   const [products, setProducts] = useState([])
@@ -55,6 +64,10 @@ export default function Produtos() {
   const [categoryFilter, setCategoryFilter] = useState('todas')
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
+  const [orderDraft, setOrderDraft] = useState(null)
+  const [draggingId, setDraggingId] = useState(null)
+  const [savingOrder, setSavingOrder] = useState(false)
+  const reordering = orderDraft !== null
 
   async function load() {
     setLoading(true)
@@ -75,12 +88,12 @@ export default function Produtos() {
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
-    return products.filter((p) => {
+    return (orderDraft || products).filter((p) => {
       if (categoryFilter !== 'todas' && p.category !== categoryFilter) return false
       if (!term) return true
       return p.name.toLowerCase().includes(term) || p.slug.toLowerCase().includes(term)
     })
-  }, [products, search, categoryFilter])
+  }, [products, orderDraft, search, categoryFilter])
 
   function openCreate() {
     setEditing(null)
@@ -110,6 +123,32 @@ export default function Produtos() {
     refetchStorefront()
   }
 
+  function moveProduct(fromIndex, toIndex) {
+    if (toIndex < 0 || toIndex >= filtered.length || fromIndex === toIndex) return
+    setOrderDraft((draft) => moveWithin(draft, filtered, fromIndex, toIndex))
+  }
+
+  function handleDragOver(e, index) {
+    e.preventDefault()
+    const fromIndex = filtered.findIndex((p) => p.id === draggingId)
+    if (fromIndex !== -1) moveProduct(fromIndex, index)
+  }
+
+  async function saveOrder() {
+    setSavingOrder(true)
+    setError('')
+    try {
+      await adminApi('/admin-products?action=reorder', { method: 'PUT', body: { ids: orderDraft.map((p) => p.id) } })
+      setProducts(orderDraft)
+      setOrderDraft(null)
+      refetchStorefront()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSavingOrder(false)
+    }
+  }
+
   async function handleDelete(p) {
     const confirmed = window.confirm(`Remover "${p.name}" do catálogo? Essa ação não pode ser desfeita.`)
     if (!confirmed) return
@@ -125,8 +164,26 @@ export default function Produtos() {
           <h2>Produtos</h2>
           <p>{products.length} produto{products.length === 1 ? '' : 's'} no catálogo</p>
         </div>
-        <button type="button" className="btn btn-accent" onClick={openCreate}>+ Novo Produto</button>
+        {reordering ? (
+          <div className="crm-page-head-actions">
+            <button type="button" className="btn btn-ghost" onClick={() => setOrderDraft(null)} disabled={savingOrder}>Cancelar</button>
+            <button type="button" className="btn btn-accent" onClick={saveOrder} disabled={savingOrder}>
+              {savingOrder ? 'Salvando...' : 'Salvar ordem'}
+            </button>
+          </div>
+        ) : (
+          <div className="crm-page-head-actions">
+            <button type="button" className="btn btn-outline" onClick={() => setOrderDraft(products)} disabled={loading || products.length < 2}>Ordenar</button>
+            <button type="button" className="btn btn-accent" onClick={openCreate}>+ Novo Produto</button>
+          </div>
+        )}
       </div>
+
+      {reordering && (
+        <p className="crm-reorder-hint">
+          Arraste os produtos ou use as setas para definir a ordem em que aparecem na loja. Depois clique em <strong>Salvar ordem</strong>.
+        </p>
+      )}
 
       <div className="crm-toolbar">
         <div className="crm-search-wrap">
@@ -152,18 +209,33 @@ export default function Produtos() {
           </div>
         ) : (
           <ul className="crm-product-grid">
-            {filtered.map((p) => (
-              <li key={p.id} className="crm-product-card">
+            {filtered.map((p, index) => (
+              <li
+                key={p.id}
+                className={`crm-product-card${reordering ? ' is-reordering' : ''}${draggingId === p.id ? ' is-dragging' : ''}`}
+                draggable={reordering}
+                onDragStart={reordering ? () => setDraggingId(p.id) : undefined}
+                onDragOver={reordering ? (e) => handleDragOver(e, index) : undefined}
+                onDragEnd={reordering ? () => setDraggingId(null) : undefined}
+              >
                 <img src={p.image} alt="" loading="lazy" />
                 <div>
                   <strong>{p.name}</strong>
                   <span className="crm-mini-sub">{categories.find((c) => c.slug === p.category)?.name || p.category}</span>
                   <span className="crm-product-price">{formatMoney(p.price)}</span>
                 </div>
-                <div className="crm-product-card-actions">
-                  <button type="button" className="btn btn-outline btn-sm" onClick={() => openEdit(p)}>Editar</button>
-                  <button type="button" className="btn btn-danger btn-sm" onClick={() => handleDelete(p)}>Excluir</button>
-                </div>
+                {reordering ? (
+                  <div className="crm-product-card-actions">
+                    <span className="crm-reorder-position">{index + 1}º</span>
+                    <button type="button" className="btn btn-outline btn-sm" onClick={() => moveProduct(index, index - 1)} disabled={index === 0} aria-label={`Mover ${p.name} para cima`}>↑</button>
+                    <button type="button" className="btn btn-outline btn-sm" onClick={() => moveProduct(index, index + 1)} disabled={index === filtered.length - 1} aria-label={`Mover ${p.name} para baixo`}>↓</button>
+                  </div>
+                ) : (
+                  <div className="crm-product-card-actions">
+                    <button type="button" className="btn btn-outline btn-sm" onClick={() => openEdit(p)}>Editar</button>
+                    <button type="button" className="btn btn-danger btn-sm" onClick={() => handleDelete(p)}>Excluir</button>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
