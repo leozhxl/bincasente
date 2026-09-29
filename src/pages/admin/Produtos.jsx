@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { upload } from '@vercel/blob/client'
+import { uploadPresigned } from '@vercel/blob/client'
 import { adminApi, formatMoney, getAdminToken } from './adminApi'
 import { useProducts } from '../../context/ProductsContext'
 
@@ -356,15 +356,15 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
       try {
         const dataUrl = await compressImage(file, 1200)
         const jpeg = await (await fetch(dataUrl)).blob()
-        const blob = await upload(`produto-${Date.now()}.jpg`, jpeg, {
+        const blob = await uploadPresigned(`produto-${Date.now()}.jpg`, jpeg, {
           access: 'public',
           contentType: 'image/jpeg',
           handleUploadUrl: '/api/admin-products?action=upload-image',
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         })
         setForm((f) => ({ ...f, images: [...f.images, blob.url] }))
-      } catch {
-        setError('Não foi possível enviar uma das fotos.')
+      } catch (err) {
+        setError(`Não foi possível enviar uma das fotos. ${err.message || ''}`.trim())
       } finally {
         setExtraUploading((n) => n - 1)
       }
@@ -387,7 +387,7 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
     setError('')
     try {
       const token = getAdminToken()
-      const blob = await upload(file.name, file, {
+      const blob = await uploadPresigned(file.name, file, {
         access: 'public',
         handleUploadUrl: '/api/admin-products?action=upload-video',
         clientPayload: null,
@@ -395,8 +395,8 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
         onUploadProgress: ({ percentage }) => setVideoProgress(percentage),
       })
       update('video', blob.url)
-    } catch {
-      setError('Não foi possível enviar esse vídeo.')
+    } catch (err) {
+      setError(`Não foi possível enviar esse vídeo. ${err.message || ''}`.trim())
     } finally {
       setVideoLoading(false)
     }

@@ -1,4 +1,5 @@
-import { handleUpload } from '@vercel/blob/client'
+import { issueSignedToken } from '@vercel/blob'
+import { handleUploadPresigned } from '@vercel/blob/client'
 import { getDb } from '../lib/db.js'
 import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { requireAdmin } from '../lib/auth.js'
@@ -36,18 +37,21 @@ async function handler(req, res) {
   if (!requireAdmin(req, res)) return
 
   if (req.method === 'POST' && (req.query?.action === 'upload-video' || req.query?.action === 'upload-image')) {
-    const isImage = req.query.action === 'upload-image'
-    const jsonResponse = await handleUpload({
+    // The Blob store authenticates with the project's OIDC identity, so the
+    // browser uploads through a presigned URL instead of a read-write token.
+    const limits = {
+      allowedContentTypes: req.query.action === 'upload-image'
+        ? ['image/jpeg', 'image/png', 'image/webp']
+        : ['video/mp4', 'video/webm', 'video/quicktime', 'video/ogg'],
+      maximumSizeInBytes: 100 * 1024 * 1024,
+    }
+    const jsonResponse = await handleUploadPresigned({
       body: req.body,
       request: req,
-      onBeforeGenerateToken: async () => ({
-        allowedContentTypes: isImage
-          ? ['image/jpeg', 'image/png', 'image/webp']
-          : ['video/mp4', 'video/webm', 'video/quicktime', 'video/ogg'],
-        maximumSizeInBytes: 100 * 1024 * 1024,
-        addRandomSuffix: true,
+      getSignedToken: async (pathname) => ({
+        token: await issueSignedToken({ pathname, operations: ['put'], ...limits }),
+        urlOptions: { ...limits, addRandomSuffix: true },
       }),
-      onUploadCompleted: async () => {},
     })
     return res.json(jsonResponse)
   }
