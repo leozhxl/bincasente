@@ -46,6 +46,15 @@
   object-fit: cover;
 }
 
+.best-seller-image:has(img) {
+  aspect-ratio: auto;
+}
+
+.best-seller-image:has(img) img {
+  display: block;
+  height: auto;
+}
+
 .best-seller-name {
   font-weight: 700;
   margin-bottom: 6px;
