@@ -35,12 +35,15 @@ async function uniqueSlug(db, base, ignoreId) {
 async function handler(req, res) {
   if (!requireAdmin(req, res)) return
 
-  if (req.method === 'POST' && req.query?.action === 'upload-video') {
+  if (req.method === 'POST' && (req.query?.action === 'upload-video' || req.query?.action === 'upload-image')) {
+    const isImage = req.query.action === 'upload-image'
     const jsonResponse = await handleUpload({
       body: req.body,
       request: req,
       onBeforeGenerateToken: async () => ({
-        allowedContentTypes: ['video/mp4', 'video/webm', 'video/quicktime', 'video/ogg'],
+        allowedContentTypes: isImage
+          ? ['image/jpeg', 'image/png', 'image/webp']
+          : ['video/mp4', 'video/webm', 'video/quicktime', 'video/ogg'],
         maximumSizeInBytes: 100 * 1024 * 1024,
         addRandomSuffix: true,
       }),
@@ -77,14 +80,14 @@ async function handler(req, res) {
 
     await db.execute({
       sql: `INSERT INTO crm_products
-        (id, slug, name, category, price, installments, rating, reviews_count, badges, age_range, material, condition, color_options, color_images, description, benefits, dimensions, expert_note, image, image_position, video, sort_order)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (id, slug, name, category, price, installments, rating, reviews_count, badges, age_range, material, condition, color_options, color_images, description, benefits, dimensions, expert_note, image, image_position, video, images, sort_order)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         id, slug, b.name.trim(), b.category || '', Number(b.price) || 0, b.installments || 'à vista',
         Number(b.rating) || 5, Number(b.reviewsCount) || 0, JSON.stringify(b.badges || []), b.ageRange || '',
         b.material || '', JSON.stringify(b.condition || []), JSON.stringify(b.colorOptions || []),
         JSON.stringify(b.colorImages || {}), b.description || '', JSON.stringify(b.benefits || []),
-        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '', sortOrder,
+        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '', JSON.stringify(b.images || []), sortOrder,
       ],
     })
     return res.status(201).json({ id })
@@ -106,7 +109,7 @@ async function handler(req, res) {
       sql: `UPDATE crm_products SET
         slug = ?, name = ?, category = ?, price = ?, installments = ?, rating = ?, reviews_count = ?,
         badges = ?, age_range = ?, material = ?, condition = ?, color_options = ?, color_images = ?,
-        description = ?, benefits = ?, dimensions = ?, expert_note = ?, image = ?, image_position = ?, video = ?,
+        description = ?, benefits = ?, dimensions = ?, expert_note = ?, image = ?, image_position = ?, video = ?, images = ?,
         updated_at = datetime('now')
         WHERE id = ?`,
       args: [
@@ -114,7 +117,7 @@ async function handler(req, res) {
         Number(b.rating) || 5, Number(b.reviewsCount) || 0, JSON.stringify(b.badges || []), b.ageRange || '',
         b.material || '', JSON.stringify(b.condition || []), JSON.stringify(b.colorOptions || []),
         JSON.stringify(b.colorImages || {}), b.description || '', JSON.stringify(b.benefits || []),
-        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '',
+        b.dimensions || '', b.expertNote || '', b.image || '', b.imagePosition || '', b.video || '', JSON.stringify(b.images || []),
         b.id,
       ],
     })

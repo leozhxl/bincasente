@@ -21,6 +21,7 @@ const emptyForm = {
   condition: [],
   badges: [],
   image: '',
+  images: [],
   video: '',
 }
 
@@ -307,6 +308,7 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
           condition: product.condition || [],
           badges: product.badges || [],
           image: product.image || '',
+          images: product.images || [],
           video: product.video || '',
         }
       : emptyForm
@@ -314,6 +316,7 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [imageLoading, setImageLoading] = useState(false)
+  const [extraUploading, setExtraUploading] = useState(0)
   const [videoLoading, setVideoLoading] = useState(false)
   const [videoProgress, setVideoProgress] = useState(0)
 
@@ -340,6 +343,36 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
     } finally {
       setImageLoading(false)
     }
+  }
+
+  async function handleExtraImagesChange(e) {
+    const files = Array.from(e.target.files || [])
+    e.target.value = ''
+    if (!files.length) return
+    setError('')
+    setExtraUploading((n) => n + files.length)
+    const token = getAdminToken()
+    await Promise.all(files.map(async (file) => {
+      try {
+        const dataUrl = await compressImage(file, 1200)
+        const jpeg = await (await fetch(dataUrl)).blob()
+        const blob = await upload(`produto-${Date.now()}.jpg`, jpeg, {
+          access: 'public',
+          contentType: 'image/jpeg',
+          handleUploadUrl: '/api/admin-products?action=upload-image',
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        })
+        setForm((f) => ({ ...f, images: [...f.images, blob.url] }))
+      } catch {
+        setError('Não foi possível enviar uma das fotos.')
+      } finally {
+        setExtraUploading((n) => n - 1)
+      }
+    }))
+  }
+
+  function handleRemoveExtraImage(url) {
+    setForm((f) => ({ ...f, images: f.images.filter((u) => u !== url) }))
   }
 
   async function handleVideoChange(e) {
@@ -419,6 +452,26 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
                 </label>
                 <p className="field-hint">JPG ou PNG. A imagem é redimensionada automaticamente.</p>
               </div>
+            </div>
+          </section>
+
+          <section className="crm-form-section">
+            <h3>Mais fotos</h3>
+            <p className="field-hint">Aparecem na página do produto, depois da foto principal.</p>
+            <div className="crm-gallery">
+              {form.images.map((url, i) => (
+                <div key={url} className="crm-gallery-item">
+                  <img src={url} alt={`Foto extra ${i + 1}`} />
+                  <button type="button" className="crm-gallery-remove" onClick={() => handleRemoveExtraImage(url)} aria-label={`Remover foto extra ${i + 1}`}>×</button>
+                </div>
+              ))}
+              {Array.from({ length: extraUploading }, (_, i) => (
+                <div key={`uploading-${i}`} className="crm-gallery-item crm-image-placeholder">...</div>
+              ))}
+              <label className="crm-gallery-add">
+                + Adicionar fotos
+                <input type="file" accept="image/*" multiple onChange={handleExtraImagesChange} hidden />
+              </label>
             </div>
           </section>
 
@@ -549,7 +602,7 @@ function ProdutoFormModal({ categories, conditions, product, onClose, onSave }) 
 
         <div className="crm-modal-actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancelar</button>
-          <button type="submit" className="btn btn-accent" disabled={saving || imageLoading || videoLoading}>
+          <button type="submit" className="btn btn-accent" disabled={saving || imageLoading || videoLoading || extraUploading > 0}>
             {saving ? 'Salvando...' : product ? 'Salvar alterações' : 'Cadastrar produto'}
           </button>
         </div>

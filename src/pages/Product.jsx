@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { isImageSrc } from '../utils/image'
 import { Link, useParams } from 'react-router-dom'
 import { useProducts } from '../context/ProductsContext'
 import { useCart } from '../context/CartContext'
@@ -15,6 +16,7 @@ export default function Product() {
   const [color, setColor] = useState(product?.colorOptions?.[0])
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
+  const [photoIndex, setPhotoIndex] = useState(0)
 
   if (!product) {
     return (
@@ -24,6 +26,9 @@ export default function Product() {
       </div>
     )
   }
+
+  const photos = [product.colorImages?.[color] || product.image, ...(product.images || [])].filter(Boolean)
+  const currentPhoto = photos[photoIndex] ?? photos[0]
 
   const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4)
 
@@ -41,7 +46,23 @@ export default function Product() {
 
       <div className="product-main">
         <div>
-          <ProductViewer3D emoji={product.colorImages?.[color] || product.image} name={product.name} />
+          <ProductViewer3D emoji={currentPhoto} name={product.name} />
+          {photos.length > 1 && (
+            <div className="product-thumbs" role="group" aria-label="Fotos do produto">
+              {photos.map((src, i) => (
+                <button
+                  key={`${i}-${src.slice(-40)}`}
+                  type="button"
+                  className={`product-thumb ${src === currentPhoto ? 'selected' : ''}`}
+                  onClick={() => setPhotoIndex(i)}
+                  aria-label={`Ver foto ${i + 1} de ${photos.length}`}
+                  aria-pressed={src === currentPhoto}
+                >
+                  {isImageSrc(src) ? <img src={src} alt="" loading="lazy" /> : <span>{src}</span>}
+                </button>
+              ))}
+            </div>
+          )}
           {product.video && (
             <video className="product-video" src={product.video} controls playsInline preload="metadata" />
           )}
@@ -86,7 +107,10 @@ export default function Product() {
                     className={`color-chip ${color === c ? 'selected' : ''}`}
                     role="radio"
                     aria-checked={color === c}
-                    onClick={() => setColor(c)}
+                    onClick={() => {
+                      setColor(c)
+                      setPhotoIndex(0)
+                    }}
                   >
                     {c}
                   </button>

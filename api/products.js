@@ -22,6 +22,7 @@ export function rowToProduct(r) {
     dimensions: r.dimensions,
     expertNote: r.expert_note,
     image: r.image,
+    images: JSON.parse(r.images || '[]'),
     imagePosition: r.image_position || undefined,
     video: r.video || '',
   }
