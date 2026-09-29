@@ -64,10 +64,9 @@ export default function Produtos() {
   const [categoryFilter, setCategoryFilter] = useState('todas')
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
-  const [orderDraft, setOrderDraft] = useState(null)
   const [draggingId, setDraggingId] = useState(null)
+  const [dropTarget, setDropTarget] = useState(null)
   const [savingOrder, setSavingOrder] = useState(false)
-  const reordering = orderDraft !== null
 
   async function load() {
     setLoading(true)
@@ -88,12 +87,12 @@ export default function Produtos() {
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
-    return (orderDraft || products).filter((p) => {
+    return products.filter((p) => {
       if (categoryFilter !== 'todas' && p.category !== categoryFilter) return false
       if (!term) return true
       return p.name.toLowerCase().includes(term) || p.slug.toLowerCase().includes(term)
     })
-  }, [products, orderDraft, search, categoryFilter])
+  }, [products, search, categoryFilter])
 
   function openCreate() {
     setEditing(null)
@@ -123,30 +122,81 @@ export default function Produtos() {
     refetchStorefront()
   }
 
-  function moveProduct(fromIndex, toIndex) {
+  async function moveProduct(fromIndex, toIndex) {
     if (toIndex < 0 || toIndex >= filtered.length || fromIndex === toIndex) return
-    setOrderDraft((draft) => moveWithin(draft, filtered, fromIndex, toIndex))
-  }
-
-  function handleDragOver(e, index) {
-    e.preventDefault()
-    const fromIndex = filtered.findIndex((p) => p.id === draggingId)
-    if (fromIndex !== -1) moveProduct(fromIndex, index)
-  }
-
-  async function saveOrder() {
+    const previous = products
+    const next = moveWithin(products, filtered, fromIndex, toIndex)
+    setProducts(next)
     setSavingOrder(true)
     setError('')
     try {
-      await adminApi('/admin-products?action=reorder', { method: 'PUT', body: { ids: orderDraft.map((p) => p.id) } })
-      setProducts(orderDraft)
-      setOrderDraft(null)
+      await adminApi('/admin-products?action=reorder', { method: 'PUT', body: { ids: next.map((p) => p.id) } })
       refetchStorefront()
     } catch (err) {
+      setProducts(previous)
       setError(err.message)
     } finally {
       setSavingOrder(false)
     }
+  }
+
+  function handlePointerDown(e, p) {
+    if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button')) return
+    const startX = e.clientX
+    const startY = e.clientY
+    let active = false
+    let target = null
+    let pointer = null
+    let scrollFrame = null
+
+    function updateTarget() {
+      const card = document.elementFromPoint(pointer.x, pointer.y)?.closest('[data-product-id]')
+      const id = card?.dataset.productId
+      const next = id && id !== p.id
+        ? { id, after: pointer.x > card.getBoundingClientRect().left + card.offsetWidth / 2 }
+        : null
+      if (next?.id === target?.id && next?.after === target?.after) return
+      target = next
+      setDropTarget(next)
+    }
+
+    function autoScroll() {
+      const edge = 80
+      const speed = pointer.y < edge ? -(edge - pointer.y) / 8 : pointer.y > window.innerHeight - edge ? (pointer.y - window.innerHeight + edge) / 8 : 0
+      if (speed) {
+        window.scrollBy(0, speed)
+        updateTarget()
+      }
+      scrollFrame = requestAnimationFrame(autoScroll)
+    }
+
+    function onMove(ev) {
+      pointer = { x: ev.clientX, y: ev.clientY }
+      if (!active) {
+        if (Math.hypot(ev.clientX - startX, ev.clientY - startY) < 6) return
+        active = true
+        setDraggingId(p.id)
+        scrollFrame = requestAnimationFrame(autoScroll)
+      }
+      ev.preventDefault()
+      updateTarget()
+    }
+
+    function onUp() {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      cancelAnimationFrame(scrollFrame)
+      setDraggingId(null)
+      setDropTarget(null)
+      if (!active || !target) return
+      const fromIndex = filtered.findIndex((item) => item.id === p.id)
+      let toIndex = filtered.findIndex((item) => item.id === target.id) + (target.after ? 1 : 0)
+      if (fromIndex < toIndex) toIndex -= 1
+      moveProduct(fromIndex, toIndex)
+    }
+
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
   }
 
   async function handleDelete(p) {
@@ -164,26 +214,12 @@ export default function Produtos() {
           <h2>Produtos</h2>
           <p>{products.length} produto{products.length === 1 ? '' : 's'} no catálogo</p>
         </div>
-        {reordering ? (
-          <div className="crm-page-head-actions">
-            <button type="button" className="btn btn-ghost" onClick={() => setOrderDraft(null)} disabled={savingOrder}>Cancelar</button>
-            <button type="button" className="btn btn-accent" onClick={saveOrder} disabled={savingOrder}>
-              {savingOrder ? 'Salvando...' : 'Salvar ordem'}
-            </button>
-          </div>
-        ) : (
-          <div className="crm-page-head-actions">
-            <button type="button" className="btn btn-outline" onClick={() => setOrderDraft(products)} disabled={loading || products.length < 2}>Ordenar</button>
-            <button type="button" className="btn btn-accent" onClick={openCreate}>+ Novo Produto</button>
-          </div>
-        )}
+        <button type="button" className="btn btn-accent" onClick={openCreate}>+ Novo Produto</button>
       </div>
 
-      {reordering && (
-        <p className="crm-reorder-hint">
-          Arraste os produtos ou use as setas para definir a ordem em que aparecem na loja. Depois clique em <strong>Salvar ordem</strong>.
-        </p>
-      )}
+      <p className="crm-reorder-hint">
+        {savingOrder ? 'Salvando nova ordem...' : 'Arraste os produtos com o mouse para mudar a ordem em que aparecem na loja.'}
+      </p>
 
       <div className="crm-toolbar">
         <div className="crm-search-wrap">
@@ -212,30 +248,25 @@ export default function Produtos() {
             {filtered.map((p, index) => (
               <li
                 key={p.id}
-                className={`crm-product-card${reordering ? ' is-reordering' : ''}${draggingId === p.id ? ' is-dragging' : ''}`}
-                draggable={reordering}
-                onDragStart={reordering ? () => setDraggingId(p.id) : undefined}
-                onDragOver={reordering ? (e) => handleDragOver(e, index) : undefined}
-                onDragEnd={reordering ? () => setDraggingId(null) : undefined}
+                className={[
+                  'crm-product-card',
+                  draggingId === p.id && 'is-dragging',
+                  dropTarget?.id === p.id && draggingId !== p.id && (dropTarget.after ? 'drop-after' : 'drop-before'),
+                ].filter(Boolean).join(' ')}
+                data-product-id={p.id}
+                onPointerDown={(e) => handlePointerDown(e, p)}
               >
-                <img src={p.image} alt="" loading="lazy" />
+                <span className="crm-drag-handle" aria-hidden="true">⠿ {index + 1}º</span>
+                <img src={p.image} alt="" loading="lazy" draggable={false} />
                 <div>
                   <strong>{p.name}</strong>
                   <span className="crm-mini-sub">{categories.find((c) => c.slug === p.category)?.name || p.category}</span>
                   <span className="crm-product-price">{formatMoney(p.price)}</span>
                 </div>
-                {reordering ? (
-                  <div className="crm-product-card-actions">
-                    <span className="crm-reorder-position">{index + 1}º</span>
-                    <button type="button" className="btn btn-outline btn-sm" onClick={() => moveProduct(index, index - 1)} disabled={index === 0} aria-label={`Mover ${p.name} para cima`}>↑</button>
-                    <button type="button" className="btn btn-outline btn-sm" onClick={() => moveProduct(index, index + 1)} disabled={index === filtered.length - 1} aria-label={`Mover ${p.name} para baixo`}>↓</button>
-                  </div>
-                ) : (
-                  <div className="crm-product-card-actions">
-                    <button type="button" className="btn btn-outline btn-sm" onClick={() => openEdit(p)}>Editar</button>
-                    <button type="button" className="btn btn-danger btn-sm" onClick={() => handleDelete(p)}>Excluir</button>
-                  </div>
-                )}
+                <div className="crm-product-card-actions">
+                  <button type="button" className="btn btn-outline btn-sm" onClick={() => openEdit(p)}>Editar</button>
+                  <button type="button" className="btn btn-danger btn-sm" onClick={() => handleDelete(p)}>Excluir</button>
+                </div>
               </li>
             ))}
           </ul>

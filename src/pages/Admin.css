@@ -950,9 +950,11 @@
 .crm-product-card {
   border: 1px solid var(--border);
   border-radius: 12px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+  cursor: grab;
+  user-select: none;
 }
 
 .crm-product-card img {
@@ -990,9 +992,8 @@
   flex: 1;
 }
 
-.crm-product-card.is-reordering {
-  cursor: grab;
-  user-select: none;
+.crm-product-card:active {
+  cursor: grabbing;
 }
 
 .crm-product-card.is-dragging {
@@ -1001,15 +1002,40 @@
   border-color: var(--brand);
 }
 
-.crm-product-card.is-reordering img {
-  pointer-events: none;
+.crm-product-card.drop-before::before,
+.crm-product-card.drop-after::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px;
+  background: var(--brand);
 }
 
-.crm-reorder-position {
-  align-self: center;
+.crm-product-card.drop-before::before {
+  left: -10px;
+}
+
+.crm-product-card.drop-after::after {
+  right: -10px;
+}
+
+.crm-product-card img {
+  border-radius: 12px 12px 0 0;
+}
+
+.crm-drag-handle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--brand);
-  min-width: 32px;
+  pointer-events: none;
 }
 
 .crm-reorder-hint {
