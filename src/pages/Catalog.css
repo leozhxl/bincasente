@@ -43,16 +43,8 @@
 .best-seller-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-.best-seller-image:has(img) {
-  aspect-ratio: auto;
-}
-
-.best-seller-image:has(img) img {
-  display: block;
-  height: auto;
+  object-fit: contain;
+  background: #fff;
 }
 
 .best-seller-name {
