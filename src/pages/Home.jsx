@@ -17,18 +17,6 @@ export default function Home() {
 
   return (
     <>
-      <div className="promo-alert" role="status">
-        <div className="container promo-alert-inner">
-          <span className="promo-alert-badge" aria-hidden="true">25% OFF</span>
-          <p>
-            Ganhe <strong>25% de desconto</strong> em toda a compra com os cupons{' '}
-            <strong className="promo-alert-code">MAIARA10</strong> ou{' '}
-            <strong className="promo-alert-code">NATALIA10</strong>. É só aplicar no carrinho!
-          </p>
-          <Link to="/loja" className="btn btn-accent promo-alert-cta">Aproveitar</Link>
-        </div>
-      </div>
-
       <section className="hero">
         <div className="hero-wave hero-wave-top" aria-hidden="true" />
         <div className="hero-wave hero-wave-base" aria-hidden="true" />
