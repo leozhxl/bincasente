@@ -1,4 +1,4 @@
-export function openReceipt({ orderNumber, date, customer, items, subtotal, shipping, total, payment }) {
+export function openReceipt({ orderNumber, date, customer, items, subtotal, discount = 0, coupon = '', shipping, total, payment }) {
   const win = window.open('', '_blank', 'width=680,height=800')
   if (!win) return
 
@@ -60,6 +60,7 @@ export function openReceipt({ orderNumber, date, customer, items, subtotal, ship
 
   <table class="totals">
     <tr><td>Subtotal</td><td style="text-align:right">R$ ${subtotal.toFixed(2).replace('.', ',')}</td></tr>
+    ${discount > 0 ? `<tr><td>Desconto (cupom ${coupon})</td><td style="text-align:right">− R$ ${discount.toFixed(2).replace('.', ',')}</td></tr>` : ''}
     <tr><td>Frete</td><td style="text-align:right">R$ ${shipping.toFixed(2).replace('.', ',')}</td></tr>
     <tr class="grand"><td>Total</td><td style="text-align:right">R$ ${total.toFixed(2).replace('.', ',')}</td></tr>
   </table>

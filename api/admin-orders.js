@@ -9,7 +9,8 @@ function feeRateFor(paymentMethod, settings) {
 }
 
 function computeFinance(order, settings) {
-  const subtotal = order.subtotal || order.total
+  // Receita dos produtos já com o desconto do cupom.
+  const subtotal = round2((order.subtotal || order.total) - (order.discount || 0))
   const shipping = order.shipping || 0
   const feeRate = feeRateFor(order.paymentMethod, settings)
 
@@ -44,6 +45,8 @@ async function handler(req, res) {
         total: r.total,
         subtotal: r.subtotal || r.total,
         shipping: r.shipping || 0,
+        coupon: r.coupon || '',
+        discount: r.discount || 0,
         items: JSON.parse(r.items),
         customerName: r.customer_name,
         customerEmail: r.customer_email,

@@ -31,7 +31,7 @@ const paymentLabels = {
 }
 
 export default function Checkout() {
-  const { items, subtotal, clearCart } = useCart()
+  const { items, subtotal, coupon, discount, clearCart } = useCart()
   const { user, loading: authLoading } = useAuth()
   const { addOrder, orders, refreshOrders } = useOrders()
   const navigate = useNavigate()
@@ -59,7 +59,7 @@ export default function Checkout() {
 
   const isPickup = form.entrega === 'retirada'
   const shipping = isPickup ? 0 : shippingInfo?.price || 0
-  const total = subtotal + shipping
+  const total = Math.round((subtotal - discount + shipping) * 100) / 100
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }))
@@ -149,6 +149,7 @@ export default function Checkout() {
           customer: form,
           subtotal,
           shipping,
+          coupon,
         },
       })
       setPixData(result)
@@ -164,13 +165,15 @@ export default function Checkout() {
     const whatsappItems = items.map((i) => ({ name: i.name, qty: i.qty, price: i.price, color: i.color, benefits: i.benefits, description: i.description }))
 
     setWhatsappItems(whatsappItems)
-    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, coupon, discount, paymentMethod: form.pagamento })
     setWhatsappBlockedUrl(blocked ? url : null)
 
     setOrderSnapshot({
       date: new Date().toLocaleDateString('pt-BR'),
       items: snapshotItems,
       subtotal,
+      discount,
+      coupon,
       shipping,
       total,
     })
@@ -211,6 +214,7 @@ export default function Checkout() {
         paymentMethod: form.pagamento,
         subtotal,
         shipping,
+        coupon,
       })
     } catch (err) {
       setOrderError(err.message || 'Não foi possível registrar seu pedido. Tente novamente ou fale com a gente pelo WhatsApp.')
@@ -218,13 +222,15 @@ export default function Checkout() {
     }
 
     setWhatsappItems(whatsappItems)
-    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, coupon, discount, paymentMethod: form.pagamento })
     setWhatsappBlockedUrl(blocked ? url : null)
 
     setOrderSnapshot({
       date: new Date().toLocaleDateString('pt-BR'),
       items: snapshotItems,
       subtotal,
+      discount,
+      coupon,
       shipping,
       total,
     })
@@ -236,7 +242,7 @@ export default function Checkout() {
 
   function handleSendWhatsApp() {
     if (!whatsappItems) return
-    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total, paymentMethod: form.pagamento })
+    const { url, blocked } = sendOrderToWhatsApp({ orderNumber, customer: form, items: whatsappItems, total: orderSnapshot?.total ?? total, coupon: orderSnapshot?.coupon, discount: orderSnapshot?.discount, paymentMethod: form.pagamento })
     setWhatsappBlockedUrl(blocked ? url : null)
   }
 
@@ -248,6 +254,8 @@ export default function Checkout() {
       customer: form,
       items: orderSnapshot.items,
       subtotal: orderSnapshot.subtotal,
+      discount: orderSnapshot.discount,
+      coupon: orderSnapshot.coupon,
       shipping: orderSnapshot.shipping,
       total: orderSnapshot.total,
       payment: paymentLabels[form.pagamento] || form.pagamento,
@@ -403,7 +411,7 @@ export default function Checkout() {
             </button>
           </form>
 
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
+          <OrderSummary items={items} subtotal={subtotal} coupon={coupon} discount={discount} shipping={shipping} total={total} />
         </div>
       )}
 
@@ -451,7 +459,7 @@ export default function Checkout() {
             </div>
           </form>
 
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
+          <OrderSummary items={items} subtotal={subtotal} coupon={coupon} discount={discount} shipping={shipping} total={total} />
         </div>
       )}
 
@@ -464,7 +472,7 @@ export default function Checkout() {
             onCheckNow={refreshOrders}
             orderError={orderError}
           />
-          <OrderSummary items={items} subtotal={subtotal} shipping={shipping} total={total} />
+          <OrderSummary items={items} subtotal={subtotal} coupon={coupon} discount={discount} shipping={shipping} total={total} />
         </div>
       )}
 
@@ -591,7 +599,7 @@ function PixPayment({ total, pixData, onBack, onCheckNow, orderError }) {
   )
 }
 
-function OrderSummary({ items, subtotal, shipping, total }) {
+function OrderSummary({ items, subtotal, coupon, discount, shipping, total }) {
   return (
     <aside className="checkout-summary card">
       <h2>Resumo do pedido</h2>
@@ -608,6 +616,9 @@ function OrderSummary({ items, subtotal, shipping, total }) {
       </ul>
       <dl className="summary-lines">
         <div><dt>Subtotal</dt><dd>R$ {subtotal.toFixed(2).replace('.', ',')}</dd></div>
+        {discount > 0 && (
+          <div className="summary-discount"><dt>Desconto ({coupon})</dt><dd>− R$ {discount.toFixed(2).replace('.', ',')}</dd></div>
+        )}
         <div>
           <dt>Frete</dt>
           <dd>{shipping > 0 ? `R$ ${shipping.toFixed(2).replace('.', ',')}` : 'Informe o CEP'}</dd>

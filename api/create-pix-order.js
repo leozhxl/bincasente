@@ -2,6 +2,7 @@ import { getDb } from '../lib/db.js'
 import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { requireAuth } from '../lib/auth.js'
 import { createPixPayment, mapMpStatusToOrderStatus } from '../lib/mercadopago.js'
+import { validateCouponTotals } from '../lib/coupon.js'
 
 const SITE_URL = process.env.SITE_URL || 'https://brincaesente.com'
 
@@ -11,8 +12,11 @@ async function handler(req, res) {
   const userId = requireAuth(req, res)
   if (!userId) return
 
-  const { id, date, total, items, customer, subtotal, shipping } = req.body || {}
+  const { id, date, total, items, customer, subtotal, shipping, coupon } = req.body || {}
   if (!id || total == null) return res.status(400).json({ error: 'Pedido inválido.' })
+
+  const couponCheck = validateCouponTotals({ coupon, subtotal, shipping, total })
+  if (couponCheck.error) return res.status(400).json({ error: couponCheck.error })
 
   const [firstName, ...rest] = (customer?.nome || 'Cliente').trim().split(' ')
 
@@ -47,8 +51,8 @@ async function handler(req, res) {
 
   const db = await getDb()
   await db.execute({
-    sql: `INSERT INTO orders (id, user_id, date, status, total, items, customer_name, customer_email, customer_phone, customer_address, payment_method, subtotal, shipping, mp_payment_id)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pix', ?, ?, ?)`,
+    sql: `INSERT INTO orders (id, user_id, date, status, total, items, customer_name, customer_email, customer_phone, customer_address, payment_method, subtotal, shipping, mp_payment_id, coupon, discount)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pix', ?, ?, ?, ?, ?)`,
     args: [
       id,
       userId,
@@ -63,6 +67,8 @@ async function handler(req, res) {
       subtotal ?? total,
       shipping ?? 0,
       String(payment.id),
+      couponCheck.coupon,
+      couponCheck.discount,
     ],
   })
 

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useProducts } from '../context/ProductsContext'
@@ -7,10 +8,23 @@ import { isImageSrc } from '../utils/image'
 import './Cart.css'
 
 export default function Cart() {
-  const { items, updateQty, removeItem, subtotal } = useCart()
+  const { items, updateQty, removeItem, subtotal, coupon, couponRate, discount, applyCoupon, removeCoupon } = useCart()
   const { products } = useProducts()
+  const [couponInput, setCouponInput] = useState('')
+  const [couponError, setCouponError] = useState('')
 
-  const total = subtotal
+  const total = subtotal - discount
+
+  function handleApplyCoupon(e) {
+    e.preventDefault()
+    if (!couponInput.trim()) return
+    if (applyCoupon(couponInput)) {
+      setCouponInput('')
+      setCouponError('')
+    } else {
+      setCouponError('Cupom inválido. Confira o código e tente novamente.')
+    }
+  }
 
   const crossSell = products.filter((p) => !items.some((i) => i.id === p.id)).slice(0, 4)
 
@@ -76,8 +90,38 @@ export default function Cart() {
               .
             </p>
 
+            {coupon ? (
+              <div className="coupon-applied">
+                <span>
+                  Cupom <strong>{coupon}</strong> aplicado ({Math.round(couponRate * 100)}% off)
+                </span>
+                <button type="button" className="cart-item-remove" onClick={removeCoupon}>Remover</button>
+              </div>
+            ) : (
+              <form className="coupon-form" onSubmit={handleApplyCoupon}>
+                <label htmlFor="coupon">Cupom de desconto</label>
+                <div className="coupon-row">
+                  <input
+                    id="coupon"
+                    type="text"
+                    value={couponInput}
+                    onChange={(e) => { setCouponInput(e.target.value); setCouponError('') }}
+                    placeholder="Ex.: MAIARA10"
+                    autoComplete="off"
+                    aria-invalid={!!couponError}
+                    aria-describedby={couponError ? 'err-coupon' : undefined}
+                  />
+                  <button type="submit" className="btn btn-outline">Aplicar</button>
+                </div>
+                {couponError && <p className="field-error" id="err-coupon">{couponError}</p>}
+              </form>
+            )}
+
             <dl className="summary-lines">
               <div><dt>Subtotal</dt><dd>R$ {subtotal.toFixed(2).replace('.', ',')}</dd></div>
+              {discount > 0 && (
+                <div className="summary-discount"><dt>Desconto ({coupon})</dt><dd>− R$ {discount.toFixed(2).replace('.', ',')}</dd></div>
+              )}
               <div><dt>Frete</dt><dd>A combinar</dd></div>
               <div className="summary-total"><dt>Total</dt><dd>R$ {total.toFixed(2).replace('.', ',')}</dd></div>
             </dl>

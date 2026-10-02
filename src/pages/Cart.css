@@ -144,6 +144,24 @@
   margin-bottom: 20px;
 }
 
+.coupon-form label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.coupon-applied {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--color-mint-light);
+  color: var(--color-mint-dark);
+}
+
 .coupon-row {
   display: flex;
   gap: 8px;

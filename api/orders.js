@@ -1,6 +1,7 @@
 import { getDb } from '../lib/db.js'
 import { withErrorHandler } from '../lib/withErrorHandler.js'
 import { requireAuth } from '../lib/auth.js'
+import { validateCouponTotals } from '../lib/coupon.js'
 
 async function handler(req, res) {
   const db = await getDb()
@@ -28,8 +29,11 @@ async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { id, date, status, total, items, customer, paymentMethod, subtotal, shipping } = req.body || {}
+    const { id, date, status, total, items, customer, paymentMethod, subtotal, shipping, coupon } = req.body || {}
     if (!id || total == null) return res.status(400).json({ error: 'Pedido inválido.' })
+
+    const couponCheck = validateCouponTotals({ coupon, subtotal, shipping, total })
+    if (couponCheck.error) return res.status(400).json({ error: couponCheck.error })
 
     const userId = requireAuth(req, res)
     if (!userId) return
@@ -41,8 +45,8 @@ async function handler(req, res) {
         : ''
 
     await db.execute({
-      sql: `INSERT INTO orders (id, user_id, date, status, total, items, customer_name, customer_email, customer_phone, customer_address, payment_method, subtotal, shipping)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      sql: `INSERT INTO orders (id, user_id, date, status, total, items, customer_name, customer_email, customer_phone, customer_address, payment_method, subtotal, shipping, coupon, discount)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         id,
         userId,
@@ -57,6 +61,8 @@ async function handler(req, res) {
         paymentMethod || '',
         subtotal ?? total,
         shipping ?? 0,
+        couponCheck.coupon,
+        couponCheck.discount,
       ],
     })
     return res.status(201).json({ ok: true })

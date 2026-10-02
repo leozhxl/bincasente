@@ -1,6 +1,6 @@
 const COMPANY_WHATSAPP = '5548991542845'
 
-export function sendOrderToWhatsApp({ orderNumber, customer, items, total, paymentMethod }) {
+export function sendOrderToWhatsApp({ orderNumber, customer, items, total, coupon, discount, paymentMethod }) {
   const address = customer.entrega === 'retirada'
     ? 'Retirar no local (combinar com a equipe)'
     : `${customer.endereco}, ${customer.numero || 's/n'} - ${customer.cidade}/${customer.estado}, CEP ${customer.cep}`
@@ -34,7 +34,8 @@ Telefone: ${customer.telefone || 'não informado'}
 Produtos:
 ${itemsText}
 
-Total: R$ ${total.toFixed(2).replace('.', ',')}
+${discount > 0 ? `Cupom: ${coupon} (− R$ ${discount.toFixed(2).replace('.', ',')})
+` : ''}Total: R$ ${total.toFixed(2).replace('.', ',')}
 
 Endereço de entrega: ${address}${footer}`
 

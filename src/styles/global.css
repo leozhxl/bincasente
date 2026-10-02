@@ -430,3 +430,9 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.9rem;
   margin-top: 6px;
 }
+
+.summary-lines .summary-discount dt,
+.summary-lines .summary-discount dd {
+  color: var(--color-mint-dark);
+  font-weight: 700;
+}

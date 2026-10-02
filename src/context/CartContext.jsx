@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { calcDiscount, getCouponRate, normalizeCoupon } from '../utils/coupons'
 
 const CartContext = createContext(null)
 
@@ -22,9 +23,27 @@ export function CartProvider({ children }) {
     }
   })
 
+  const [coupon, setCoupon] = useState(() => {
+    try {
+      const saved = localStorage.getItem('bes_coupon') || ''
+      return getCouponRate(saved) ? saved : ''
+    } catch {
+      return ''
+    }
+  })
+
   useEffect(() => {
     localStorage.setItem('bes_cart', JSON.stringify(items))
   }, [items])
+
+  useEffect(() => {
+    try {
+      if (coupon) localStorage.setItem('bes_coupon', coupon)
+      else localStorage.removeItem('bes_coupon')
+    } catch {
+      // armazenamento indisponível, o cupom vale só nesta sessão
+    }
+  }, [coupon])
 
   useEffect(() => {
     localStorage.setItem('bes_wishlist', JSON.stringify(wishlist))
@@ -66,6 +85,19 @@ export function CartProvider({ children }) {
 
   function clearCart() {
     setItems([])
+    setCoupon('')
+  }
+
+  // Retorna true se o cupom for válido e foi aplicado.
+  function applyCoupon(code) {
+    const normalized = normalizeCoupon(code)
+    if (!getCouponRate(normalized)) return false
+    setCoupon(normalized)
+    return true
+  }
+
+  function removeCoupon() {
+    setCoupon('')
   }
 
   function toggleWishlist(product) {
@@ -75,6 +107,7 @@ export function CartProvider({ children }) {
   }
 
   const subtotal = useMemo(() => items.reduce((sum, i) => sum + i.price * i.qty, 0), [items])
+  const discount = useMemo(() => calcDiscount(subtotal, coupon), [subtotal, coupon])
   const count = useMemo(() => items.reduce((sum, i) => sum + i.qty, 0), [items])
 
   const value = {
@@ -84,6 +117,11 @@ export function CartProvider({ children }) {
     removeItem,
     clearCart,
     subtotal,
+    coupon,
+    couponRate: getCouponRate(coupon),
+    discount,
+    applyCoupon,
+    removeCoupon,
     count,
     wishlist,
     toggleWishlist,
