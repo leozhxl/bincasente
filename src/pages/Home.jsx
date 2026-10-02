@@ -19,9 +19,9 @@ export default function Home() {
     <>
       <div className="promo-alert" role="status">
         <div className="container promo-alert-inner">
-          <span className="promo-alert-badge" aria-hidden="true">30% OFF</span>
+          <span className="promo-alert-badge" aria-hidden="true">25% OFF</span>
           <p>
-            Ganhe <strong>30% de desconto</strong> em toda a compra com os cupons{' '}
+            Ganhe <strong>25% de desconto</strong> em toda a compra com os cupons{' '}
             <strong className="promo-alert-code">MAIARA10</strong> ou{' '}
             <strong className="promo-alert-code">NATALIA10</strong>. É só aplicar no carrinho!
           </p>
