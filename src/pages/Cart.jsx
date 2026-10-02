@@ -106,7 +106,7 @@ export default function Cart() {
                     type="text"
                     value={couponInput}
                     onChange={(e) => { setCouponInput(e.target.value); setCouponError('') }}
-                    placeholder="Ex.: MAIARA10"
+                    placeholder="Ex.: MAIARA"
                     autoComplete="off"
                     aria-invalid={!!couponError}
                     aria-describedby={couponError ? 'err-coupon' : undefined}

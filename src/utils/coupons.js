@@ -1,6 +1,8 @@
 // Cupons de desconto válidos. O percentual é aplicado sobre o subtotal dos
 // produtos (o frete não recebe desconto). Usado no site e no servidor.
 export const COUPONS = {
+  MAIARA: 0.25,
+  NATALIA: 0.25,
   MAIARA10: 0.25,
   NATALIA10: 0.25,
 }
